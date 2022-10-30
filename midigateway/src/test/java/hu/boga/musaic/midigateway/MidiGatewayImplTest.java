@@ -44,4 +44,14 @@ class MidiGatewayImplTest {
         sequenceModell.division = INVALID_DIVISION_TYPE;
         Assertions.assertThrows(MusaicException.class, () -> midiGateway.initMidiSequence(sequenceModell));
     }
+
+    @Test
+    void open(){
+        SequenceModell model = midiGateway.open(PATH);
+        assertNotNull(model);
+    }
+    @Test
+    void openNegativePath(){
+        assertThrows(MusaicException.class, () ->  midiGateway.open(""));
+    }
 }

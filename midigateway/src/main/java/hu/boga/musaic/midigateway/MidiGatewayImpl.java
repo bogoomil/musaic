@@ -4,11 +4,11 @@ import hu.boga.musaic.core.exceptions.MusaicException;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.gateway.MidiGateway;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.Sequence;
-import javax.sound.midi.Track;
-import java.util.HashMap;
-import java.util.Map;
+import javax.sound.midi.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MidiGatewayImpl implements MidiGateway {
 
@@ -24,6 +24,20 @@ public class MidiGatewayImpl implements MidiGateway {
         }
     }
 
+    @Override
+    public SequenceModell open(String path) {
+        try {
+            File file = new File(path);
+            String id = UUID.randomUUID().toString();
+            Sequence sequence = MidiSystem.getSequence(file);
+            SequenceModell sequenceModell = new SequenceToModellConverter(sequence).convert();
+            SEQUENCE_MAP.put(sequenceModell.getId(), sequence);
+            return sequenceModell;
+        } catch (InvalidMidiDataException | IOException e) {
+            throw new MusaicException(e.getMessage(), e);
+        }
+    }
+
     private void tryingInitializeSequence(SequenceModell modell) throws InvalidMidiDataException {
         Sequence sequence = new Sequence(modell.division, modell.resolution);
         SEQUENCE_MAP.put(modell.getId(), sequence);
@@ -32,4 +46,5 @@ public class MidiGatewayImpl implements MidiGateway {
             TRACK_MAP.put(trackModell.getId(), track);
         });
     }
+
 }

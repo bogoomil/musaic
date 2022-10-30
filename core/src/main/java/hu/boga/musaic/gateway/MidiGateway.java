@@ -6,5 +6,6 @@ public interface MidiGateway {
 
     void initMidiSequence(SequenceModell modell);
 
+    SequenceModell open(String path);
 
 }
