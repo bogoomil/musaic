@@ -1,2 +1,6 @@
 # Project exclude paths
 /target/
+/midigateway/target/
+/launcher/target/
+/gui/target/
+/core/target/
