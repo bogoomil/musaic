@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import hu.boga.musaic.controls.NoteNameCombo?>
+<?import hu.boga.musaic.controls.ModeCombo?>
+<?import hu.boga.musaic.controls.TempoSlider?>
+<BorderPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="hu.boga.musaic.views.SequenceEditorPanelController">
+    <top>
+        <HBox BorderPane.alignment="CENTER">
+            <TextField fx:id="tfFilename"/>
+            <Button mnemonicParsing="false" onAction="#saveSequence" text="Save"/>
+            <Separator minWidth="18.0" orientation="VERTICAL" prefWidth="10.0"/>
+            <Button mnemonicParsing="false" onAction="#onNewTrackButtonClicked" text="Track+"/>
+            <Separator minWidth="18.0" orientation="VERTICAL" prefWidth="10.0"/>
+            <Button mnemonicParsing="false" onAction="#onPlayCurrentSec" text="Play"/>
+            <Button mnemonicParsing="false" onAction="#stopPlayback" text="Stop"/>
+            <NoteNameCombo fx:id="rootCombo" prefWidth="150.0"/>
+            <ModeCombo fx:id="modeCombo" prefWidth="150.0"/>
+            <Button fx:id="btnClearMode" mnemonicParsing="false" text="clear mode"/>
+            <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="2.0"/>
+        </HBox>
+    </top>
+    <center>
+        <Accordion fx:id="accordion" BorderPane.alignment="CENTER">
+            <panes>
+                <TitledPane text="Properties" textFill="#028d00">
+                    <VBox>
+                        <GridPane>
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="208.0" minWidth="10.0" prefWidth="62.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="368.0" minWidth="10.0"
+                                                   prefWidth="368.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <children>
+                                <Label fx:id="tempoLabel" text="Tempo"/>
+                                <TempoSlider fx:id="tempoSlider" prefHeight="16.0" prefWidth="307.0"
+                                             GridPane.columnIndex="1"/>
+                            </children>
+                        </GridPane>
+                        <Label fx:id="division"/>
+                        <Label fx:id="resolution"/>
+                        <Label fx:id="tickLength"/>
+                        <Label fx:id="ticksPerMeasure"/>
+                        <Label fx:id="ticksIn32nds"/>
+                        <Label fx:id="ticksPerSecond"/>
+                        <Label fx:id="tickSize"/>
+                    </VBox>
+                </TitledPane>
+            </panes>
+        </Accordion>
+    </center>
+</BorderPane>

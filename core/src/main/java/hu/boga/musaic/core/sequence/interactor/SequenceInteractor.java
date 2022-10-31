@@ -1,12 +1,13 @@
 package hu.boga.musaic.core.sequence.interactor;
 
 import hu.boga.musaic.core.modell.SequenceModell;
-import hu.boga.musaic.core.sequence.boundary.SeqenceBoundaryOut;
+import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 import hu.boga.musaic.gateway.MidiGateway;
 import hu.boga.musaic.core.sequence.interactor.converters.SequenceModellToDtoConverter;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -15,10 +16,11 @@ public class SequenceInteractor implements SequenceBoundaryIn {
 
     private static final Map<String, SequenceModell> SEQUENCE_MODELS = new HashMap<>();
 
-    private final SeqenceBoundaryOut boundaryOut;
+    private final SequenceBoundaryOut boundaryOut;
     private final MidiGateway gateway;
 
-    public SequenceInteractor(SeqenceBoundaryOut boundaryOut, MidiGateway gateway) {
+    @Inject
+    public SequenceInteractor(SequenceBoundaryOut boundaryOut, MidiGateway gateway) {
         this.boundaryOut = boundaryOut;
         this.gateway = gateway;
     }

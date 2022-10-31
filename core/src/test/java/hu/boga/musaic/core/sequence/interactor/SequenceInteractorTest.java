@@ -1,7 +1,7 @@
 package hu.boga.musaic.core.sequence.interactor;
 
 import hu.boga.musaic.core.modell.SequenceModell;
-import hu.boga.musaic.core.sequence.boundary.SeqenceBoundaryOut;
+import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 import hu.boga.musaic.gateway.MidiGateway;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,12 +19,12 @@ class SequenceInteractorTest {
     private SequenceInteractor interactor;
     private ArgumentCaptor<SequenceDto> sequenceDtoArgumentCaptor;
     private ArgumentCaptor<SequenceModell> sequenceModellArgumentCaptor;
-    private SeqenceBoundaryOut boundaryOut;
+    private SequenceBoundaryOut boundaryOut;
     private MidiGateway gateway;
 
     @BeforeEach
     void setUp() {
-        boundaryOut = Mockito.mock(SeqenceBoundaryOut.class);
+        boundaryOut = Mockito.mock(SequenceBoundaryOut.class);
         gateway = Mockito.mock(MidiGateway.class);
         sequenceDtoArgumentCaptor = ArgumentCaptor.forClass(SequenceDto.class);
         sequenceModellArgumentCaptor = ArgumentCaptor.forClass(SequenceModell.class);
