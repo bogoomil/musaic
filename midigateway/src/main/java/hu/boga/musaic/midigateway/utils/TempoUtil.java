@@ -11,6 +11,10 @@ import java.util.List;
 
 public class TempoUtil extends MidiUtil {
 
+    private TempoUtil(){
+        super();
+    }
+
     public static void addTempoEvents(Sequence sequence, int tempo) {
         Arrays.stream(sequence.getTracks()).forEach(track -> {
             addTempoEvents(track, tempo);
