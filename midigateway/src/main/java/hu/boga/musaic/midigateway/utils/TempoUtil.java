@@ -11,17 +11,15 @@ import java.util.List;
 
 public class TempoUtil extends MidiUtil {
 
-    private TempoUtil(){
+    private TempoUtil() {
         super();
     }
 
     public static void addTempoEvents(Sequence sequence, int tempo) {
-        Arrays.stream(sequence.getTracks()).forEach(track -> {
-            addTempoEvents(track, tempo);
-        });
+        Arrays.stream(sequence.getTracks()).forEach(track -> addTempoEvents(track, tempo));
     }
 
-    public static void removeTempoEvents(Sequence sequence){
+    public static void removeTempoEvents(Sequence sequence) {
         Arrays.stream(sequence.getTracks()).forEach(track -> {
             final List<MidiEvent> tempoEvents = getMetaEventsByType(track, MidiConstants.METAMESSAGE_SET_TEMPO);
             tempoEvents.forEach(track::remove);
@@ -31,7 +29,7 @@ public class TempoUtil extends MidiUtil {
 
     public static int getTempo(Sequence sequence) {
         List<MidiEvent> tempoEvents = getMetaEventsByType(sequence, MidiConstants.METAMESSAGE_SET_TEMPO);
-        if (tempoEvents.size() == 0) {
+        if (tempoEvents.isEmpty()) {
             return 0;
         } else {
             return getTempoInBPM((MetaMessage) tempoEvents.get(0).getMessage());
@@ -54,7 +52,6 @@ public class TempoUtil extends MidiUtil {
             throw new IllegalArgumentException("mm=" + mm);
         }
         int mspq = ((data[0] & 0xff) << 16) | ((data[1] & 0xff) << 8) | (data[2] & 0xff);
-        int tempo = Math.round(60000001f / mspq);
-        return tempo;
+        return Math.round(60000001f / mspq);
     }
 }
