@@ -15,19 +15,6 @@ public class MidiGatewayImpl implements MidiGateway {
     protected static final Map<String, Sequence> SEQUENCE_MAP = new HashMap<>();
     protected static final Map<String, Track> TRACK_MAP = new HashMap<>();
 
-    private static final Sequencer sequencer;
-
-    static {
-        Sequencer sequencer1;
-        try {
-            sequencer1 = MidiSystem.getSequencer();
-            sequencer1.open();
-        } catch (MidiUnavailableException e) {
-            throw new MusaicException("unable to initialize sequencer: " + e.getMessage(), e);
-        }
-        sequencer = sequencer1;
-    }
-
     @Override
     public void initMidiSequence(SequenceModell modell) {
         try {
@@ -48,23 +35,7 @@ public class MidiGatewayImpl implements MidiGateway {
 
     @Override
     public void play(String sequenceId) {
-        try {
-            tryingToPlaySequence(sequenceId);
-        } catch (InvalidMidiDataException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void tryingToPlaySequence(String sequenceId) throws InvalidMidiDataException {
-        sequencer.stop();
-        sequencer.setLoopCount(0);
-        sequencer.setSequence(SEQUENCE_MAP.get(sequenceId));
-        sequencer.setTempoFactor(1f);
-        sequencer.setTickPosition(0);
-//        sequencer.setLoopStartPoint(fromTick);
-//        sequencer.setLoopEndPoint(toTick);
-        sequencer.start();
+        Player.playSequence(SEQUENCE_MAP.get(sequenceId));
     }
 
     private SequenceModell tryingToOpen(String path) throws InvalidMidiDataException, IOException {
@@ -85,6 +56,7 @@ public class MidiGatewayImpl implements MidiGateway {
         Arrays.stream(sequence.getTracks()).forEach(track -> {
             TrackModell modell = new TrackToModellConverter(track).convert();
             sequenceModell.tracks.add(modell);
+            TRACK_MAP.put(modell.getId(), track);
             convertNotes(track, modell);
         });
     }

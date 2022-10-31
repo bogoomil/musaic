@@ -74,5 +74,4 @@
             <artifactId>slf4j-reload4j</artifactId>
         </dependency>
     </dependencies>
-
 </project>

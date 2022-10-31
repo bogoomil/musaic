@@ -5,7 +5,7 @@ import com.google.common.base.Objects;
 import java.util.UUID;
 
 public class BaseModell {
-    private final String id;
+    private String id;
 
     public BaseModell(String id) {
         this.id = id;
