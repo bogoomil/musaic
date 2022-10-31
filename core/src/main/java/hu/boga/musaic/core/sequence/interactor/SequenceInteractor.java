@@ -4,7 +4,7 @@ import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
-import hu.boga.musaic.gateway.MidiGateway;
+import hu.boga.musaic.core.gateway.MidiGateway;
 import hu.boga.musaic.core.sequence.interactor.converters.SequenceModellToDtoConverter;
 
 import javax.inject.Inject;

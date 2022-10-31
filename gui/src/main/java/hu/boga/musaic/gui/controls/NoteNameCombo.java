@@ -1,4 +1,4 @@
-package hu.boga.musaic.controls;
+package hu.boga.musaic.gui.controls;
 
 import hu.boga.musaic.musictheory.enums.NoteName;
 import javafx.scene.control.ComboBox;

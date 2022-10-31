@@ -3,11 +3,16 @@ package hu.boga.musaic.midigateway;
 import hu.boga.musaic.core.exceptions.MusaicException;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
-import hu.boga.musaic.gateway.MidiGateway;
+import hu.boga.musaic.core.gateway.MidiGateway;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+
+import javax.sound.midi.Sequence;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,10 +29,10 @@ class MidiGatewayImplTest {
     @BeforeEach
     void setUp() {
         easyRandom = new EasyRandom();
-        sequenceModell = easyRandom.nextObject(SequenceModell.class);
+        sequenceModell = new SequenceModell();
         sequenceModell.division = SequenceModell.DEFAULT_DIVISION;
         sequenceModell.resolution = SequenceModell.DEFAULT_RESOLUTION;
-        trackModell = easyRandom.nextObject(TrackModell.class);
+        trackModell = new TrackModell();
         sequenceModell.tracks.add(trackModell);
         midiGateway = new MidiGatewayImpl();
     }
@@ -55,5 +60,10 @@ class MidiGatewayImplTest {
     @Test
     void openNegativePath(){
         assertThrows(MusaicException.class, () ->  midiGateway.open(""));
+    }
+
+    @Test
+    void play(){
+        assertThrows(MusaicException.class, () -> midiGateway.play(""));
     }
 }

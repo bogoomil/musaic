@@ -3,7 +3,7 @@ package hu.boga.musaic.core.sequence.interactor;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
-import hu.boga.musaic.gateway.MidiGateway;
+import hu.boga.musaic.core.gateway.MidiGateway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

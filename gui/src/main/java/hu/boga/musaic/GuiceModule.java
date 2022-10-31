@@ -6,9 +6,9 @@ import com.google.inject.Injector;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.interactor.SequenceInteractor;
-import hu.boga.musaic.gateway.MidiGateway;
+import hu.boga.musaic.core.gateway.MidiGateway;
 import hu.boga.musaic.midigateway.MidiGatewayImpl;
-import hu.boga.musaic.views.SequenceEditorPanelController;
+import hu.boga.musaic.gui.views.SequenceEditorPanelController;
 
 import javax.inject.Singleton;
 

@@ -1,16 +1,14 @@
-package hu.boga.musaic.views;
+package hu.boga.musaic.gui.views;
 
 import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
-import hu.boga.musaic.controls.ModeCombo;
-import hu.boga.musaic.controls.NoteNameCombo;
-import hu.boga.musaic.controls.TempoSlider;
+import hu.boga.musaic.gui.controls.ModeCombo;
+import hu.boga.musaic.gui.controls.NoteNameCombo;
+import hu.boga.musaic.gui.controls.TempoSlider;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

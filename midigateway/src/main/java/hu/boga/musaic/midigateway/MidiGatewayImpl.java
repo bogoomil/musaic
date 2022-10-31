@@ -3,8 +3,9 @@ package hu.boga.musaic.midigateway;
 import hu.boga.musaic.core.exceptions.MusaicException;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
-import hu.boga.musaic.gateway.MidiGateway;
+import hu.boga.musaic.core.gateway.MidiGateway;
 
+import javax.inject.Inject;
 import javax.sound.midi.*;
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +15,8 @@ public class MidiGatewayImpl implements MidiGateway {
 
     protected static final Map<String, Sequence> SEQUENCE_MAP = new HashMap<>();
     protected static final Map<String, Track> TRACK_MAP = new HashMap<>();
+
+    private Player player = new Player();
 
     @Override
     public void initMidiSequence(SequenceModell modell) {
@@ -35,7 +38,7 @@ public class MidiGatewayImpl implements MidiGateway {
 
     @Override
     public void play(String sequenceId) {
-        Player.playSequence(SEQUENCE_MAP.get(sequenceId));
+        player.playSequence(SEQUENCE_MAP.get(sequenceId));
     }
 
     private SequenceModell tryingToOpen(String path) throws InvalidMidiDataException, IOException {

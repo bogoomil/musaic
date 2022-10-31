@@ -1,4 +1,4 @@
-package hu.boga.musaic.controls;
+package hu.boga.musaic.gui.controls;
 
 import javafx.scene.control.ComboBox;
 

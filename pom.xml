@@ -14,7 +14,6 @@
         <module>core</module>
         <module>midigateway</module>
         <module>gui</module>
-        <module>launcher</module>
     </modules>
 
     <properties>
@@ -155,7 +154,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>hu.boga.midiai/hu.boga.midiai.MidiAiApplication</mainClass>
+                            <mainClass>hu.boga.musaic.MusaicApp</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
@@ -184,6 +183,7 @@
                     <failWhenNoMutations>false</failWhenNoMutations>
                     <excludedClasses>
                         <param>hu.boga.musaic.musictheory.*</param>
+                        <param>hu.boga.musaic.midigateway.Player</param>
                     </excludedClasses>
                 </configuration>
             </plugin>

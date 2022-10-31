@@ -9,8 +9,10 @@
         <module name="core" />
         <module name="gui" />
         <module name="midigateway" />
-        <module name="launcher" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="launcher" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

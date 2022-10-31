@@ -3,7 +3,7 @@ module core {
     exports hu.boga.musaic.core.sequence.boundary;
     exports hu.boga.musaic.core.sequence.boundary.dtos;
     exports hu.boga.musaic.core.sequence.interactor;
-    exports hu.boga.musaic.gateway;
+    exports hu.boga.musaic.core.gateway;
     exports hu.boga.musaic.core.modell;
     exports hu.boga.musaic.core.exceptions;
 

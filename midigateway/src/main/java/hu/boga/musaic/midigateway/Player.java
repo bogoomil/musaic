@@ -18,13 +18,15 @@ public class Player {
         sequencer = sequencer1;
     }
 
-    public static void playSequence(Sequence sequence){
+    public void playSequence(Sequence sequence){
+        if(sequence == null){
+            throw new MusaicException("sequence is null");
+        }
         try {
             tryingToPlaySequence(sequence);
         } catch (InvalidMidiDataException e) {
-            e.printStackTrace();
+            throw new MusaicException("unable to play sequence " + e.getMessage());
         }
-
     }
 
     private static void tryingToPlaySequence(Sequence sequence) throws InvalidMidiDataException {
@@ -33,8 +35,6 @@ public class Player {
         sequencer.setSequence(sequence);
         sequencer.setTempoFactor(1f);
         sequencer.setTickPosition(0);
-//        sequencer.setLoopStartPoint(fromTick);
-//        sequencer.setLoopEndPoint(toTick);
         sequencer.start();
     }
 

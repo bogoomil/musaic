@@ -1,5 +1,6 @@
 package hu.boga.musaic;
 
+import hu.boga.musaic.gui.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

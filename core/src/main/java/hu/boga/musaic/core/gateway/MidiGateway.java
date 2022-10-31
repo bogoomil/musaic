@@ -1,4 +1,4 @@
-package hu.boga.musaic.gateway;
+package hu.boga.musaic.core.gateway;
 
 import hu.boga.musaic.core.modell.SequenceModell;
 

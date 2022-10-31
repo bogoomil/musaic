@@ -1,6 +1,7 @@
-package hu.boga.musaic;
+package hu.boga.musaic.gui;
 
-import hu.boga.musaic.views.SequenceEditorPanelController;
+import hu.boga.musaic.GuiceModule;
+import hu.boga.musaic.gui.views.SequenceEditorPanelController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
