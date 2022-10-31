@@ -10,27 +10,26 @@ import javax.sound.midi.Sequence;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SequenceToModellConverterTest {
+class SequenceToModellConverterTest extends ConverterBaseTest{
 
     public static final int TEMPO = 120;
     SequenceToModellConverter converter;
-    private Sequence sequence;
+
 
     @BeforeEach
     void setUp() throws InvalidMidiDataException {
-        sequence = new Sequence(0.0f, 128);
-        sequence.createTrack();
+        super.setUp();
         TempoUtil.addTempoEvents(sequence, TEMPO);
         converter = new SequenceToModellConverter(sequence);
     }
+
 
     @Test
     void convert() {
         SequenceModell model = converter.convert();
         assertEquals(model.resolution, sequence.getResolution());
         assertEquals(model.division, sequence.getDivisionType());
-        assertEquals(model.tempo, TEMPO);
+        assertEquals(TEMPO, model.tempo);
     }
-
 
 }

@@ -1,4 +1,4 @@
-package hu.boga.musaic.midigateway.utils;
+package hu.boga.musaic.midigateway;
 
 import hu.boga.musaic.midigateway.utils.TempoUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,19 +10,21 @@ import javax.sound.midi.Track;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MidiUtilBaseTest {
-
+public class ConverterBaseTest {
+    public static final float DIVISION_TYPE = 0.0f;
+    public static final int RESOLUTION = 128;
     Sequence sequence;
     Track track;
 
     @BeforeEach
     void setUp() throws InvalidMidiDataException {
-        sequence = new Sequence(0.0f, 128);
+        sequence = new Sequence(DIVISION_TYPE, RESOLUTION);
         track = sequence.createTrack();
     }
 
     @Test
-    void setUpTests(){
+    void setUpTest(){
         assertEquals(1, sequence.getTracks().length);
     }
+
 }

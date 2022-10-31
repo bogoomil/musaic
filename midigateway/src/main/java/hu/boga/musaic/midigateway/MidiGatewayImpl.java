@@ -1,8 +1,11 @@
 package hu.boga.musaic.midigateway;
 
 import hu.boga.musaic.core.exceptions.MusaicException;
+import hu.boga.musaic.core.modell.NoteModell;
 import hu.boga.musaic.core.modell.SequenceModell;
+import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.gateway.MidiGateway;
+import hu.boga.musaic.midigateway.utils.NoteUtil;
 
 import javax.sound.midi.*;
 import java.io.File;
@@ -27,15 +30,36 @@ public class MidiGatewayImpl implements MidiGateway {
     @Override
     public SequenceModell open(String path) {
         try {
-            File file = new File(path);
-            String id = UUID.randomUUID().toString();
-            Sequence sequence = MidiSystem.getSequence(file);
-            SequenceModell sequenceModell = new SequenceToModellConverter(sequence).convert();
-            SEQUENCE_MAP.put(sequenceModell.getId(), sequence);
-            return sequenceModell;
+            return tryingOpen(path);
         } catch (InvalidMidiDataException | IOException e) {
             throw new MusaicException(e.getMessage(), e);
         }
+    }
+
+    private SequenceModell tryingOpen(String path) throws InvalidMidiDataException, IOException {
+        File file = new File(path);
+        Sequence sequence = MidiSystem.getSequence(file);
+        SequenceModell sequenceModell = convertSquence(sequence);
+        return sequenceModell;
+    }
+
+    private SequenceModell convertSquence(Sequence sequence) {
+        SequenceModell sequenceModell = new SequenceToModellConverter(sequence).convert();
+        convertTracks(sequence, sequenceModell);
+        SEQUENCE_MAP.put(sequenceModell.getId(), sequence);
+        return sequenceModell;
+    }
+
+    private void convertTracks(Sequence sequence, SequenceModell sequenceModell) {
+        Arrays.stream(sequence.getTracks()).forEach(track -> {
+            TrackModell modell = new TrackToModellConverter(track).convert();
+            sequenceModell.tracks.add(modell);
+            convertNotes(track, modell);
+        });
+    }
+
+    private void convertNotes(Track track, TrackModell modell) {
+        modell.notes = new NoteToModellConverter(track).convert();
     }
 
     private void tryingInitializeSequence(SequenceModell modell) throws InvalidMidiDataException {

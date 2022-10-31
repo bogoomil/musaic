@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MidiUtil {
+
+    MidiUtil(){
+        throw new UnsupportedOperationException();
+    }
+
     protected static MidiEvent createMetaEvent(final long tick, final int type, final byte[] array) {
         final MetaMessage metaMessage = new MetaMessage();
         try {
@@ -36,36 +41,36 @@ public class MidiUtil {
         return events;
     }
 
-    protected static void addShortMessage(final Track track, final int tick, final int command, final int channel, final int data1, final int data2) throws InvalidMidiDataException {
+    protected static void addShortMessage(final Track track, final int tick, final int command, final int channel, final int data1, final int data2) {
         final ShortMessage shortMessage = new ShortMessage();
-        shortMessage.setMessage(command, channel, data1, data2);
+        try {
+            shortMessage.setMessage(command, channel, data1, data2);
+        } catch (InvalidMidiDataException e) {
+            throw new MusaicException(e.getMessage(), e);
+        }
         final MidiEvent event = new MidiEvent(shortMessage, tick);
         track.add(event);
     }
 
-    //    public void updateTrackName(final String name) {
-//        final List<MidiEvent> tempoEvents = this.getMetaEventsByType(Constants.METAMESSAGE_SET_NAME);
-//        this.removeEvents(tempoEvents);
-//
-//        final MidiEvent event = this.createMetaEvent(0, Constants.METAMESSAGE_SET_NAME, name.getBytes(StandardCharsets.UTF_8));
-//        this.track.add(event);
-//
-//    }
-//
-//    private List<ShortMessage> getShortMessagesByCommand(final int command) {
-//        final List<ShortMessage> retVal = new ArrayList<>();
-//        this.getEventsByCommand(command).forEach(midiEvent -> {
-//            final ShortMessage msg = (ShortMessage) midiEvent.getMessage();
-//            retVal.add(msg);
-//        });
-//        return retVal;
-//    }
+    public static void removeEvents(Track track, final List<MidiEvent> events) {
+        events.forEach(track::remove);
+    }
 
-//    public void addChord(final int tick, final int pitch, final int length, final ChordType chordType) {
-//        final Chord chord = Chord.getChord(new Pitch(pitch), chordType);
-//        Arrays.stream(chord.getPitches()).forEach(pitch1 -> {
-//            this.addNote(tick, pitch1.getMidiCode(), length);
-//        });
-//    }
+    protected static List<MidiMessage> getMidiMessagesByCommand(final Track track, final int command) {
+        return getMidiEventsByCommand(track, command).stream().map(MidiEvent::getMessage).collect(Collectors.toList());
+    }
 
+    protected static List<MidiEvent> getMidiEventsByCommand(final Track track, final int command) {
+        final List<MidiEvent> retVal = new ArrayList<>();
+        for (int i = 0; i < track.size(); i++) {
+            final MidiEvent event = track.get(i);
+            if (event.getMessage() instanceof ShortMessage) {
+                final ShortMessage msg = (ShortMessage) event.getMessage();
+                if (msg.getCommand() == command) {
+                    retVal.add(event);
+                }
+            }
+        }
+        return retVal;
+    }
 }

@@ -1,10 +1,19 @@
 package hu.boga.musaic.midigateway.utils;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import javax.sound.midi.InvalidMidiDataException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TempoUtilTest extends MidiUtilBaseTest{
+
+    @BeforeEach
+    void setUp() throws InvalidMidiDataException {
+        super.setUp();
+        TempoUtil.addTempoEvents(sequence, 120);
+    }
 
     @Test
     void addTempoEvents() {

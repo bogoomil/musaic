@@ -8,7 +8,7 @@ public class TrackModell extends BaseModell {
     public int channel;
     public int program;
     public String name;
-    public final List<NoteModell> notes = new ArrayList<>();
+    public List<NoteModell> notes = new ArrayList<>();
 
     @Override
     public String toString() {

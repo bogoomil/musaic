@@ -8,6 +8,10 @@ import java.util.List;
 
 public class NoteUtil extends MidiUtil {
 
+    private NoteUtil(){
+        super();
+    }
+
     public static List<MidiEvent> getNoteOnEvents(Track track){
         List<MidiEvent> events = new ArrayList<>();
         for(int i = 0; i < track.size(); i++){
@@ -19,12 +23,8 @@ public class NoteUtil extends MidiUtil {
     }
 
     public static void addNote(final Track track, final int tick, final int pitch, final int length, int volume, int channel) {
-        try {
-            addShortMessage(track, tick, ShortMessage.NOTE_ON, channel, pitch, volume);
-            addShortMessage(track, tick + length, ShortMessage.NOTE_OFF, channel, pitch, 0);
-        } catch (final InvalidMidiDataException e) {
-            throw new MusaicException(e.getMessage(), e);
-        }
+        addShortMessage(track, tick, ShortMessage.NOTE_ON, channel, pitch, volume);
+        addShortMessage(track, tick + length, ShortMessage.NOTE_OFF, channel, pitch, 0);
     }
 
     public static void moveNote(Track track, final int tick, final int pitch, final int newTick) {
@@ -33,12 +33,8 @@ public class NoteUtil extends MidiUtil {
         final MidiEvent noteOff = findMatchingNoteOff(track, index, noteOn);
         final long length = noteOff.getTick() - noteOn.getTick();
         final ShortMessage shortMessage = (ShortMessage) noteOn.getMessage();
-        try {
-            addShortMessage(track, newTick, ShortMessage.NOTE_ON, shortMessage.getChannel(), shortMessage.getData1(), shortMessage.getData2());
-            addShortMessage(track, (int) (newTick + length), ShortMessage.NOTE_OFF, shortMessage.getChannel(), shortMessage.getData1(), shortMessage.getData2());
-        } catch (final InvalidMidiDataException e) {
-            e.printStackTrace();
-        }
+        addShortMessage(track, newTick, ShortMessage.NOTE_ON, shortMessage.getChannel(), shortMessage.getData1(), shortMessage.getData2());
+        addShortMessage(track, (int) (newTick + length), ShortMessage.NOTE_OFF, shortMessage.getChannel(), shortMessage.getData1(), shortMessage.getData2());
         track.remove(noteOn);
         track.remove(noteOff);
     }
@@ -57,6 +53,10 @@ public class NoteUtil extends MidiUtil {
         MidiEvent noteOn = track.get(index);
         MidiEvent noteOff = NoteUtil.findMatchingNoteOff(track, index, noteOn);
         return new NoteOnOffPair(noteOn, noteOff);
+    }
+
+    public static int getVelocity(MidiMessage noteOnOff) {
+        return noteOnOff.getMessage()[2];
     }
 
     private static int indexOfNoteOnEvent(Track track, final int tick, final int pitch) {
@@ -87,13 +87,11 @@ public class NoteUtil extends MidiUtil {
     }
 
     private static boolean isNoteOnMessage(MidiMessage message) {
-        return message.getStatus() >= 144 && message.getStatus() < 160
-                && getVelocity(message) > 0;
+        return message instanceof ShortMessage && ((ShortMessage) message).getCommand() == ShortMessage.NOTE_ON;
     }
 
     private static boolean isNoteOffMessage(MidiMessage message) {
-        return (message.getStatus() >= 128 && message.getStatus() < 144)
-                || (message.getStatus() >= 144 && message.getStatus() < 160 && getVelocity(message) == 0);
+        return message instanceof ShortMessage && ((ShortMessage) message).getCommand() == ShortMessage.NOTE_OFF;
     }
 
     private static int getNoteValue(MidiEvent noteOnOff) {
@@ -108,21 +106,13 @@ public class NoteUtil extends MidiUtil {
         return noteOnOff.getMessage()[1];
     }
 
-    private static int getVelocity(MidiEvent noteOnOff) {
-        return getVelocity(noteOnOff.getMessage());
-    }
-
-    private static int getVelocity(MidiMessage noteOnOff) {
-        return noteOnOff.getMessage()[2];
-    }
-
     private static boolean isNoteOnEvent(MidiEvent event) {
         return isNoteOnMessage(event.getMessage());
     }
 
-    static class NoteOnOffPair{
-        MidiEvent noteOn;
-        MidiEvent noteOff;
+    public static class NoteOnOffPair{
+        public MidiEvent noteOn;
+        public MidiEvent noteOff;
 
         public NoteOnOffPair(MidiEvent noteOn, MidiEvent noteOff) {
             this.noteOn = noteOn;

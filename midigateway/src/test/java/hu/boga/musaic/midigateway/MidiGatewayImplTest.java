@@ -49,6 +49,8 @@ class MidiGatewayImplTest {
     void open(){
         SequenceModell model = midiGateway.open(PATH);
         assertNotNull(model);
+        assertEquals(1, model.tracks.size());
+        assertEquals(3, model.tracks.get(0).notes.size());
     }
     @Test
     void openNegativePath(){
