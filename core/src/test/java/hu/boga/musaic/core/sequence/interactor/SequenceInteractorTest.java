@@ -16,6 +16,9 @@ import static org.mockito.Mockito.times;
 
 class SequenceInteractorTest {
 
+    public static final String SEQUENCE_ID = "SEQUENCE_ID";
+    public static final String PATH = "PATH";
+
     private SequenceInteractor interactor;
     private ArgumentCaptor<SequenceDto> sequenceDtoArgumentCaptor;
     private ArgumentCaptor<SequenceModell> sequenceModellArgumentCaptor;
@@ -51,6 +54,34 @@ class SequenceInteractorTest {
         Mockito.verify(boundaryOut, times(2)).displaySequence(sequenceDtoArgumentCaptor.capture());
 
         assertEquals(createdModell.getId(), sequenceDtoArgumentCaptor.getValue().id);
+    }
+
+    @Test
+    void play(){
+        interactor.play(SEQUENCE_ID);
+        ArgumentCaptor<String> sequenceIdCaptor = ArgumentCaptor.forClass(String.class);
+        Mockito.verify(gateway).play(sequenceIdCaptor.capture());
+
+        assertNotNull(sequenceIdCaptor.getValue());
+        assertEquals(SEQUENCE_ID, sequenceIdCaptor.getValue());
+    }
+
+    @Test
+    void open(){
+        Mockito.when(gateway.open(PATH)).thenReturn(new SequenceModell());
+
+        interactor.open(PATH);
+
+        ArgumentCaptor<String> sequenceIdCaptor = ArgumentCaptor.forClass(String.class);
+        Mockito.verify(gateway).open(sequenceIdCaptor.capture());
+
+        assertNotNull(sequenceIdCaptor.getValue());
+        assertEquals(PATH, sequenceIdCaptor.getValue());
+
+        Mockito.verify(boundaryOut, times(1)).displaySequence(sequenceDtoArgumentCaptor.capture());
+
+        assertNotNull(sequenceDtoArgumentCaptor.getValue());
+
     }
 
     @Test

@@ -1,22 +1,32 @@
 package hu.boga.musaic.midigateway;
 
 import hu.boga.musaic.core.exceptions.MusaicException;
-import hu.boga.musaic.core.modell.NoteModell;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.gateway.MidiGateway;
-import hu.boga.musaic.midigateway.utils.NoteUtil;
 
 import javax.sound.midi.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class MidiGatewayImpl implements MidiGateway {
 
     protected static final Map<String, Sequence> SEQUENCE_MAP = new HashMap<>();
     protected static final Map<String, Track> TRACK_MAP = new HashMap<>();
+
+    private static final Sequencer sequencer;
+
+    static {
+        Sequencer sequencer1;
+        try {
+            sequencer1 = MidiSystem.getSequencer();
+            sequencer1.open();
+        } catch (MidiUnavailableException e) {
+            throw new MusaicException("unable to initialize sequencer: " + e.getMessage(), e);
+        }
+        sequencer = sequencer1;
+    }
 
     @Override
     public void initMidiSequence(SequenceModell modell) {
@@ -30,13 +40,34 @@ public class MidiGatewayImpl implements MidiGateway {
     @Override
     public SequenceModell open(String path) {
         try {
-            return tryingOpen(path);
+            return tryingToOpen(path);
         } catch (InvalidMidiDataException | IOException e) {
             throw new MusaicException(e.getMessage(), e);
         }
     }
 
-    private SequenceModell tryingOpen(String path) throws InvalidMidiDataException, IOException {
+    @Override
+    public void play(String sequenceId) {
+        try {
+            tryingToPlaySequence(sequenceId);
+        } catch (InvalidMidiDataException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void tryingToPlaySequence(String sequenceId) throws InvalidMidiDataException {
+        sequencer.stop();
+        sequencer.setLoopCount(0);
+        sequencer.setSequence(SEQUENCE_MAP.get(sequenceId));
+        sequencer.setTempoFactor(1f);
+        sequencer.setTickPosition(0);
+//        sequencer.setLoopStartPoint(fromTick);
+//        sequencer.setLoopEndPoint(toTick);
+        sequencer.start();
+    }
+
+    private SequenceModell tryingToOpen(String path) throws InvalidMidiDataException, IOException {
         File file = new File(path);
         Sequence sequence = MidiSystem.getSequence(file);
         SequenceModell sequenceModell = convertSquence(sequence);

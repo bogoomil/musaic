@@ -36,6 +36,17 @@ public class SequenceInteractor implements SequenceBoundaryIn {
         boundaryOut.displaySequence(dto);
     }
 
+    @Override
+    public void open(String path){
+        SequenceDto dto = new SequenceModellToDtoConverter(gateway.open(path)).convert();
+        boundaryOut.displaySequence(dto);
+    }
+
+    @Override
+    public void play(String sequenceId) {
+        gateway.play(sequenceId);
+    }
+
     private SequenceModell createNewSequence(){
         SequenceModell modell = new SequenceModell();
         SEQUENCE_MODELS.put(modell.getId(), modell);

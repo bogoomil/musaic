@@ -8,4 +8,5 @@ public interface MidiGateway {
 
     SequenceModell open(String path);
 
+    void play(String sequenceId);
 }

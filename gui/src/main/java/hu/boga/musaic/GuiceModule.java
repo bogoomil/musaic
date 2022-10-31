@@ -10,6 +10,8 @@ import hu.boga.musaic.gateway.MidiGateway;
 import hu.boga.musaic.midigateway.MidiGatewayImpl;
 import hu.boga.musaic.views.SequenceEditorPanelController;
 
+import javax.inject.Singleton;
+
 public class GuiceModule extends AbstractModule {
     public static final Injector INJECTOR = Guice.createInjector(new GuiceModule());
 
@@ -19,10 +21,10 @@ public class GuiceModule extends AbstractModule {
 //        bind(SequenceGateway.class).to(SequenceGatewayImpl.class);
 //        bind(TrackGateway.class).to(TrackGatewayImpl.class);
 //
-        bind(SequenceBoundaryIn.class).to(SequenceInteractor.class);
-        bind(SequenceBoundaryOut.class).to(SequenceEditorPanelController.class);
+        bind(SequenceBoundaryIn.class).to(SequenceInteractor.class).in(Singleton.class);
+        bind(SequenceBoundaryOut.class).to(SequenceEditorPanelController.class).in(Singleton.class);
 
-        bind(MidiGateway.class).to(MidiGatewayImpl.class);
+        bind(MidiGateway.class).to(MidiGatewayImpl.class).in(Singleton.class);
 //
 //        bind(TrackBoundaryIn.class).to(TrackInteractor.class);
 //        bind(TrackBoundaryOut.class).to(TrackEditorPanelController.class);

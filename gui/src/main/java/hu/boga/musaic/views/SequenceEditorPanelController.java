@@ -84,8 +84,7 @@ public class SequenceEditorPanelController implements SequenceBoundaryOut {
     }
 
     public void onPlayCurrentSec(ActionEvent actionEvent) {
-//        boundaryIn.play(sequenceId);
-        //this.boundaryIn.playLoop(projectId, 960, 1920);
+        boundaryIn.play(sequenceId);
     }
 
 //    public void stopPlayback(ActionEvent actionEvent) {
@@ -126,7 +125,7 @@ public class SequenceEditorPanelController implements SequenceBoundaryOut {
     }
 
     public void initSequence(File file) {
-//        this.boundaryIn.open(file.getAbsolutePath());
+        this.boundaryIn.open(file.getAbsolutePath());
     }
 
     private void addTrackPanel(int trackIndex) throws IOException {
