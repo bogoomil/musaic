@@ -1,14 +1,18 @@
 package hu.boga.musaic.gui.sequenceeditor;
 
 import com.google.common.eventbus.EventBus;
+import hu.boga.musaic.GuiceModule;
+import hu.boga.musaic.core.sequence.boundary.dtos.TrackDto;
 import hu.boga.musaic.gui.controls.ModeCombo;
 import hu.boga.musaic.gui.controls.NoteNameCombo;
 import hu.boga.musaic.gui.controls.TempoSlider;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
+import hu.boga.musaic.gui.trackeditor.TrackEditor;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,20 +106,7 @@ public class SequenceEditor implements SequenceBoundaryOut {
         this.tempoSlider.adjustValue(sequenceDto.tempo);
         this.tempoLabel.setText("Tempo: " + sequenceDto.tempo);
         this.sequenceId = sequenceDto.id;
-
-        initChildren(sequenceDto);
-
-    }
-
-    private void initChildren(SequenceDto sequenceDto) {
-//        accordion.getPanes().remove(1, accordion.getPanes().size());
-//        for(int i = 0; i < sequenceDto.trackCount; i++) {
-//            try {
-//                addTrackPanel(i);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        sequenceDto.tracks.forEach(trackDto -> addTrackPanel(trackDto, sequenceDto.resolution));
     }
 
     public void initSequence() {
@@ -126,16 +117,20 @@ public class SequenceEditor implements SequenceBoundaryOut {
         this.boundaryIn.open(file.getAbsolutePath());
     }
 
-    private void addTrackPanel(int trackIndex) throws IOException {
-//        FXMLLoader loader = new FXMLLoader(TrackEditorPanelController.class.getResource("track-editor.fxml"));
-//        loader.setControllerFactory(GuiceModule.INJECTOR::getInstance);
-//        TitledPane trackEditor = loader.load();
-//
-//        TrackEditorPanelController trackEditorPanelController = loader.getController();
-//        trackEditorPanelController.setTrackIndex(sequenceId, trackIndex);
-//        trackEditorPanelController.setEventBus(eventBus);
-//
-//        accordion.getPanes().add(trackEditor);
+    private void addTrackPanel(TrackDto trackDto, int resolution) {
+        FXMLLoader loader = new FXMLLoader(TrackEditor.class.getResource("track-editor.fxml"));
+        loader.setControllerFactory(GuiceModule.INJECTOR::getInstance);
+        TitledPane trackEditor = null;
+        try {
+            trackEditor = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        TrackEditor controller = loader.getController();
+        controller.setTrackDto(trackDto, resolution);
+        controller.setEventBus(eventBus);
+
+        accordion.getPanes().add(trackEditor);
     }
 
     public void onNewTrackButtonClicked(ActionEvent actionEvent) {

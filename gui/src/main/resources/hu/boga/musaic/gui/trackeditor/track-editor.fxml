@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import hu.boga.midiai.gui.controls.*?>
-<?import hu.boga.midiai.gui.trackeditor.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import hu.boga.musaic.gui.controls.*?>
+<?import hu.boga.musaic.gui.trackeditor.TrackEditorPanel?>
 
-<TitledPane fx:id="titledPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.midiai.gui.trackeditor.TrackEditorPanelController">
+<?import hu.boga.musaic.gui.controls.InstrumentCombo?>
+<TitledPane fx:id="titledPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.trackeditor.TrackEditor">
     <BorderPane prefHeight="200.0" prefWidth="200.0">
         <top>
             <AnchorPane BorderPane.alignment="CENTER">

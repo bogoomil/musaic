@@ -1,17 +1,20 @@
 package hu.boga.musaic.gui.trackeditor;
 
 import com.google.common.eventbus.EventBus;
+import hu.boga.musaic.core.sequence.boundary.dtos.TrackDto;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
 import hu.boga.musaic.gui.controls.InstrumentCombo;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -85,15 +88,6 @@ public class TrackEditor implements TrackBoundaryOut {
 
 //    @Override
 //    public void dispayTrack(TrackDto trackDto) {
-//        trackIndex = trackDto.trackIndex;
-//        titledPane.setText("ch: " + trackDto.channel + " pr:" + trackDto.program + " notes: " + trackDto.noteCount + " (" + trackIndex + ")");
-//        channelCombo.getSelectionModel().select(trackDto.channel);
-//        instrumentCombo.selectInstrument(trackDto.program);
-//        trackName.setText(trackDto.name);
-//
-//        trackEditorPanel.setResolution(trackDto.resolution);
-//        trackEditorPanel.setNotes(Arrays.asList(trackDto.notes));
-//        trackEditorPanel.paintNotes();
 //    }
 //
 //    public void removeTrack(ActionEvent actionEvent) {
@@ -104,6 +98,22 @@ public class TrackEditor implements TrackBoundaryOut {
         this.eventBus = eventBus;
         eventBus.register(this);
         trackEditorPanel.setEventBus(eventBus);
+    }
+
+    public void removeTrack(ActionEvent actionEvent) {
+    }
+
+    public void setTrackDto(TrackDto trackDto, int resolution) {
+
+        titledPane.setText("ch: " + trackDto.channel + " pr:" + trackDto.program + " notes: " + trackDto.notes.size() + " (" + trackDto.id + ")");
+        channelCombo.getSelectionModel().select(trackDto.channel);
+        instrumentCombo.selectInstrument(trackDto.program);
+        trackName.setText(trackDto.name);
+
+        trackEditorPanel.setResolution(resolution);
+        trackEditorPanel.setNotes(trackDto.notes);
+        trackEditorPanel.paintNotes();
+
     }
 
 
