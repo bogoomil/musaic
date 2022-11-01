@@ -179,9 +179,11 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <verbose>true</verbose>
                     <skip>false</skip>
                     <failWhenNoMutations>false</failWhenNoMutations>
                     <excludedClasses>
+                        <param>hu.boga.musaic.core.sequence.boundary.dtos.*</param>
                         <param>hu.boga.musaic.musictheory.*</param>
                         <param>hu.boga.musaic.midigateway.Player</param>
                     </excludedClasses>

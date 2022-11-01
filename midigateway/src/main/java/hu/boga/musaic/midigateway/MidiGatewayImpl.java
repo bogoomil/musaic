@@ -17,8 +17,8 @@ public class MidiGatewayImpl implements MidiGateway {
 
     private static final Logger LOG = LoggerFactory.getLogger(MidiGatewayImpl.class);
 
-    protected static final Map<String, Sequence> SEQUENCE_MAP = new HashMap<>();
-    protected static final Map<String, Track> TRACK_MAP = new HashMap<>();
+    public static final Map<String, Sequence> SEQUENCE_MAP = new HashMap<>();
+    public static final Map<String, Track> TRACK_MAP = new HashMap<>();
 
     @Override
     public void initMidiSequence(SequenceModell modell) {
@@ -55,6 +55,17 @@ public class MidiGatewayImpl implements MidiGateway {
     @Override
     public void save(String sequenceId, String path) {
         Saver.save(SEQUENCE_MAP.get(sequenceId), path);
+    }
+
+    @Override
+    public void addTrack(SequenceModell modell) {
+        Sequence sequence = SEQUENCE_MAP.get(modell.getId());
+        Track newTrack = sequence.createTrack();
+        modell.tracks.forEach(trackModell -> {
+            if(!TRACK_MAP.containsKey(trackModell.getId())){
+                TRACK_MAP.put(trackModell.getId(), newTrack);
+            }
+        });
     }
 
     private SequenceModell tryingToOpen(String path) throws InvalidMidiDataException, IOException {

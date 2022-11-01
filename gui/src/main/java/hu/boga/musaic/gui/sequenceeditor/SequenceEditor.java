@@ -46,7 +46,8 @@ public class SequenceEditor implements SequenceBoundaryOut {
     @FXML
     private Accordion accordion;
 
-    private String sequenceId;
+    private SequenceDto sequenceDto;
+
 
     @Inject
     public SequenceEditor(SequenceBoundaryIn boundaryInProvider) {
@@ -73,27 +74,32 @@ public class SequenceEditor implements SequenceBoundaryOut {
 
     private void initTemposSettings(Number newValue) {
         tempoLabel.setText("Tempo: " + newValue.intValue());
-        if(sequenceId != null){
-            boundaryIn.setTempo(sequenceId, newValue.intValue());
+        if(sequenceDto.id != null){
+            boundaryIn.setTempo(sequenceDto.id, newValue.intValue());
         }
     }
 
     public void saveSequence(ActionEvent actionEvent) {
-        LOG.debug("Saving sequence: " + sequenceId);
+        LOG.debug("Saving sequence: " + sequenceDto.id);
         String path = new FileChooser().showSaveDialog(null).getAbsolutePath();
-        this.boundaryIn.save(sequenceId, path);
+        this.boundaryIn.save(sequenceDto.id, path);
     }
 
     public void onPlayCurrentSec(ActionEvent actionEvent) {
-        boundaryIn.play(sequenceId);
+        boundaryIn.play(sequenceDto.id);
     }
 
 //    public void stopPlayback(ActionEvent actionEvent) {
-//        this.boundaryIn.stop(sequenceId);
+//        this.boundaryIn.stop(sequenceDto.id);
 //    }
 
     @Override
     public void displaySequence(SequenceDto sequenceDto) {
+        this.sequenceDto = sequenceDto;
+        updateGui(sequenceDto);
+    }
+
+    private void updateGui(SequenceDto sequenceDto) {
         this.division.setText("division: " + sequenceDto.division + "");
         this.resolution.setText("resolution: " + sequenceDto.resolution + "");
         this.tickLength.setText("tick length: " + sequenceDto.tickLength + "");
@@ -103,8 +109,7 @@ public class SequenceEditor implements SequenceBoundaryOut {
         this.tickSize.setText("tick size: " + sequenceDto.tickSize + " (1 / ticks per second)");
         this.tempoSlider.adjustValue(sequenceDto.tempo);
         this.tempoLabel.setText("Tempo: " + sequenceDto.tempo);
-        this.sequenceId = sequenceDto.id;
-        sequenceDto.tracks.forEach(trackDto -> addTrackPanel(trackDto, sequenceDto.resolution));
+        sequenceDto.tracks.forEach(trackDto -> displayNewTrack(trackDto));
     }
 
     public void initSequence() {
@@ -115,7 +120,8 @@ public class SequenceEditor implements SequenceBoundaryOut {
         this.boundaryIn.open(file.getAbsolutePath());
     }
 
-    private void addTrackPanel(TrackDto trackDto, int resolution) {
+    @Override
+    public void displayNewTrack(TrackDto trackDto) {
         FXMLLoader loader = new FXMLLoader(TrackEditor.class.getResource("track-editor.fxml"));
         loader.setControllerFactory(GuiceModule.INJECTOR::getInstance);
         TitledPane trackEditor = null;
@@ -125,21 +131,18 @@ public class SequenceEditor implements SequenceBoundaryOut {
             e.printStackTrace();
         }
         TrackEditor controller = loader.getController();
-        controller.setTrackDto(trackDto, resolution);
+        controller.setTrackDto(trackDto, sequenceDto.resolution);
         controller.setEventBus(eventBus);
 
         accordion.getPanes().add(trackEditor);
     }
 
-    public void onNewTrackButtonClicked(ActionEvent actionEvent) {
-    }
-
     public void stopPlayback(ActionEvent actionEvent) {
     }
 
-//    public void onNewTrackButtonClicked(ActionEvent actionEvent) {
-//        this.boundaryIn.addTrack(sequenceId);
-//    }
+    public void onNewTrackButtonClicked(ActionEvent actionEvent) {
+        this.boundaryIn.addTrack(sequenceDto.id);
+    }
 
 //    @Override
 //    public void addTrack(int index) {
@@ -153,13 +156,13 @@ public class SequenceEditor implements SequenceBoundaryOut {
 
 //    @Subscribe
 //    public void onTrackDeletedEvent(TrackDeleteEvent event) {
-//        boundaryIn.removeTrack(sequenceId, event.getIndex());
+//        boundaryIn.removeTrack(sequenceDto.id, event.getIndex());
 //    }
 //
 //    @Subscribe
 //    public void onProgramChangedEvent(ProgramChangedEvent even){
 //        LOG.debug("programchanged event: " + even);
-//        boundaryIn.updateTrackProgram(sequenceId, even.getTrackIndex(), even.getProgram(), even.getChannel());
+//        boundaryIn.updateTrackProgram(sequenceDto.id, even.getTrackIndex(), even.getProgram(), even.getChannel());
 //    }
 
 

@@ -9,4 +9,15 @@ public class TrackDto {
     public List<NoteDto> notes;
 
     public String id;
+
+    @Override
+    public String toString() {
+        return "TrackDto{" +
+                "channel=" + channel +
+                ", program=" + program +
+                ", name='" + name + '\'' +
+                ", notes=" + notes +
+                ", id='" + id + '\'' +
+                '}';
+    }
 }

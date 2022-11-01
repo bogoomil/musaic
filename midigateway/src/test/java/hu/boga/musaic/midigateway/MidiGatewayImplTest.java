@@ -105,4 +105,16 @@ class MidiGatewayImplTest {
             assertThrows(MusaicException.class, () -> midiGateway.save("", PATH_TO_SAVE));
         }
     }
+
+    @Test
+    void addTrack(){
+        MidiGatewayImpl.TRACK_MAP.clear();//Ha ez nincs itt a pitest fails.
+        SequenceModell modell = new SequenceModell();
+        modell.tracks.add(new TrackModell());
+        midiGateway.initMidiSequence(modell);
+        modell.tracks.add(new TrackModell());
+        midiGateway.addTrack(modell);
+
+        assertEquals(2, MidiGatewayImpl.TRACK_MAP.size());
+    }
 }

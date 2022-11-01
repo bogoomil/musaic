@@ -1,11 +1,13 @@
 package hu.boga.musaic.core.sequence.interactor;
 
 import hu.boga.musaic.core.modell.SequenceModell;
+import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 import hu.boga.musaic.core.gateway.MidiGateway;
 import hu.boga.musaic.core.sequence.interactor.converters.SequenceModellToDtoConverter;
+import hu.boga.musaic.core.sequence.interactor.converters.TrackModelltoDtoConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,6 +66,15 @@ public class SequenceInteractor implements SequenceBoundaryIn {
         SequenceModell modell = SEQUENCE_MODELS.get(sequenceId);
         modell.tempo = tempo;
         gateway.updateTempo(modell);
+    }
+
+    @Override
+    public void addTrack(String sequenceId) {
+        SequenceModell modell = SEQUENCE_MODELS.get(sequenceId);
+        TrackModell trackModell = new TrackModell();
+        modell.tracks.add(trackModell);
+        gateway.addTrack(modell);
+        boundaryOut.displayNewTrack(new TrackModelltoDtoConverter(trackModell).convert());
     }
 
     private SequenceModell createNewSequence(){

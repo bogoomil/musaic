@@ -4,6 +4,7 @@ import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 import hu.boga.musaic.core.gateway.MidiGateway;
+import hu.boga.musaic.core.sequence.boundary.dtos.TrackDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -21,8 +22,10 @@ class SequenceInteractorTest {
 
     private SequenceInteractor interactor;
     private ArgumentCaptor<SequenceDto> sequenceDtoArgumentCaptor;
+    private ArgumentCaptor<TrackDto> trackDtoArgumentCaptor;
     private ArgumentCaptor<SequenceModell> sequenceModellArgumentCaptor;
     private SequenceBoundaryOut boundaryOut;
+
     private MidiGateway gateway;
 
     @BeforeEach
@@ -31,6 +34,7 @@ class SequenceInteractorTest {
         gateway = Mockito.mock(MidiGateway.class);
         sequenceDtoArgumentCaptor = ArgumentCaptor.forClass(SequenceDto.class);
         sequenceModellArgumentCaptor = ArgumentCaptor.forClass(SequenceModell.class);
+        trackDtoArgumentCaptor = ArgumentCaptor.forClass(TrackDto.class);
         interactor = new SequenceInteractor(boundaryOut, gateway);
     }
 
@@ -104,5 +108,19 @@ class SequenceInteractorTest {
 
         assertNotNull(captor1.getValue());
         assertNotNull(captor2.getValue());
+    }
+
+    @Test
+    void addTrack(){
+        interactor.create();
+        Mockito.verify(gateway).initMidiSequence(sequenceModellArgumentCaptor.capture());
+        SequenceModell modell = sequenceModellArgumentCaptor.getValue();
+
+        interactor.addTrack(modell.getId());
+
+        Mockito.verify(gateway).addTrack(sequenceModellArgumentCaptor.capture());
+        Mockito.verify(boundaryOut).displayNewTrack(trackDtoArgumentCaptor.capture());
+        assertNotNull(sequenceModellArgumentCaptor.getValue());
+        assertNotNull(trackDtoArgumentCaptor.getValue());
     }
 }

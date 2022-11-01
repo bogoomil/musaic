@@ -9,4 +9,5 @@ public interface SequenceBoundaryIn {
 
     void setTempo(String sequenceId, int intValue);
 
+    void addTrack(String sequenceId);
 }
