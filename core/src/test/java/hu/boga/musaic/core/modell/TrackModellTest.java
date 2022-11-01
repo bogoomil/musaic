@@ -1,11 +1,9 @@
 package hu.boga.musaic.core.modell;
 
-import hu.boga.musaic.core.modell.NoteModell;
-import hu.boga.musaic.core.modell.TrackModell;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TrackModellTest {
 
@@ -16,7 +14,7 @@ class TrackModellTest {
     @BeforeEach
     void setUp() {
         trackModell = new TrackModell();
-        noteModell = new NoteModell(0,1,1,100);
+        noteModell = new NoteModell(0,1,1,100, 0);
         trackModell.notes.add(noteModell);
     }
 

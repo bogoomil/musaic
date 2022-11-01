@@ -1,8 +1,11 @@
 package hu.boga.musaic.midigateway;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
 import hu.boga.musaic.core.gateway.TrackGateway;
+import hu.boga.musaic.core.modell.NoteModell;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
+import hu.boga.musaic.midigateway.utils.NoteUtil;
 import hu.boga.musaic.midigateway.utils.TrackUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,5 +66,13 @@ class TrackGatewayImplTest {
             mockedStatic.verify(() -> TrackUtil.addProgramChangeEvent(Mockito.any(), eq(0), eq(0), eq(0)));
         }
 
+    }
+    @Test
+    void addNotesToTrack(){
+        InMemorySequenceStore.TRACK_MAP.put(TRACK_ID, track);
+        try (MockedStatic<NoteUtil> mockedStatic = Mockito.mockStatic(NoteUtil.class)) {
+            gateway.addNotesToTrack(TRACK_ID, Arrays.asList(new NoteModell[]{new NoteModell(12,0,512, 100, 0)}));
+            mockedStatic.verify(() -> NoteUtil.addNote(track, 0,12,512,100,0));
+        }
     }
 }

@@ -1,10 +1,9 @@
 package hu.boga.musaic.core.modell;
 
-import hu.boga.musaic.core.modell.NoteModell;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class NoteModellTest {
 
@@ -12,7 +11,7 @@ class NoteModellTest {
 
     @BeforeEach
     void setUp() {
-        noteModell = new NoteModell(1,1L,1L,1);
+        noteModell = new NoteModell(1,1L,1L,1, 0);
     }
 
     @Test

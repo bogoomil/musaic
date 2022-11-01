@@ -224,15 +224,9 @@ public class TrackEditorPanel extends Pane {
         if (event.getButton() == MouseButton.SECONDARY) {
             this.contextMenu.show(this, event.getScreenX(), event.getScreenY());
         } else if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-            if(currentChordType == null){
-                final AddNoteEvent addNoteEvent = new AddNoteEvent(this.getTickByX((int) event.getX()), this.getPitchByY((int) event.getY()).getMidiCode(), currentNoteLength.getErtek());
-                eventBus.post(addNoteEvent);
-//                trackEventListeners.forEach(trackEventListener -> trackEventListener.onAddNoteEvent(addNoteEvent));
-            } else{
-                final AddChordEvent addChordEvent = new AddChordEvent(this.getTickByX((int) event.getX()), this.getPitchByY((int) event.getY()).getMidiCode(), currentNoteLength.getErtek(), currentChordType);
-                eventBus.post(addChordEvent);
-//                trackEventListeners.forEach(trackEventListener -> trackEventListener.onAddChordEvent(addChordEvent));
-            }
+            final AddChordEvent addChordEvent = new AddChordEvent(this.getTickByX((int) event.getX()), this.getPitchByY((int) event.getY()).getMidiCode(), currentNoteLength.getErtek(), currentChordType);
+            eventBus.post(addChordEvent);
+
         }
     }
 

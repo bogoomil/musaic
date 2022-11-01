@@ -2,6 +2,7 @@ package hu.boga.musaic.core.modell;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SequenceModell extends BaseModell{
 
@@ -32,6 +33,10 @@ public class SequenceModell extends BaseModell{
 
     public long getTickLength() {
         return tracks.stream().mapToLong(trackModell -> trackModell.getTickLength()).max().orElse(0);
+    }
+
+    public Optional<TrackModell> getTrackById(String trackId){
+        return tracks.stream().filter(trackModell -> trackModell.getId().equals(trackId)).findFirst();
     }
 
     @Override

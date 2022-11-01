@@ -11,12 +11,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class SequenceModellTest {
 
     public static final String TO_STRING = "tracks=[TrackModell{, channel=0, program=0, name='null', notes=[[C(0), tick:1, length: 1]]}], resolution=128, division=0.0, tickLength=2, tempo=120.0}";
+    public static final String NON_EXISTING_TRACKID = "NON_EXISTING_TRACKID";
     SequenceModell modell;
+    private TrackModell trackModell;
 
     @BeforeEach
     void setUp() {
-        TrackModell trackModell = new TrackModell();
-        NoteModell noteModell = new NoteModell(0,1,1,100);
+        trackModell = new TrackModell();
+        NoteModell noteModell = new NoteModell(0,1,1,100, 0);
         trackModell.notes.add(noteModell);
 
         modell = new SequenceModell();
@@ -51,5 +53,11 @@ class SequenceModellTest {
     @Test
     void testGetTickLength(){
         assertEquals(2, modell.getTickLength());
+    }
+
+    @Test
+    void getTrackById(){
+        assertEquals(trackModell, modell.getTrackById(trackModell.getId()).get());
+        assertTrue(modell.getTrackById(NON_EXISTING_TRACKID).isEmpty());
     }
 }

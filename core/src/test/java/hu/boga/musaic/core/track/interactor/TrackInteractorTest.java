@@ -7,14 +7,15 @@ import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
+import hu.boga.musaic.musictheory.enums.ChordType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
+import static org.mockito.ArgumentMatchers.eq;
 
 class TrackInteractorTest {
 
@@ -22,15 +23,27 @@ class TrackInteractorTest {
     public static final String TRACK_ID = "TRACK_ID";
     TrackInteractor trackInteractor;
     private TrackGateway gateway;
+    private SequenceModell modell;
+    private TrackModell trackModell;
+    private TrackBoundaryOut boundaryOut;
 
 
     @BeforeEach
     void setUp() {
-        TrackBoundaryOut boundaryOut = Mockito.mock(TrackBoundaryOut.class);
+
+        InMemorySequenceModellStore.clear();
+
+        boundaryOut = Mockito.mock(TrackBoundaryOut.class);
         TrackBoundaryIn boundaryIn = Mockito.mock(TrackBoundaryIn.class);
         gateway = Mockito.mock(TrackGateway.class);
 
         trackInteractor = new TrackInteractor(gateway, boundaryOut);
+
+        modell = new SequenceModell();
+        trackModell = new TrackModell();
+        modell.tracks.add(trackModell);
+
+        InMemorySequenceModellStore.SEQUENCE_MODELS.put(modell.getId(), modell);
     }
 
     @Test
@@ -46,10 +59,6 @@ class TrackInteractorTest {
 
     @Test
     void removeTrack(){
-        InMemorySequenceModellStore.clear();
-        SequenceModell modell = new SequenceModell();
-        TrackModell trackModell = new TrackModell();
-        modell.tracks.add(trackModell);
         modell.tracks.add(new TrackModell());
 
         try (MockedStatic<InMemorySequenceModellStore> mockedStatic = Mockito.mockStatic(InMemorySequenceModellStore.class)) {
@@ -66,5 +75,23 @@ class TrackInteractorTest {
     void updateTrackProgram(){
         trackInteractor.updateTrackProgram(TRACK_ID, 0,0);
         Mockito.verify(gateway).updateTrackProgram(TRACK_ID, 0, 0);
+    }
+
+    @Test
+    void addSingleNote(){
+        trackInteractor.addChord(trackModell.getId(), 0, 12, 32, 0, null);
+        ArgumentCaptor<TrackDto> captor = ArgumentCaptor.forClass(TrackDto.class);
+        Mockito.verify(boundaryOut).setTrackDto(captor.capture(), eq(modell.resolution));
+        assertEquals(1, captor.getValue().notes.size());
+        assertEquals(512, captor.getValue().notes.get(0).length);
+    }
+    @Test
+    void addChord(){
+        trackInteractor.addChord(trackModell.getId(), 0, 12, 32, 0, ChordType.MAJ);
+        ArgumentCaptor<TrackDto> captor = ArgumentCaptor.forClass(TrackDto.class);
+        Mockito.verify(boundaryOut).setTrackDto(captor.capture(), eq(modell.resolution));
+        Mockito.verify(gateway).addNotesToTrack(eq(trackModell.getId()), Mockito.any());
+        assertEquals(3, captor.getValue().notes.size());
+
     }
 }

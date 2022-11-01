@@ -2,14 +2,23 @@ package hu.boga.musaic.core.track.interactor;
 
 import hu.boga.musaic.core.InMemorySequenceModellStore;
 import hu.boga.musaic.core.gateway.TrackGateway;
+import hu.boga.musaic.core.modell.NoteModell;
 import hu.boga.musaic.core.modell.SequenceModell;
+import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
+import hu.boga.musaic.core.track.interactor.converters.TrackModelltoDtoConverter;
+import hu.boga.musaic.musictheory.Chord;
+import hu.boga.musaic.musictheory.Pitch;
+import hu.boga.musaic.musictheory.enums.ChordType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class TrackInteractor implements TrackBoundaryIn {
 
@@ -43,4 +52,35 @@ public class TrackInteractor implements TrackBoundaryIn {
         gateway.updateTrackProgram(trackId, program, channel);
     }
 
+    @Override
+    public void addChord(String trackId, int tick, int pitch, int length, int channel, ChordType chordType) {
+        String sequenceId = InMemorySequenceModellStore.getSequenceIdByTrackId(trackId);
+        SequenceModell sequenceModell = InMemorySequenceModellStore.getSequenceById(sequenceId);
+        sequenceModell.getTrackById(trackId).ifPresent(trackModell -> {
+            addNotesToTrack(trackId, tick, pitch, length, channel, chordType, sequenceModell, trackModell);
+        });
+    }
+
+    private void addNotesToTrack(String trackId, int tick, int pitch, int length, int channel, ChordType chordType, SequenceModell sequenceModell, TrackModell trackModell) {
+        final int computedLength = length * sequenceModell.getTicksIn32nds();
+        List<NoteModell> notes = getNotesToAdd(tick, pitch, chordType, computedLength, channel);
+        trackModell.notes.addAll(notes);
+        gateway.addNotesToTrack(trackId, notes);
+        boundaryOut.setTrackDto(new TrackModelltoDtoConverter(trackModell).convert(), sequenceModell.resolution);
+    }
+
+    private List<NoteModell> getNotesToAdd(int tick, int pitch, ChordType chordType, int computedLength, int channel) {
+        List<NoteModell> notes = new ArrayList<>();
+        if(chordType == null){
+            NoteModell note = new NoteModell(pitch, tick, computedLength, 100, channel);
+            notes.add(note);
+        } else {
+            Chord chord = Chord.getChord(new Pitch(pitch), chordType);
+            Arrays.stream(chord.getPitches()).forEach(midiCode -> {
+                NoteModell note = new NoteModell(midiCode.getMidiCode(), tick, computedLength, 100, channel);
+                notes.add(note);
+            });
+        }
+        return notes;
+    }
 }

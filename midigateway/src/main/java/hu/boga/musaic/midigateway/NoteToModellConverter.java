@@ -21,7 +21,7 @@ public class NoteToModellConverter {
             int pitch = ((ShortMessage) event.getMessage()).getData1();
             NoteUtil.NoteOnOffPair pair = NoteUtil.getNoteOnOffPair(track, (int) event.getTick(), pitch);
             long length = pair.noteOff.getTick() - pair.noteOn.getTick();
-            NoteModell modell = new NoteModell(pitch, event.getTick(), length, NoteUtil.getVelocity(event.getMessage()));
+            NoteModell modell = new NoteModell(pitch, event.getTick(), length, NoteUtil.getVelocity(event.getMessage()), ((ShortMessage)event.getMessage()).getChannel());
             notes.add(modell);
         });
         return notes;

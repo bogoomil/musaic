@@ -6,10 +6,7 @@ import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
 import hu.boga.musaic.gui.controls.InstrumentCombo;
-import hu.boga.musaic.gui.trackeditor.events.ModeChangedEvent;
-import hu.boga.musaic.gui.trackeditor.events.ProgramChangedEvent;
-import hu.boga.musaic.gui.trackeditor.events.RootChangedEvent;
-import hu.boga.musaic.gui.trackeditor.events.TrackDeletedEvent;
+import hu.boga.musaic.gui.trackeditor.events.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -47,6 +44,7 @@ public class TrackEditor implements TrackBoundaryOut {
 
     private EventBus eventBus;
     private TrackDto trackDto;
+    private int currentChannel;
 
     @Inject
     public TrackEditor(TrackBoundaryIn trackBoundaryIn) {
@@ -102,6 +100,7 @@ public class TrackEditor implements TrackBoundaryOut {
         trackEditorPanel.setEventBus(eventBus);
     }
 
+    @Override
     public void setTrackDto(TrackDto trackDto, int resolution) {
 
         this.trackDto = trackDto;
@@ -117,16 +116,15 @@ public class TrackEditor implements TrackBoundaryOut {
 
     }
 
-
 //    @Subscribe
 //    public void onAddNoteEvent(AddNoteEvent event) {
 //        trackBoundaryIn.addNote(trackIndex, event.getTick(), event.getPitch(), event.getLength());
 //    }
 //
-//    @Subscribe
-//    public void onAddChordEvent(AddChordEvent event) {
-//        trackBoundaryIn.addChord(trackIndex, event.getTick(), event.getPitch(), event.getLength(), event.getChordType());
-//    }
+    @Subscribe
+    public void onAddChordEvent(AddChordEvent event) {
+        trackBoundaryIn.addChord(trackDto.id, event.getTick(), event.getPitch(), event.getLength(), currentChannel, event.getChordType());
+    }
 //
 //    @Subscribe
 //    public void onMoveNoteEvent(MoveNoteEvent event) {
@@ -152,6 +150,7 @@ public class TrackEditor implements TrackBoundaryOut {
 
     public void onProgramChangedEvent(ProgramChangedEvent event){
         LOG.debug("programchanged event: " + event);
+        currentChannel = event.getChannel();
         trackBoundaryIn.updateTrackProgram(event.getTrackId(), event.getProgram(), event.getChannel());
     }
 }
