@@ -1,18 +1,18 @@
 package hu.boga.musaic.gui.trackeditor.events;
 
 public class ProgramChangedEvent {
-    int trackIndex;
+    String trackId;
     int program;
     int channel;
 
-    public ProgramChangedEvent(final int trackIndex, final int program, final int channel) {
-        this.trackIndex = trackIndex;
+    public ProgramChangedEvent(final String trackId, final int program, final int channel) {
+        this.trackId = trackId;
         this.program = program;
         this.channel = channel;
     }
 
-    public int getTrackIndex() {
-        return this.trackIndex;
+    public String getTrackId() {
+        return trackId;
     }
 
     public int getProgram() {
@@ -26,7 +26,7 @@ public class ProgramChangedEvent {
     @Override
     public String toString() {
         return "ProgramChangedEvent{" +
-                "trackIndex=" + trackIndex +
+                "trackId=" + trackId +
                 ", program=" + program +
                 ", channel=" + channel +
                 '}';

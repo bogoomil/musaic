@@ -7,6 +7,7 @@ import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
 import hu.boga.musaic.gui.controls.InstrumentCombo;
 import hu.boga.musaic.gui.trackeditor.events.ModeChangedEvent;
+import hu.boga.musaic.gui.trackeditor.events.ProgramChangedEvent;
 import hu.boga.musaic.gui.trackeditor.events.RootChangedEvent;
 import hu.boga.musaic.gui.trackeditor.events.TrackDeletedEvent;
 import javafx.beans.value.ChangeListener;
@@ -57,13 +58,13 @@ public class TrackEditor implements TrackBoundaryOut {
 
         channelCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             if(eventBus != null){
-//                eventBus.post(new ProgramChangedEvent(trackIndex, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex()));
+                eventBus.post(new ProgramChangedEvent(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex()));
             }
         });
 
         instrumentCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             if(eventBus != null){
-//                eventBus.post(new ProgramChangedEvent(trackIndex, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex()));
+                eventBus.post(new ProgramChangedEvent(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex()));
             }
         });
 

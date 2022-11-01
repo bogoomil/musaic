@@ -13,6 +13,7 @@ import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 import hu.boga.musaic.gui.trackeditor.TrackEditor;
 import hu.boga.musaic.gui.trackeditor.TrackEditorPanel;
 import hu.boga.musaic.gui.trackeditor.events.ModeChangedEvent;
+import hu.boga.musaic.gui.trackeditor.events.ProgramChangedEvent;
 import hu.boga.musaic.gui.trackeditor.events.RootChangedEvent;
 import hu.boga.musaic.gui.trackeditor.events.TrackDeletedEvent;
 import javafx.event.ActionEvent;
@@ -149,28 +150,17 @@ public class SequenceEditor implements SequenceBoundaryOut {
         this.boundaryIn.addTrack(sequenceDto.id);
     }
 
-//    @Override
-//    public void addTrack(int index) {
-//        try {
-//            addTrackPanel(index);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            throw new MidiAiException("Adding new track failed: " + e.getMessage());
-//        }
-//    }
-
     @Subscribe
     public void onTrackDeletedEvent(TrackDeletedEvent event) {
         accordion.getPanes().removeIf(titledPane -> !titledPane.getText().equals(PROPERTIES_PANEL_TEXT));
         boundaryIn.reloadSequence(sequenceDto);
     }
 
-//
-//    @Subscribe
-//    public void onProgramChangedEvent(ProgramChangedEvent even){
-//        LOG.debug("programchanged event: " + even);
-//        boundaryIn.updateTrackProgram(sequenceDto.id, even.getTrackIndex(), even.getProgram(), even.getChannel());
-//    }
+    @Subscribe
+    public void onProgramChangedEvent(ProgramChangedEvent event){
+        LOG.debug("programchanged event: " + event);
+        boundaryIn.updateTrackProgram(event.getTrackId(), event.getProgram(), event.getChannel());
+    }
 
 
 }

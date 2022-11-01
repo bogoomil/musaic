@@ -88,6 +88,11 @@ public class SequenceInteractor implements SequenceBoundaryIn {
         boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());
     }
 
+    @Override
+    public void updateTrackProgram(String trackId, int program, int channel) {
+        LOG.debug("updating track: {} program: {} channel: {}", trackId, program, channel);
+    }
+
     private SequenceModell createNewSequence(){
         SequenceModell modell = new SequenceModell();
         InMemorySequenceModellStore.SEQUENCE_MODELS.put(modell.getId(), modell);
