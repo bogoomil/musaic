@@ -56,10 +56,10 @@ public class SequenceEditor implements SequenceBoundaryOut {
     }
 
     public void initialize() {
-//        tempoSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-//                    initTemposSettings(newValue);
-//                }
-//        );
+        tempoSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+                    initTemposSettings(newValue);
+                }
+        );
 //        rootCombo.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new RootChangedEvent(rootCombo.getSelectedNoteName())));
 //        modeCombo.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new ModeChangedEvent(modeCombo.getSelectedTone())));
 //
@@ -73,10 +73,10 @@ public class SequenceEditor implements SequenceBoundaryOut {
     }
 
     private void initTemposSettings(Number newValue) {
-//        tempoLabel.setText("Tempo: " + newValue.intValue());
-//        if(sequenceId != null){
-//            boundaryIn.setTempo(sequenceId, newValue.intValue());
-//        }
+        tempoLabel.setText("Tempo: " + newValue.intValue());
+        if(sequenceId != null){
+            boundaryIn.setTempo(sequenceId, newValue.intValue());
+        }
     }
 
     public void saveSequence(ActionEvent actionEvent) {

@@ -4,6 +4,7 @@ module midigateway {
     requires java.desktop;
     requires core;
     requires javax.inject;
+    requires org.slf4j;
 
     opens hu.boga.musaic.midigateway to com.google.guice;
 }

@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public class SequenceInteractor implements SequenceBoundaryIn {
 
-    private static final Map<String, SequenceModell> SEQUENCE_MODELS = new HashMap<>();
+    public static final Map<String, SequenceModell> SEQUENCE_MODELS = new HashMap<>();
 
     private final SequenceBoundaryOut boundaryOut;
     private final MidiGateway gateway;
@@ -38,13 +38,22 @@ public class SequenceInteractor implements SequenceBoundaryIn {
 
     @Override
     public void open(String path){
-        SequenceDto dto = new SequenceModellToDtoConverter(gateway.open(path)).convert();
+        SequenceModell sequenceModell = gateway.open(path);
+        SEQUENCE_MODELS.put(sequenceModell.getId(), sequenceModell);
+        SequenceDto dto = new SequenceModellToDtoConverter(sequenceModell).convert();
         boundaryOut.displaySequence(dto);
     }
 
     @Override
     public void play(String sequenceId) {
         gateway.play(sequenceId);
+    }
+
+    @Override
+    public void setTempo(String sequenceId, int tempo) {
+        SequenceModell modell = SEQUENCE_MODELS.get(sequenceId);
+        modell.tempo = tempo;
+        gateway.updateTempo(modell);
     }
 
     private SequenceModell createNewSequence(){

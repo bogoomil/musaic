@@ -4,14 +4,18 @@ import hu.boga.musaic.core.exceptions.MusaicException;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.gateway.MidiGateway;
+import hu.boga.musaic.midigateway.utils.TempoUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import javax.sound.midi.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
 public class MidiGatewayImpl implements MidiGateway {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MidiGatewayImpl.class);
 
     protected static final Map<String, Sequence> SEQUENCE_MAP = new HashMap<>();
     protected static final Map<String, Track> TRACK_MAP = new HashMap<>();
@@ -39,6 +43,18 @@ public class MidiGatewayImpl implements MidiGateway {
     @Override
     public void play(String sequenceId) {
         player.playSequence(SEQUENCE_MAP.get(sequenceId));
+    }
+
+    @Override
+    public void updateTempo(SequenceModell modell) {
+        Sequence sequence = SEQUENCE_MAP.get(modell.getId());
+
+        LOG.debug("original tempo: " + TempoUtil.getTempo(sequence));
+
+        TempoUtil.removeTempoEvents(sequence);
+        TempoUtil.addTempoEvents(sequence, (int) modell.tempo);
+
+        LOG.debug("tempo updated to: " + TempoUtil.getTempo(sequence));
     }
 
     private SequenceModell tryingToOpen(String path) throws InvalidMidiDataException, IOException {

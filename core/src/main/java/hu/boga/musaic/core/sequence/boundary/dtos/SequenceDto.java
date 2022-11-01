@@ -16,4 +16,6 @@ public class SequenceDto {
     public int ticksIn32nds;
     public float tickSize;
     public float ticksPerSecond;
+
+
 }
