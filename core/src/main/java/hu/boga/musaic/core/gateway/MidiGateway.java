@@ -11,4 +11,6 @@ public interface MidiGateway {
     void play(String sequenceId);
 
     void updateTempo(SequenceModell modell);
+
+    void save(String sequenceId, String path);
 }

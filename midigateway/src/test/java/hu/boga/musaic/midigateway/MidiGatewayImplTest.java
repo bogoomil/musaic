@@ -1,29 +1,31 @@
 package hu.boga.musaic.midigateway;
 
 import hu.boga.musaic.core.exceptions.MusaicException;
+import hu.boga.musaic.core.gateway.MidiGateway;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
-import hu.boga.musaic.core.gateway.MidiGateway;
 import hu.boga.musaic.midigateway.utils.TempoUtil;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
-import javax.sound.midi.Sequence;
+import javax.sound.midi.MidiSystem;
+import java.io.File;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.times;
 
 class MidiGatewayImplTest {
 
-    private static final String PATH = "/home/kunb/git/musaic/midigateway/src/main/resources/phrygian.mid";
+    private static final String PATH = "src/main/resources/phrygian.mid";
 
     public static final float INVALID_DIVISION_TYPE = 0.123445f;
+    public static final String PATH_TO_SAVE = "path-to-save";
     private EasyRandom easyRandom;
     private MidiGateway midiGateway;
     private SequenceModell sequenceModell;
@@ -84,6 +86,23 @@ class MidiGatewayImplTest {
             mockedStatic.verify(() -> TempoUtil.getTempo(Mockito.any()), times(2));
             mockedStatic.verify(() -> TempoUtil.removeTempoEvents(Mockito.any()), times(1));
             mockedStatic.verify(() -> TempoUtil.addTempoEvents(Mockito.any(), eq(234)), times(1));
+        }
+    }
+
+    @Test
+    void save(){
+        File f = new File(PATH_TO_SAVE);
+        try (MockedStatic<Saver> mockedStatic = Mockito.mockStatic(Saver.class)) {
+            midiGateway.save("", PATH_TO_SAVE);
+            mockedStatic.verify(() -> Saver.save(Mockito.any(), eq(PATH_TO_SAVE)));
+        }
+    }
+    @Test
+    void saveNegativePath(){
+        File f = new File(PATH_TO_SAVE);
+        try (MockedStatic<Saver> mockedStatic = Mockito.mockStatic(Saver.class)) {
+            mockedStatic.when(() -> Saver.save(Mockito.any(), eq(PATH_TO_SAVE))).thenThrow(new MusaicException("blabla"));
+            assertThrows(MusaicException.class, () -> midiGateway.save("", PATH_TO_SAVE));
         }
     }
 }

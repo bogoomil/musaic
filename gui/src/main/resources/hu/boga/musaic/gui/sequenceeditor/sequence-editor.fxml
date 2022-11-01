@@ -10,7 +10,6 @@
             fx:controller="hu.boga.musaic.gui.sequenceeditor.SequenceEditor">
     <top>
         <HBox BorderPane.alignment="CENTER">
-            <TextField fx:id="tfFilename"/>
             <Button mnemonicParsing="false" onAction="#saveSequence" text="Save"/>
             <Separator minWidth="18.0" orientation="VERTICAL" prefWidth="10.0"/>
             <Button mnemonicParsing="false" onAction="#onNewTrackButtonClicked" text="Track+"/>

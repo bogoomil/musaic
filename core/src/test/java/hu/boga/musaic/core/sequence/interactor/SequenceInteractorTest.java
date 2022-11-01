@@ -95,4 +95,14 @@ class SequenceInteractorTest {
 
         assertNotNull(sequenceModellArgumentCaptor.getValue());
     }
+    @Test
+    void save(){
+        interactor.save(SEQUENCE_ID, PATH);
+        ArgumentCaptor<String> captor1 = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> captor2 = ArgumentCaptor.forClass(String.class);
+        Mockito.verify(gateway).save(captor1.capture(), captor2.capture());
+
+        assertNotNull(captor1.getValue());
+        assertNotNull(captor2.getValue());
+    }
 }

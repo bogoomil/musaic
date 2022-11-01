@@ -22,11 +22,11 @@ public class GuiceModule extends AbstractModule {
     @Override
     protected void configure() {
 
-        bind(SequenceBoundaryIn.class).to(SequenceInteractor.class).in(Singleton.class);
-        bind(SequenceBoundaryOut.class).to(SequenceEditor.class).in(Singleton.class);
+        bind(SequenceBoundaryIn.class).to(SequenceInteractor.class);
+        bind(SequenceBoundaryOut.class).to(SequenceEditor.class);
 
-        bind(TrackBoundaryIn.class).to(TrackInteractor.class).in(Singleton.class);
-        bind(TrackBoundaryOut.class).to(TrackEditor.class).in(Singleton.class);
+        bind(TrackBoundaryIn.class).to(TrackInteractor.class);
+        bind(TrackBoundaryOut.class).to(TrackEditor.class);
 
         bind(MidiGateway.class).to(MidiGatewayImpl.class).in(Singleton.class);
 

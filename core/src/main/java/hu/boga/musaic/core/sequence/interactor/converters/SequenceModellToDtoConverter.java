@@ -17,7 +17,6 @@ public class SequenceModellToDtoConverter {
         SequenceDto dto = new SequenceDto();
         dto.id = modell.getId();
         dto.division = modell.division;
-        dto.name = modell.name;
         dto.resolution = modell.resolution;
         dto.tempo = modell.tempo;
         dto.tickLength = modell.getTickLength();

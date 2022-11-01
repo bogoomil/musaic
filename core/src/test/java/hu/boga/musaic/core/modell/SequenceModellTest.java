@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SequenceModellTest {
 
-    public static final String TO_STRING = "name='null', tracks=[TrackModell{, channel=0, program=0, name='null', notes=[[C(0), tick:1, length: 1]]}], resolution=128, division=0.0, tickLength=2, tempo=120.0}";
+    public static final String TO_STRING = "tracks=[TrackModell{, channel=0, program=0, name='null', notes=[[C(0), tick:1, length: 1]]}], resolution=128, division=0.0, tickLength=2, tempo=120.0}";
     SequenceModell modell;
 
     @BeforeEach

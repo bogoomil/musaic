@@ -46,13 +46,15 @@ public class MidiGatewayImpl implements MidiGateway {
     @Override
     public void updateTempo(SequenceModell modell) {
         Sequence sequence = SEQUENCE_MAP.get(modell.getId());
-
         LOG.debug("original tempo: " + TempoUtil.getTempo(sequence));
-
         TempoUtil.removeTempoEvents(sequence);
         TempoUtil.addTempoEvents(sequence, (int) modell.tempo);
-
         LOG.debug("tempo updated to: " + TempoUtil.getTempo(sequence));
+    }
+
+    @Override
+    public void save(String sequenceId, String path) {
+        Saver.save(SEQUENCE_MAP.get(sequenceId), path);
     }
 
     private SequenceModell tryingToOpen(String path) throws InvalidMidiDataException, IOException {

@@ -36,19 +36,19 @@ public class MainController {
     }
 
     private void openFile(File file) throws IOException {
-        getSequenceTabController().initSequence(file);
+        getSequenceTabController(file.getName()).initSequence(file);
     }
 
     private void createNewTab() throws IOException {
-        getSequenceTabController().initSequence();
+        getSequenceTabController("New sequence").initSequence();
     }
 
-    private SequenceEditor getSequenceTabController() throws IOException {
+    private SequenceEditor getSequenceTabController(String tabName) throws IOException {
         FXMLLoader loader = new FXMLLoader(SequenceEditor.class.getResource("sequence-editor.fxml"));
         loader.setControllerFactory(GuiceModule.INJECTOR::getInstance);
         BorderPane sequenceEditorPanel =  loader.load();
         SequenceEditor controller = loader.getController();
-        mainTab.getTabs().add(new Tab("ZergeFaszGerinc", sequenceEditorPanel));
+        mainTab.getTabs().add(new Tab(tabName, sequenceEditorPanel));
         return controller;
     }
 }

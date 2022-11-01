@@ -5,6 +5,8 @@ public interface SequenceBoundaryIn {
     void load(String id);
     void open(String path);
     void play(String sequenceId);
+    void save(String sequenceId, String path);
 
     void setTempo(String sequenceId, int intValue);
+
 }

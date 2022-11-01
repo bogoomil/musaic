@@ -9,7 +9,6 @@ public class SequenceModell extends BaseModell{
     public static final int DEFAULT_DIVISION = 0;
     public static final int DEFAULT_RESOLUTION = 128;
 
-    public String name;
     public List<TrackModell> tracks = new ArrayList<>();
     public int resolution = DEFAULT_RESOLUTION;
     public float division = DEFAULT_DIVISION;
@@ -39,7 +38,6 @@ public class SequenceModell extends BaseModell{
     public String toString() {
         return "SequenceModell{" +
                 "id='" + getId() + '\'' +
-                ", name='" + name + '\'' +
                 ", tracks=" + tracks +
                 ", resolution=" + resolution +
                 ", division=" + division +

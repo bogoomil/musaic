@@ -6,6 +6,8 @@ import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 import hu.boga.musaic.core.gateway.MidiGateway;
 import hu.boga.musaic.core.sequence.interactor.converters.SequenceModellToDtoConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -13,6 +15,8 @@ import java.util.Map;
 import java.util.Optional;
 
 public class SequenceInteractor implements SequenceBoundaryIn {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SequenceInteractor.class);
 
     public static final Map<String, SequenceModell> SEQUENCE_MODELS = new HashMap<>();
 
@@ -39,6 +43,7 @@ public class SequenceInteractor implements SequenceBoundaryIn {
     @Override
     public void open(String path){
         SequenceModell sequenceModell = gateway.open(path);
+        LOG.debug("opening sequence modell: {}", sequenceModell);
         SEQUENCE_MODELS.put(sequenceModell.getId(), sequenceModell);
         SequenceDto dto = new SequenceModellToDtoConverter(sequenceModell).convert();
         boundaryOut.displaySequence(dto);
@@ -47,6 +52,11 @@ public class SequenceInteractor implements SequenceBoundaryIn {
     @Override
     public void play(String sequenceId) {
         gateway.play(sequenceId);
+    }
+
+    @Override
+    public void save(String sequenceId, String path) {
+        gateway.save(sequenceId, path);
     }
 
     @Override

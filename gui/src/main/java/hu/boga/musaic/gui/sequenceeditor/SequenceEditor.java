@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,8 +43,6 @@ public class SequenceEditor implements SequenceBoundaryOut {
 
     public final EventBus eventBus = new EventBus();
 
-    @FXML
-    private TextField tfFilename;
     @FXML
     private Accordion accordion;
 
@@ -80,9 +79,9 @@ public class SequenceEditor implements SequenceBoundaryOut {
     }
 
     public void saveSequence(ActionEvent actionEvent) {
-//        LOG.debug("Saving sequence: " + sequenceId);
-//        String path = new FileChooser().showSaveDialog(null).getAbsolutePath();
-//        this.boundaryIn.save(sequenceId, path);
+        LOG.debug("Saving sequence: " + sequenceId);
+        String path = new FileChooser().showSaveDialog(null).getAbsolutePath();
+        this.boundaryIn.save(sequenceId, path);
     }
 
     public void onPlayCurrentSec(ActionEvent actionEvent) {
@@ -95,7 +94,6 @@ public class SequenceEditor implements SequenceBoundaryOut {
 
     @Override
     public void displaySequence(SequenceDto sequenceDto) {
-        this.tfFilename.setText(sequenceDto.name);
         this.division.setText("division: " + sequenceDto.division + "");
         this.resolution.setText("resolution: " + sequenceDto.resolution + "");
         this.tickLength.setText("tick length: " + sequenceDto.tickLength + "");

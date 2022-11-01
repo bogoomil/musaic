@@ -37,7 +37,6 @@ class SequenceModellToDtoConverterTest {
         assertEquals(dto.division, modell.division);
         assertEquals(dto.resolution, modell.resolution);
         assertEquals(dto.tempo, modell.tempo);
-        assertEquals(dto.name, modell.name);
         assertEquals(dto.id, modell.getId());
         assertEquals(dto.tickLength, modell.getTickLength());
         assertEquals(dto.ticksIn32nds, modell.getTicksIn32nds());
