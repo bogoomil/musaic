@@ -1,10 +1,13 @@
 package hu.boga.musaic.gui.trackeditor;
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import hu.boga.musaic.core.sequence.boundary.dtos.TrackDto;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
 import hu.boga.musaic.gui.controls.InstrumentCombo;
+import hu.boga.musaic.gui.trackeditor.events.ModeChangedEvent;
+import hu.boga.musaic.gui.trackeditor.events.RootChangedEvent;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -138,4 +141,15 @@ public class TrackEditor implements TrackBoundaryOut {
 //        trackBoundaryIn.deleteNote(trackIndex, dtos.toArray(NoteDto[]::new));
 //
 //    }
+
+    @Subscribe
+    private void handleRootChangedEvent(RootChangedEvent event) {
+        trackEditorPanel.setCurrentRoot(event.getNoteName());
+    }
+
+    @Subscribe
+    private void handleModeChangedEvent(ModeChangedEvent event) {
+        trackEditorPanel.setCurrentTone(event.getTone());
+    }
+
 }

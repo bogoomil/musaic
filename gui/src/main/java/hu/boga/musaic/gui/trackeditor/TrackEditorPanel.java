@@ -453,17 +453,14 @@ public class TrackEditorPanel extends Pane {
         return (GuiConstants.OCTAVES * 12 - 1 - midiCode) * GuiConstants.LINE_HEIGHT;
     }
 
-    @Subscribe
-    private void handleRootChangedEvent(RootChangedEvent event) {
-        this.currentRoot = event.getNoteName();
-        LOG.debug("current root: " + currentRoot);
+    public void setCurrentRoot(NoteName currentRoot) {
+        this.currentRoot = currentRoot;
         paintNotes();
+
     }
 
-    @Subscribe
-    private void handleModeChangedEvent(ModeChangedEvent event) {
-        this.currentTone = event.getTone();
+    public void setCurrentTone(Tone currentTone) {
+        this.currentTone = currentTone;
         paintNotes();
     }
-
 }

@@ -10,6 +10,8 @@ import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 import hu.boga.musaic.gui.trackeditor.TrackEditor;
+import hu.boga.musaic.gui.trackeditor.events.ModeChangedEvent;
+import hu.boga.musaic.gui.trackeditor.events.RootChangedEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -60,16 +62,15 @@ public class SequenceEditor implements SequenceBoundaryOut {
                     initTemposSettings(newValue);
                 }
         );
-//        rootCombo.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new RootChangedEvent(rootCombo.getSelectedNoteName())));
-//        modeCombo.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new ModeChangedEvent(modeCombo.getSelectedTone())));
-//
-//        btnClearMode.setOnAction(event -> {
-//            modeCombo.getSelectionModel().clearSelection();
-//            eventBus.post(new ModeChangedEvent(null));
-//
-//            rootCombo.getSelectionModel().clearSelection();
-//            eventBus.post(new RootChangedEvent(null));
-//        });
+        rootCombo.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new RootChangedEvent(rootCombo.getSelectedNoteName())));
+        modeCombo.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new ModeChangedEvent(modeCombo.getSelectedTone())));
+
+        btnClearMode.setOnAction(event -> {
+            modeCombo.getSelectionModel().clearSelection();
+            eventBus.post(new ModeChangedEvent(null));
+            rootCombo.getSelectionModel().clearSelection();
+            eventBus.post(new RootChangedEvent(null));
+        });
     }
 
     private void initTemposSettings(Number newValue) {
@@ -131,6 +132,7 @@ public class SequenceEditor implements SequenceBoundaryOut {
             e.printStackTrace();
         }
         TrackEditor controller = loader.getController();
+        eventBus.register(controller);
         controller.setTrackDto(trackDto, sequenceDto.resolution);
         controller.setEventBus(eventBus);
 
