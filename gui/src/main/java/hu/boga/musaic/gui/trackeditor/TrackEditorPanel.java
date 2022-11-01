@@ -54,7 +54,7 @@ public class TrackEditorPanel extends Pane {
     private CursorRectangle cursor = new CursorRectangle();
     private List<Point2D> selectedPoints = new ArrayList<>(0);
 
-    private EventBus eventBus;
+    private NoteChangeListener noteChangeListener;
 
     public TrackEditorPanel() {
         this.createContextMenu();
@@ -64,11 +64,6 @@ public class TrackEditorPanel extends Pane {
         this.setOnMouseClicked(event -> this.handleMouseClick(event));
 
         contextMenu = createContextMenu();
-    }
-
-    public void setEventBus(final EventBus eventBus) {
-        this.eventBus = eventBus;
-        eventBus.register(this);
     }
 
     private void hideCursor() {
@@ -138,7 +133,7 @@ public class TrackEditorPanel extends Pane {
                 .map(noteRectangle -> new DeleteNoteEvent(noteRectangle.getTick(), noteRectangle.getPitch()))
                 .collect(Collectors.toList());
         LOG.debug("deleting notes " + events);
-        eventBus.post(events.toArray(DeleteNoteEvent[]::new));
+        this.noteChangeListener.onDeleteNoteEvent(events.toArray(DeleteNoteEvent[]::new));
         selectedPoints.clear();
     }
 
@@ -147,7 +142,7 @@ public class TrackEditorPanel extends Pane {
                 .map(noteRectangle -> new DeleteNoteEvent(noteRectangle.getTick(), noteRectangle.getPitch()))
                 .collect(Collectors.toList());
         LOG.debug("deleting notes " + events);
-        eventBus.post(events.toArray(DeleteNoteEvent[]::new));
+        this.noteChangeListener.onDeleteNoteEvent(events.toArray(DeleteNoteEvent[]::new));
         selectedPoints.clear();
     }
 
@@ -225,8 +220,7 @@ public class TrackEditorPanel extends Pane {
             this.contextMenu.show(this, event.getScreenX(), event.getScreenY());
         } else if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             final AddChordEvent addChordEvent = new AddChordEvent(this.getTickByX((int) event.getX()), this.getPitchByY((int) event.getY()).getMidiCode(), currentNoteLength.getErtek(), currentChordType);
-            eventBus.post(addChordEvent);
-
+            this.noteChangeListener.onAddChordEvent(addChordEvent);
         }
     }
 
@@ -320,7 +314,7 @@ public class TrackEditorPanel extends Pane {
     private NoteRectangle createNoteRectangle(final NoteDto noteDto) {
 
         final int x = (int) (noteDto.tick * this.getTickWidth());
-        final NoteRectangle noteRectangle = new NoteRectangle(x, (int) noteDto.midiCode, eventBus);
+        final NoteRectangle noteRectangle = new NoteRectangle(x, (int) noteDto.midiCode);
         noteRectangle.setX(x);
         noteRectangle.setY(this.getYByPitch((int) noteDto.midiCode));
         noteRectangle.setWidth(getTickWidth() * noteDto.length);
@@ -328,15 +322,14 @@ public class TrackEditorPanel extends Pane {
 
         noteRectangle.setOnMouseReleased(event -> {
             if (noteRectangle.isDragging()) {
-                eventBus.post(new MoveNoteEvent((int) noteDto.tick, (int) noteDto.midiCode, TrackEditorPanel.this.getTickByX((int) noteRectangle.getX())));
-//                trackEventListener.onMoveNoteEvent();
+                this.noteChangeListener.oMoveNoteEvent(new MoveNoteEvent((int) noteDto.tick, (int) noteDto.midiCode, TrackEditorPanel.this.getTickByX((int) noteRectangle.getX())));
             }
             noteRectangle.setDragging(false);
         });
 
         noteRectangle.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                eventBus.post(new DeleteNoteEvent(noteDto.tick, noteDto.midiCode));
+                this.noteChangeListener.onDeleteNoteEvent(new DeleteNoteEvent(noteDto.tick, noteDto.midiCode));
             } else if (event.getClickCount() == 1) {
                 noteRectangle.setSelected(!noteRectangle.isSelected());
                 if (noteRectangle.isSelected()) {
@@ -456,5 +449,9 @@ public class TrackEditorPanel extends Pane {
     public void setCurrentTone(Tone currentTone) {
         this.currentTone = currentTone;
         paintNotes();
+    }
+
+    public void setNoteChangeListener(NoteChangeListener noteChangeListener) {
+        this.noteChangeListener = noteChangeListener;
     }
 }

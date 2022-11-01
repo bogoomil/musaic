@@ -143,6 +143,8 @@ public class SequenceEditor implements SequenceBoundaryOut {
         controller.setTrackDto(trackDto, sequenceDto.resolution);
         controller.setEventBus(eventBus);
 
+        eventBus.register(controller);
+
         accordion.getPanes().add(trackEditorPanel);
     }
 

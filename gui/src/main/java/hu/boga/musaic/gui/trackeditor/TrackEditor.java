@@ -21,7 +21,7 @@ import javax.inject.Inject;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class TrackEditor implements TrackBoundaryOut {
+public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(TrackEditor.class);
 
@@ -87,6 +87,7 @@ public class TrackEditor implements TrackBoundaryOut {
                 trackBoundaryIn.updateTrackName(trackDto);
             }
         });
+        trackEditorPanel.setNoteChangeListener(this);
     }
 
     public void removeTrack(ActionEvent actionEvent) {
@@ -97,7 +98,6 @@ public class TrackEditor implements TrackBoundaryOut {
     public void setEventBus(final EventBus eventBus) {
         this.eventBus = eventBus;
         eventBus.register(this);
-        trackEditorPanel.setEventBus(eventBus);
     }
 
     @Override
@@ -116,14 +116,19 @@ public class TrackEditor implements TrackBoundaryOut {
 
     }
 
-//    @Subscribe
-//    public void onAddNoteEvent(AddNoteEvent event) {
-//        trackBoundaryIn.addNote(trackIndex, event.getTick(), event.getPitch(), event.getLength());
-//    }
-//
-    @Subscribe
     public void onAddChordEvent(AddChordEvent event) {
         trackBoundaryIn.addChord(trackDto.id, event.getTick(), event.getPitch(), event.getLength(), currentChannel, event.getChordType());
+    }
+
+    @Override
+    public void onDeleteNoteEvent(DeleteNoteEvent[] events) {
+        throw new UnsupportedOperationException("DELETE NOTE EVENT");
+
+    }
+
+    @Override
+    public void oMoveNoteEvent(MoveNoteEvent... events) {
+        throw new UnsupportedOperationException("MOVE NOTE EVENT");
     }
 //
 //    @Subscribe

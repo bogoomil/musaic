@@ -21,10 +21,9 @@ public class NoteRectangle extends Rectangle {
     private EventBus eventBus;
     private double offset;
 
-    public NoteRectangle(final int tick, final int pitch, EventBus eventBus) {
+    public NoteRectangle(final int tick, final int pitch) {
         this.tick = tick;
         this.pitch = pitch;
-        this.eventBus = eventBus;
         this.setFill(DEFAULT_COLOR);
         setUpEventHandlers();
     }
