@@ -14,7 +14,13 @@ public class TrackGatewayImpl implements TrackGateway {
     @Override
     public void updateTrackName(String trackId, String newName) {
         LOG.debug("updating track : {}, name: {}", trackId, newName);
-        Track track = MidiGatewayImpl.TRACK_MAP.get(trackId);
+        Track track = InMemorySequenceStore.TRACK_MAP.get(trackId);
         TrackUtil.updateTrackName(track, newName);
+    }
+
+    @Override
+    public void removeTrack(String sequenceId, String trackId) {
+        LOG.debug("removing track: {} from sequence: {}", trackId, sequenceId);
+        InMemorySequenceStore.SEQUENCE_MAP.get(sequenceId).deleteTrack(InMemorySequenceStore.TRACK_MAP.get(trackId));
     }
 }

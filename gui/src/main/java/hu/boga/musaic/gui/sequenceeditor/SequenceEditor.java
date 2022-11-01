@@ -1,6 +1,7 @@
 package hu.boga.musaic.gui.sequenceeditor;
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import hu.boga.musaic.GuiceModule;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.gui.controls.ModeCombo;
@@ -10,8 +11,10 @@ import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 import hu.boga.musaic.gui.trackeditor.TrackEditor;
+import hu.boga.musaic.gui.trackeditor.TrackEditorPanel;
 import hu.boga.musaic.gui.trackeditor.events.ModeChangedEvent;
 import hu.boga.musaic.gui.trackeditor.events.RootChangedEvent;
+import hu.boga.musaic.gui.trackeditor.events.TrackDeletedEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,7 +30,10 @@ import java.io.IOException;
 public class SequenceEditor implements SequenceBoundaryOut {
     private static final String DEFAULT_NAME = "new_project.mid";
     private static final Logger LOG = LoggerFactory.getLogger(SequenceEditor.class);
+    public static final String PROPERTIES_PANEL_TEXT = "Properties";
     private final SequenceBoundaryIn boundaryIn;
+
+
 
     public Label division;
     public Label resolution;
@@ -125,18 +131,18 @@ public class SequenceEditor implements SequenceBoundaryOut {
     public void displayNewTrack(TrackDto trackDto) {
         FXMLLoader loader = new FXMLLoader(TrackEditor.class.getResource("track-editor.fxml"));
         loader.setControllerFactory(GuiceModule.INJECTOR::getInstance);
-        TitledPane trackEditor = null;
+        TitledPane trackEditorPanel = null;
         try {
-            trackEditor = loader.load();
+            trackEditorPanel = loader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
         TrackEditor controller = loader.getController();
-        eventBus.register(controller);
+
         controller.setTrackDto(trackDto, sequenceDto.resolution);
         controller.setEventBus(eventBus);
 
-        accordion.getPanes().add(trackEditor);
+        accordion.getPanes().add(trackEditorPanel);
     }
 
     public void onNewTrackButtonClicked(ActionEvent actionEvent) {
@@ -153,10 +159,12 @@ public class SequenceEditor implements SequenceBoundaryOut {
 //        }
 //    }
 
-//    @Subscribe
-//    public void onTrackDeletedEvent(TrackDeleteEvent event) {
-//        boundaryIn.removeTrack(sequenceDto.id, event.getIndex());
-//    }
+    @Subscribe
+    public void onTrackDeletedEvent(TrackDeletedEvent event) {
+        accordion.getPanes().removeIf(titledPane -> !titledPane.getText().equals(PROPERTIES_PANEL_TEXT));
+        boundaryIn.reloadSequence(sequenceDto);
+    }
+
 //
 //    @Subscribe
 //    public void onProgramChangedEvent(ProgramChangedEvent even){

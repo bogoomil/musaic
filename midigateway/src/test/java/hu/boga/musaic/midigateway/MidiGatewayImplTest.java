@@ -12,9 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
-import javax.sound.midi.MidiSystem;
 import java.io.File;
-import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -45,8 +43,8 @@ class MidiGatewayImplTest {
     @Test
     void initMidiSequence() {
         midiGateway.initMidiSequence(sequenceModell);
-        assertTrue(MidiGatewayImpl.SEQUENCE_MAP.containsKey(sequenceModell.getId()));
-        assertTrue(MidiGatewayImpl.TRACK_MAP.containsKey(trackModell.getId()));
+        assertTrue(InMemorySequenceStore.SEQUENCE_MAP.containsKey(sequenceModell.getId()));
+        assertTrue(InMemorySequenceStore.TRACK_MAP.containsKey(trackModell.getId()));
     }
 
     @Test
@@ -108,14 +106,14 @@ class MidiGatewayImplTest {
 
     @Test
     void addTrack(){
-        MidiGatewayImpl.TRACK_MAP.clear();//Ha ez nincs itt a pitest fails.
+        InMemorySequenceStore.TRACK_MAP.clear();//Ha ez nincs itt a pitest fails.
         SequenceModell modell = new SequenceModell();
         modell.tracks.add(new TrackModell());
         midiGateway.initMidiSequence(modell);
         modell.tracks.add(new TrackModell());
         midiGateway.addTrack(modell);
 
-        assertEquals(2, MidiGatewayImpl.TRACK_MAP.size());
+        assertEquals(2, InMemorySequenceStore.TRACK_MAP.size());
     }
 
     @Test

@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TrackEditorPanel extends Pane {
+public class TrackEditorPanel extends TitledPane {
 
     private static final Logger LOG = LoggerFactory.getLogger(TrackEditorPanel.class);
 

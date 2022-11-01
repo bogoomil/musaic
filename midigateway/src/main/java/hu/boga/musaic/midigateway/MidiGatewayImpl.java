@@ -17,9 +17,6 @@ public class MidiGatewayImpl implements MidiGateway {
 
     private static final Logger LOG = LoggerFactory.getLogger(MidiGatewayImpl.class);
 
-    public static final Map<String, Sequence> SEQUENCE_MAP = new HashMap<>();
-    public static final Map<String, Track> TRACK_MAP = new HashMap<>();
-
     @Override
     public void initMidiSequence(SequenceModell modell) {
         try {
@@ -40,12 +37,12 @@ public class MidiGatewayImpl implements MidiGateway {
 
     @Override
     public void play(String sequenceId) {
-        Player.playSequence(SEQUENCE_MAP.get(sequenceId));
+        Player.playSequence(InMemorySequenceStore.SEQUENCE_MAP.get(sequenceId));
     }
 
     @Override
     public void updateTempo(SequenceModell modell) {
-        Sequence sequence = SEQUENCE_MAP.get(modell.getId());
+        Sequence sequence = InMemorySequenceStore.SEQUENCE_MAP.get(modell.getId());
         LOG.debug("original tempo: " + TempoUtil.getTempo(sequence));
         TempoUtil.removeTempoEvents(sequence);
         TempoUtil.addTempoEvents(sequence, (int) modell.tempo);
@@ -54,16 +51,16 @@ public class MidiGatewayImpl implements MidiGateway {
 
     @Override
     public void save(String sequenceId, String path) {
-        Saver.save(SEQUENCE_MAP.get(sequenceId), path);
+        Saver.save(InMemorySequenceStore.SEQUENCE_MAP.get(sequenceId), path);
     }
 
     @Override
     public void addTrack(SequenceModell modell) {
-        Sequence sequence = SEQUENCE_MAP.get(modell.getId());
+        Sequence sequence = InMemorySequenceStore.SEQUENCE_MAP.get(modell.getId());
         Track newTrack = sequence.createTrack();
         modell.tracks.forEach(trackModell -> {
-            if(!TRACK_MAP.containsKey(trackModell.getId())){
-                TRACK_MAP.put(trackModell.getId(), newTrack);
+            if(!InMemorySequenceStore.TRACK_MAP.containsKey(trackModell.getId())){
+                InMemorySequenceStore.TRACK_MAP.put(trackModell.getId(), newTrack);
             }
         });
     }
@@ -84,7 +81,7 @@ public class MidiGatewayImpl implements MidiGateway {
     private SequenceModell convertSquence(Sequence sequence) {
         SequenceModell sequenceModell = new SequenceToModellConverter(sequence).convert();
         convertTracks(sequence, sequenceModell);
-        SEQUENCE_MAP.put(sequenceModell.getId(), sequence);
+        InMemorySequenceStore.SEQUENCE_MAP.put(sequenceModell.getId(), sequence);
         return sequenceModell;
     }
 
@@ -92,7 +89,7 @@ public class MidiGatewayImpl implements MidiGateway {
         Arrays.stream(sequence.getTracks()).forEach(track -> {
             TrackModell modell = new TrackToModellConverter(track).convert();
             sequenceModell.tracks.add(modell);
-            TRACK_MAP.put(modell.getId(), track);
+            InMemorySequenceStore.TRACK_MAP.put(modell.getId(), track);
             convertNotes(track, modell);
         });
     }
@@ -103,10 +100,10 @@ public class MidiGatewayImpl implements MidiGateway {
 
     private void tryingInitializeSequence(SequenceModell modell) throws InvalidMidiDataException {
         Sequence sequence = new Sequence(modell.division, modell.resolution);
-        SEQUENCE_MAP.put(modell.getId(), sequence);
+        InMemorySequenceStore.SEQUENCE_MAP.put(modell.getId(), sequence);
         modell.tracks.forEach(trackModell -> {
             Track track = sequence.createTrack();
-            TRACK_MAP.put(trackModell.getId(), track);
+            InMemorySequenceStore.TRACK_MAP.put(trackModell.getId(), track);
         });
     }
 

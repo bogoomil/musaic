@@ -4,6 +4,7 @@ import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 import hu.boga.musaic.core.gateway.MidiGateway;
+import hu.boga.musaic.core.sequence.interactor.converters.SequenceModellToDtoConverter;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -128,6 +129,16 @@ class SequenceInteractorTest {
     void stop(){
         interactor.stop();
         Mockito.verify(gateway).stop();
+    }
+
+    @Test
+    void reloadSequence(){
+        interactor.create();
+        Mockito.verify(gateway).initMidiSequence(sequenceModellArgumentCaptor.capture());
+        SequenceModell modell = sequenceModellArgumentCaptor.getValue();
+
+        interactor.reloadSequence(new SequenceModellToDtoConverter(modell).convert());
+        Mockito.verify(boundaryOut, times(2)).displaySequence(Mockito.any());
     }
 
 }

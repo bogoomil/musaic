@@ -1,5 +1,6 @@
 package hu.boga.musaic.core.sequence.interactor;
 
+import hu.boga.musaic.core.InMemorySequenceModellStore;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
@@ -19,8 +20,6 @@ import java.util.Optional;
 public class SequenceInteractor implements SequenceBoundaryIn {
 
     private static final Logger LOG = LoggerFactory.getLogger(SequenceInteractor.class);
-
-    public static final Map<String, SequenceModell> SEQUENCE_MODELS = new HashMap<>();
 
     private final SequenceBoundaryOut boundaryOut;
     private final MidiGateway gateway;
@@ -46,7 +45,7 @@ public class SequenceInteractor implements SequenceBoundaryIn {
     public void open(String path){
         SequenceModell sequenceModell = gateway.open(path);
         LOG.debug("opening sequence modell: {}", sequenceModell);
-        SEQUENCE_MODELS.put(sequenceModell.getId(), sequenceModell);
+        InMemorySequenceModellStore.SEQUENCE_MODELS.put(sequenceModell.getId(), sequenceModell);
         SequenceDto dto = new SequenceModellToDtoConverter(sequenceModell).convert();
         boundaryOut.displaySequence(dto);
     }
@@ -63,14 +62,14 @@ public class SequenceInteractor implements SequenceBoundaryIn {
 
     @Override
     public void setTempo(String sequenceId, int tempo) {
-        SequenceModell modell = SEQUENCE_MODELS.get(sequenceId);
+        SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId);
         modell.tempo = tempo;
         gateway.updateTempo(modell);
     }
 
     @Override
     public void addTrack(String sequenceId) {
-        SequenceModell modell = SEQUENCE_MODELS.get(sequenceId);
+        SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId);
         TrackModell trackModell = new TrackModell();
         modell.tracks.add(trackModell);
         gateway.addTrack(modell);
@@ -83,16 +82,22 @@ public class SequenceInteractor implements SequenceBoundaryIn {
 
     }
 
+    @Override
+    public void reloadSequence(SequenceDto sequenceDto) {
+        SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceDto.id);
+        boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());
+    }
+
     private SequenceModell createNewSequence(){
         SequenceModell modell = new SequenceModell();
-        SEQUENCE_MODELS.put(modell.getId(), modell);
+        InMemorySequenceModellStore.SEQUENCE_MODELS.put(modell.getId(), modell);
         gateway.initMidiSequence(modell);
         return modell;
     }
 
     private Optional<SequenceModell> getModell(String id){
-        if(SEQUENCE_MODELS.containsKey(id)) {
-            return Optional.of(SEQUENCE_MODELS.get(id));
+        if(InMemorySequenceModellStore.SEQUENCE_MODELS.containsKey(id)) {
+            return Optional.of(InMemorySequenceModellStore.SEQUENCE_MODELS.get(id));
         }
         return Optional.empty();
     }

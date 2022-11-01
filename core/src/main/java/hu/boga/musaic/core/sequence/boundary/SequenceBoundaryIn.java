@@ -1,5 +1,7 @@
 package hu.boga.musaic.core.sequence.boundary;
 
+import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
+
 public interface SequenceBoundaryIn {
     void create();
     void load(String id);
@@ -12,4 +14,6 @@ public interface SequenceBoundaryIn {
     void addTrack(String sequenceId);
 
     void stop();
+
+    void reloadSequence(SequenceDto sequenceDto);
 }

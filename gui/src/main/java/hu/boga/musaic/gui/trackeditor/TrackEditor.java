@@ -8,6 +8,7 @@ import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
 import hu.boga.musaic.gui.controls.InstrumentCombo;
 import hu.boga.musaic.gui.trackeditor.events.ModeChangedEvent;
 import hu.boga.musaic.gui.trackeditor.events.RootChangedEvent;
+import hu.boga.musaic.gui.trackeditor.events.TrackDeletedEvent;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -89,24 +90,15 @@ public class TrackEditor implements TrackBoundaryOut {
         });
     }
 
-    public void setTrackIndex(String seqId, int trackIndex){
+    public void removeTrack(ActionEvent actionEvent) {
+        trackBoundaryIn.removeTrack(trackDto.id);
+        this.eventBus.post(new TrackDeletedEvent(trackDto.id));
     }
-
-//    @Override
-//    public void dispayTrack(TrackDto trackDto) {
-//    }
-//
-//    public void removeTrack(ActionEvent actionEvent) {
-//        eventBus.post(new TrackDeleteEvent(trackIndex));
-//    }
 
     public void setEventBus(final EventBus eventBus) {
         this.eventBus = eventBus;
         eventBus.register(this);
         trackEditorPanel.setEventBus(eventBus);
-    }
-
-    public void removeTrack(ActionEvent actionEvent) {
     }
 
     public void setTrackDto(TrackDto trackDto, int resolution) {
