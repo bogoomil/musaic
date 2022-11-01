@@ -68,6 +68,12 @@ public class MidiGatewayImpl implements MidiGateway {
         });
     }
 
+    @Override
+    public void stop() {
+        Player.stopPlayback();
+
+    }
+
     private SequenceModell tryingToOpen(String path) throws InvalidMidiDataException, IOException {
         File file = new File(path);
         Sequence sequence = MidiSystem.getSequence(file);

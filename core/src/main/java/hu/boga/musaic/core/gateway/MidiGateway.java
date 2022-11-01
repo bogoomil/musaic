@@ -15,4 +15,6 @@ public interface MidiGateway {
     void save(String sequenceId, String path);
 
     void addTrack(SequenceModell modell);
+
+    void stop();
 }

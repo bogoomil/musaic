@@ -77,6 +77,12 @@ public class SequenceInteractor implements SequenceBoundaryIn {
         boundaryOut.displayNewTrack(new TrackModelltoDtoConverter(trackModell).convert());
     }
 
+    @Override
+    public void stop() {
+        gateway.stop();
+
+    }
+
     private SequenceModell createNewSequence(){
         SequenceModell modell = new SequenceModell();
         SEQUENCE_MODELS.put(modell.getId(), modell);

@@ -179,7 +179,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <verbose>true</verbose>
+                    <verbose>false</verbose>
                     <skip>false</skip>
                     <failWhenNoMutations>false</failWhenNoMutations>
                     <excludedClasses>
@@ -189,8 +189,6 @@
                     </excludedClasses>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
-
 </project>

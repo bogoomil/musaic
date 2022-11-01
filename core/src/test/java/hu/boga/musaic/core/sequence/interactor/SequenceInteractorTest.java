@@ -123,4 +123,11 @@ class SequenceInteractorTest {
         assertNotNull(sequenceModellArgumentCaptor.getValue());
         assertNotNull(trackDtoArgumentCaptor.getValue());
     }
+
+    @Test
+    void stop(){
+        interactor.stop();
+        Mockito.verify(gateway).stop();
+    }
+
 }

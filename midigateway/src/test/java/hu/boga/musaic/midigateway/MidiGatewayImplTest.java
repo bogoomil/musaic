@@ -117,4 +117,13 @@ class MidiGatewayImplTest {
 
         assertEquals(2, MidiGatewayImpl.TRACK_MAP.size());
     }
+
+    @Test
+    void stop(){
+        SequenceModell model = midiGateway.open(PATH);
+        try (MockedStatic<Player> mockedStatic = Mockito.mockStatic(Player.class)) {
+            midiGateway.stop();
+            mockedStatic.verify(() -> Player.stopPlayback(), times(1));
+        }
+    }
 }

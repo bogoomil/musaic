@@ -38,4 +38,7 @@ public class Player {
         sequencer.start();
     }
 
+    public static void stopPlayback() {
+        sequencer.stop();
+    }
 }

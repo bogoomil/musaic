@@ -89,9 +89,9 @@ public class SequenceEditor implements SequenceBoundaryOut {
         boundaryIn.play(sequenceDto.id);
     }
 
-//    public void stopPlayback(ActionEvent actionEvent) {
-//        this.boundaryIn.stop(sequenceDto.id);
-//    }
+    public void stopPlayback(ActionEvent actionEvent) {
+        this.boundaryIn.stop();
+    }
 
     @Override
     public void displaySequence(SequenceDto sequenceDto) {
@@ -135,9 +135,6 @@ public class SequenceEditor implements SequenceBoundaryOut {
         controller.setEventBus(eventBus);
 
         accordion.getPanes().add(trackEditor);
-    }
-
-    public void stopPlayback(ActionEvent actionEvent) {
     }
 
     public void onNewTrackButtonClicked(ActionEvent actionEvent) {
