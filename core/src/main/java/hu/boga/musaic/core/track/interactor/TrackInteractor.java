@@ -6,10 +6,14 @@ import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
 public class TrackInteractor implements TrackBoundaryIn {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TrackInteractor.class);
 
     TrackGateway gateway;
     TrackBoundaryOut boundaryOut;
@@ -32,4 +36,11 @@ public class TrackInteractor implements TrackBoundaryIn {
         modell.tracks.removeIf(trackModell -> trackModell.getId().equals(trackId));
         gateway.removeTrack(seqId, trackId);
     }
+
+    @Override
+    public void updateTrackProgram(String trackId, int program, int channel) {
+        LOG.debug("updating track: {} program: {} channel: {}", trackId, program, channel);
+        gateway.updateTrackProgram(trackId, program, channel);
+    }
+
 }

@@ -156,11 +156,4 @@ public class SequenceEditor implements SequenceBoundaryOut {
         boundaryIn.reloadSequence(sequenceDto);
     }
 
-    @Subscribe
-    public void onProgramChangedEvent(ProgramChangedEvent event){
-        LOG.debug("programchanged event: " + event);
-        boundaryIn.updateTrackProgram(event.getTrackId(), event.getProgram(), event.getChannel());
-    }
-
-
 }

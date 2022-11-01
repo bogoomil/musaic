@@ -60,7 +60,7 @@ public class MidiUtil {
         return getMidiEventsByCommand(track, command).stream().map(MidiEvent::getMessage).collect(Collectors.toList());
     }
 
-    protected static List<MidiEvent> getMidiEventsByCommand(final Track track, final int command) {
+    public static List<MidiEvent> getMidiEventsByCommand(final Track track, final int command) {
         final List<MidiEvent> retVal = new ArrayList<>();
         for (int i = 0; i < track.size(); i++) {
             final MidiEvent event = track.get(i);

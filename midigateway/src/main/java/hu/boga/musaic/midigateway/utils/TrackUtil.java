@@ -54,6 +54,7 @@ public class TrackUtil extends MidiUtil {
     }
 
     public static void addProgramChangeEvent(Track track, final int channel, final int program, final int tick) {
+        removeEvents(track, TrackUtil.getMidiEventsByCommand(track, ShortMessage.PROGRAM_CHANGE));
         addShortMessage(track, tick, ShortMessage.PROGRAM_CHANGE, channel, program, 0);
     }
 

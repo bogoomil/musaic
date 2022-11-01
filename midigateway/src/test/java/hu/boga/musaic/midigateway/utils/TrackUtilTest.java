@@ -61,4 +61,12 @@ class TrackUtilTest extends MidiUtilBaseTest {
         MidiUtil.addShortMessage(track, 23, ShortMessage.PROGRAM_CHANGE, 1, 1, 0);
         assertThrows(MusaicException.class, () -> TrackUtil.getProgram(track));
     }
+
+    @Test
+    void addProgramChangeEvent(){
+        TrackUtil.addProgramChangeEvent(track, 1,1,0);
+        TrackUtil.addProgramChangeEvent(track, 1,1,0);
+        assertEquals(1, TrackUtil.getMidiEventsByCommand(track, ShortMessage.PROGRAM_CHANGE).size());
+//        assertDoesNotThrow(() -> TrackUtil.addProgramChangeEvent(track, 1,1,0));
+    }
 }

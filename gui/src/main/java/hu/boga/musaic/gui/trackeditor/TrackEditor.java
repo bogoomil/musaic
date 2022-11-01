@@ -58,13 +58,13 @@ public class TrackEditor implements TrackBoundaryOut {
 
         channelCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             if(eventBus != null){
-                eventBus.post(new ProgramChangedEvent(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex()));
+                onProgramChangedEvent(new ProgramChangedEvent(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex()));
             }
         });
 
         instrumentCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             if(eventBus != null){
-                eventBus.post(new ProgramChangedEvent(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex()));
+                onProgramChangedEvent(new ProgramChangedEvent(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex()));
             }
         });
 
@@ -150,4 +150,8 @@ public class TrackEditor implements TrackBoundaryOut {
         trackEditorPanel.setCurrentTone(event.getTone());
     }
 
+    public void onProgramChangedEvent(ProgramChangedEvent event){
+        LOG.debug("programchanged event: " + event);
+        trackBoundaryIn.updateTrackProgram(event.getTrackId(), event.getProgram(), event.getChannel());
+    }
 }

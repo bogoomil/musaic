@@ -32,10 +32,10 @@ class TrackToModellConverterTest extends ConverterBaseTest {
         assertEquals(2, modell.program);
     }
 
-    @Test
-    void convertNegativePath(){
-        TrackUtil.addProgramChangeEvent(track, 2,3,1);
-        TrackToModellConverter converter = new TrackToModellConverter(track);
-        assertThrows(MusaicException.class, () -> converter.convert());
-    }
+//    @Test
+//    void convertNegativePath(){
+//        TrackUtil.addProgramChangeEvent(track, 2,3,1);
+//        TrackToModellConverter converter = new TrackToModellConverter(track);
+//        assertThrows(MusaicException.class, () -> converter.convert());
+//    }
 }

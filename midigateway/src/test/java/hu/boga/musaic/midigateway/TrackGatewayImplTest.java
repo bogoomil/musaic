@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.Sequence;
-import javax.sound.midi.Track;
+import javax.sound.midi.*;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
@@ -52,5 +52,16 @@ class TrackGatewayImplTest {
     void removeTrack() {
         gateway.removeTrack(SEQ_ID, TRACK_ID);
         assertEquals(0, modell.getTracks().length);
+    }
+
+    @Test
+    void updateTrackProgram(){
+        InMemorySequenceStore.TRACK_MAP.put(TRACK_ID, track);
+        try (MockedStatic<TrackUtil> mockedStatic = Mockito.mockStatic(TrackUtil.class)) {
+            gateway.updateTrackProgram(TRACK_ID, 0,0);
+            List<MidiEvent> events = TrackUtil.getMidiEventsByCommand(track, ShortMessage.PROGRAM_CHANGE);
+            mockedStatic.verify(() -> TrackUtil.addProgramChangeEvent(Mockito.any(), eq(0), eq(0), eq(0)));
+        }
+
     }
 }

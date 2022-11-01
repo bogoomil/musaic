@@ -46,9 +46,7 @@ class TrackInteractorTest {
 
     @Test
     void removeTrack(){
-
         InMemorySequenceModellStore.clear();
-
         SequenceModell modell = new SequenceModell();
         TrackModell trackModell = new TrackModell();
         modell.tracks.add(trackModell);
@@ -57,12 +55,16 @@ class TrackInteractorTest {
         try (MockedStatic<InMemorySequenceModellStore> mockedStatic = Mockito.mockStatic(InMemorySequenceModellStore.class)) {
             mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceIdByTrackId(trackModell.getId())).thenReturn(modell.getId());
             mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceById(modell.getId())).thenReturn(modell);
-
             trackInteractor.removeTrack(trackModell.getId());
             Mockito.verify(gateway).removeTrack(modell.getId(), trackModell.getId());
 
             assertEquals(1, modell.tracks.size());
         }
+    }
 
+    @Test
+    void updateTrackProgram(){
+        trackInteractor.updateTrackProgram(TRACK_ID, 0,0);
+        Mockito.verify(gateway).updateTrackProgram(TRACK_ID, 0, 0);
     }
 }

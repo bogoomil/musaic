@@ -16,6 +16,4 @@ public interface SequenceBoundaryIn {
     void stop();
 
     void reloadSequence(SequenceDto sequenceDto);
-
-    void updateTrackProgram(String trackId, int program, int channel);
 }
