@@ -4,7 +4,7 @@ import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 import hu.boga.musaic.core.gateway.MidiGateway;
-import hu.boga.musaic.core.sequence.boundary.dtos.TrackDto;
+import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

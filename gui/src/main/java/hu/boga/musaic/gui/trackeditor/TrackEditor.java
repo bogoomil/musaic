@@ -2,7 +2,7 @@ package hu.boga.musaic.gui.trackeditor;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import hu.boga.musaic.core.sequence.boundary.dtos.TrackDto;
+import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
 import hu.boga.musaic.gui.controls.InstrumentCombo;
@@ -11,13 +11,14 @@ import hu.boga.musaic.gui.trackeditor.events.RootChangedEvent;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -43,6 +44,7 @@ public class TrackEditor implements TrackBoundaryOut {
     TrackBoundaryIn trackBoundaryIn;
 
     private EventBus eventBus;
+    private TrackDto trackDto;
 
     @Inject
     public TrackEditor(TrackBoundaryIn trackBoundaryIn) {
@@ -78,12 +80,13 @@ public class TrackEditor implements TrackBoundaryOut {
 
             }
         });
-//        trackName.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
-//            @Override
-//            public void handle(KeyEvent event) {
-//                trackBoundaryIn.updateTrackName(trackIndex, trackName.getText());
-//            }
-//        });
+        trackName.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                trackDto.name = trackName.getText();
+                trackBoundaryIn.updateTrackName(trackDto);
+            }
+        });
     }
 
     public void setTrackIndex(String seqId, int trackIndex){
@@ -107,6 +110,8 @@ public class TrackEditor implements TrackBoundaryOut {
     }
 
     public void setTrackDto(TrackDto trackDto, int resolution) {
+
+        this.trackDto = trackDto;
 
         titledPane.setText("ch: " + trackDto.channel + " pr:" + trackDto.program + " notes: " + trackDto.notes.size() + " (" + trackDto.id + ")");
         channelCombo.getSelectionModel().select(trackDto.channel);

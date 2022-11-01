@@ -1,5 +1,7 @@
 package hu.boga.musaic.core.sequence.boundary.dtos;
 
+import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
+
 import java.util.List;
 
 public class SequenceDto {

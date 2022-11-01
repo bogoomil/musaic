@@ -7,7 +7,7 @@ import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 import hu.boga.musaic.core.gateway.MidiGateway;
 import hu.boga.musaic.core.sequence.interactor.converters.SequenceModellToDtoConverter;
-import hu.boga.musaic.core.sequence.interactor.converters.TrackModelltoDtoConverter;
+import hu.boga.musaic.core.track.interactor.converters.TrackModelltoDtoConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

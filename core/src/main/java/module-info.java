@@ -9,6 +9,7 @@ module core {
     exports hu.boga.musaic.musictheory;
     exports hu.boga.musaic.core.track.boundary;
     exports hu.boga.musaic.core.track.interactor;
+    exports hu.boga.musaic.core.track.boundary.dtos;
 
     requires com.google.guice;
     requires javax.inject;

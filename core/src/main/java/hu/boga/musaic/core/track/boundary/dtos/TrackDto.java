@@ -1,4 +1,6 @@
-package hu.boga.musaic.core.sequence.boundary.dtos;
+package hu.boga.musaic.core.track.boundary.dtos;
+
+import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 
 import java.util.List;
 

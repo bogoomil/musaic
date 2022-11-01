@@ -1,9 +1,8 @@
-package hu.boga.musaic.core.sequence.interactor.converters;
+package hu.boga.musaic.core.track.interactor.converters;
 
 import hu.boga.musaic.core.modell.NoteModell;
 import hu.boga.musaic.core.modell.TrackModell;
-import hu.boga.musaic.core.sequence.boundary.dtos.TrackDto;
-import hu.boga.musaic.core.sequence.interactor.converters.TrackModelltoDtoConverter;
+import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -2,7 +2,7 @@ package hu.boga.musaic.gui.sequenceeditor;
 
 import com.google.common.eventbus.EventBus;
 import hu.boga.musaic.GuiceModule;
-import hu.boga.musaic.core.sequence.boundary.dtos.TrackDto;
+import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.gui.controls.ModeCombo;
 import hu.boga.musaic.gui.controls.NoteNameCombo;
 import hu.boga.musaic.gui.controls.TempoSlider;
