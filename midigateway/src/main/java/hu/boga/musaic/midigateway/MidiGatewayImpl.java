@@ -20,8 +20,6 @@ public class MidiGatewayImpl implements MidiGateway {
     protected static final Map<String, Sequence> SEQUENCE_MAP = new HashMap<>();
     protected static final Map<String, Track> TRACK_MAP = new HashMap<>();
 
-    private Player player = new Player();
-
     @Override
     public void initMidiSequence(SequenceModell modell) {
         try {
@@ -42,7 +40,7 @@ public class MidiGatewayImpl implements MidiGateway {
 
     @Override
     public void play(String sequenceId) {
-        player.playSequence(SEQUENCE_MAP.get(sequenceId));
+        Player.playSequence(SEQUENCE_MAP.get(sequenceId));
     }
 
     @Override

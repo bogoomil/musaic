@@ -69,17 +69,12 @@ class SequenceInteractorTest {
     @Test
     void open(){
         Mockito.when(gateway.open(PATH)).thenReturn(new SequenceModell());
-
         interactor.open(PATH);
-
         ArgumentCaptor<String> sequenceIdCaptor = ArgumentCaptor.forClass(String.class);
         Mockito.verify(gateway).open(sequenceIdCaptor.capture());
-
         assertNotNull(sequenceIdCaptor.getValue());
         assertEquals(PATH, sequenceIdCaptor.getValue());
-
         Mockito.verify(boundaryOut, times(1)).displaySequence(sequenceDtoArgumentCaptor.capture());
-
         assertNotNull(sequenceDtoArgumentCaptor.getValue());
 
     }
@@ -88,5 +83,16 @@ class SequenceInteractorTest {
     void loadNegativePath(){
         interactor.create();
         assertThrows(NoSuchElementException.class, () -> interactor.load("zergefasz"));
+    }
+
+    @Test
+    void setTempo(){
+        interactor.create();
+        Mockito.verify(gateway).initMidiSequence(sequenceModellArgumentCaptor.capture());
+        SequenceModell modell = sequenceModellArgumentCaptor.getValue();
+        interactor.setTempo(modell.getId(), 100);
+        Mockito.verify(gateway).updateTempo(Mockito.any());
+
+        assertNotNull(sequenceModellArgumentCaptor.getValue());
     }
 }

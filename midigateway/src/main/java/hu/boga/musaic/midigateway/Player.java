@@ -18,7 +18,7 @@ public class Player {
         sequencer = sequencer1;
     }
 
-    public void playSequence(Sequence sequence){
+    public static void playSequence(Sequence sequence){
         if(sequence == null){
             throw new MusaicException("sequence is null");
         }

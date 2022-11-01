@@ -4,6 +4,7 @@ import hu.boga.musaic.core.exceptions.MusaicException;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.gateway.MidiGateway;
+import hu.boga.musaic.midigateway.utils.TempoUtil;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,8 @@ import org.mockito.Mockito;
 import javax.sound.midi.Sequence;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
 
 class MidiGatewayImplTest {
 
@@ -64,6 +67,23 @@ class MidiGatewayImplTest {
 
     @Test
     void play(){
-        assertThrows(MusaicException.class, () -> midiGateway.play(""));
+        SequenceModell model = midiGateway.open(PATH);
+        try (MockedStatic<Player> mockedStatic = Mockito.mockStatic(Player.class)) {
+            midiGateway.play(model.getId());
+            mockedStatic.verify(() -> Player.playSequence(Mockito.any()), times(1));
+        }
+    }
+
+    @Test
+    void updateTempo(){
+        SequenceModell model = midiGateway.open(PATH);
+        model.tempo = 234;
+
+        try (MockedStatic<TempoUtil> mockedStatic = Mockito.mockStatic(TempoUtil.class)) {
+            midiGateway.updateTempo(model);
+            mockedStatic.verify(() -> TempoUtil.getTempo(Mockito.any()), times(2));
+            mockedStatic.verify(() -> TempoUtil.removeTempoEvents(Mockito.any()), times(1));
+            mockedStatic.verify(() -> TempoUtil.addTempoEvents(Mockito.any(), eq(234)), times(1));
+        }
     }
 }

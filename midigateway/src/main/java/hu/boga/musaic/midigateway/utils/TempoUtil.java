@@ -54,4 +54,5 @@ public class TempoUtil extends MidiUtil {
         int mspq = ((data[0] & 0xff) << 16) | ((data[1] & 0xff) << 8) | (data[2] & 0xff);
         return Math.round(60000001f / mspq);
     }
+
 }

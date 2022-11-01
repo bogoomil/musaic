@@ -179,7 +179,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <skip>true</skip>
+                    <skip>false</skip>
                     <failWhenNoMutations>false</failWhenNoMutations>
                     <excludedClasses>
                         <param>hu.boga.musaic.musictheory.*</param>
