@@ -7,7 +7,7 @@
 <?import hu.boga.musaic.gui.controls.ModeCombo?>
 <?import hu.boga.musaic.gui.controls.TempoSlider?>
 <BorderPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="hu.boga.musaic.gui.views.SequenceEditorPanelController">
+            fx:controller="hu.boga.musaic.gui.sequenceeditor.SequenceEditor">
     <top>
         <HBox BorderPane.alignment="CENTER">
             <TextField fx:id="tfFilename"/>

@@ -1,7 +1,7 @@
 package hu.boga.musaic.gui;
 
 import hu.boga.musaic.GuiceModule;
-import hu.boga.musaic.gui.views.SequenceEditorPanelController;
+import hu.boga.musaic.gui.sequenceeditor.SequenceEditor;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,11 +43,11 @@ public class MainController {
         getSequenceTabController().initSequence();
     }
 
-    private SequenceEditorPanelController getSequenceTabController() throws IOException {
-        FXMLLoader loader = new FXMLLoader(SequenceEditorPanelController.class.getResource("sequence-editor-panel.fxml"));
+    private SequenceEditor getSequenceTabController() throws IOException {
+        FXMLLoader loader = new FXMLLoader(SequenceEditor.class.getResource("sequence-editor.fxml"));
         loader.setControllerFactory(GuiceModule.INJECTOR::getInstance);
         BorderPane sequenceEditorPanel =  loader.load();
-        SequenceEditorPanelController controller = loader.getController();
+        SequenceEditor controller = loader.getController();
         mainTab.getTabs().add(new Tab("ZergeFaszGerinc", sequenceEditorPanel));
         return controller;
     }

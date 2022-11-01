@@ -6,6 +6,9 @@ module core {
     exports hu.boga.musaic.core.gateway;
     exports hu.boga.musaic.core.modell;
     exports hu.boga.musaic.core.exceptions;
+    exports hu.boga.musaic.musictheory;
+    exports hu.boga.musaic.core.track.boundary;
+    exports hu.boga.musaic.core.track.interactor;
 
     requires com.google.guice;
     requires javax.inject;

@@ -1,4 +1,4 @@
-package hu.boga.musaic.gui.views;
+package hu.boga.musaic.gui.sequenceeditor;
 
 import com.google.common.eventbus.EventBus;
 import hu.boga.musaic.gui.controls.ModeCombo;
@@ -17,9 +17,9 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 
-public class SequenceEditorPanelController implements SequenceBoundaryOut {
+public class SequenceEditor implements SequenceBoundaryOut {
     private static final String DEFAULT_NAME = "new_project.mid";
-    private static final Logger LOG = LoggerFactory.getLogger(SequenceEditorPanelController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SequenceEditor.class);
     private final SequenceBoundaryIn boundaryIn;
 
     public Label division;
@@ -46,7 +46,7 @@ public class SequenceEditorPanelController implements SequenceBoundaryOut {
     private String sequenceId;
 
     @Inject
-    public SequenceEditorPanelController(SequenceBoundaryIn boundaryInProvider) {
+    public SequenceEditor(SequenceBoundaryIn boundaryInProvider) {
         this.boundaryIn = boundaryInProvider;
         eventBus.register(this);
     }
@@ -127,7 +127,7 @@ public class SequenceEditorPanelController implements SequenceBoundaryOut {
     }
 
     private void addTrackPanel(int trackIndex) throws IOException {
-//        FXMLLoader loader = new FXMLLoader(TrackEditorPanelController.class.getResource("track-editor-panel.fxml"));
+//        FXMLLoader loader = new FXMLLoader(TrackEditorPanelController.class.getResource("track-editor.fxml"));
 //        loader.setControllerFactory(GuiceModule.INJECTOR::getInstance);
 //        TitledPane trackEditor = loader.load();
 //
