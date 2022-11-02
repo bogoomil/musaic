@@ -1,9 +1,11 @@
 package hu.boga.musaic.core;
 
 import hu.boga.musaic.core.modell.SequenceModell;
+import hu.boga.musaic.core.modell.TrackModell;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class InMemorySequenceModellStore {
@@ -17,15 +19,14 @@ public class InMemorySequenceModellStore {
         return SEQUENCE_MODELS.get(sequenceId);
     }
 
-    public static String getSequenceIdByTrackId(String trackId){
-        AtomicReference<String> retVal = new AtomicReference<>();
-        SEQUENCE_MODELS.entrySet().forEach((entry) -> {
-            entry.getValue().tracks.forEach(trackModell -> {
-                if(trackId.equals(trackModell.getId())){
-                    retVal.set(entry.getKey());
-                }
-            });
-        });
-        return retVal.get();
+    public static Optional<SequenceModell> getSequenceByTrackId(String trackId){
+        return SEQUENCE_MODELS.values().stream().filter(sequenceModell -> sequenceModell.getTrackById(trackId).isPresent()).findFirst();
+    }
+
+    public static Optional<TrackModell> getTrackById(String trackId){
+        return SEQUENCE_MODELS
+                .values()
+                .stream()
+                .map(sequenceModell -> sequenceModell.getTrackById(trackId)).findFirst().get();
     }
 }

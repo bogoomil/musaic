@@ -9,36 +9,42 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InMemorySequenceModellStoreTest {
 
+    public static final String NON_EXISTING_TRACK_ID = "nonExistingTrackId";
     private SequenceModell modell;
     private TrackModell trackModell;
 
     @BeforeEach
     void setUp() {
+        InMemorySequenceModellStore.SEQUENCE_MODELS.clear();
+
         modell = new SequenceModell();
         trackModell = new TrackModell();
-
         modell.tracks.add(trackModell);
         InMemorySequenceModellStore.SEQUENCE_MODELS.put(modell.getId(), modell);
     }
 
     @Test
-    void getSequenceIdByTrackId() {
-        assertEquals(modell.getId(), InMemorySequenceModellStore.getSequenceIdByTrackId(trackModell.getId()));
+    void getSequenceByTrackId() {
+        assertEquals(modell, InMemorySequenceModellStore.getSequenceByTrackId(trackModell.getId()).get());
+        assertTrue(InMemorySequenceModellStore.getSequenceByTrackId(NON_EXISTING_TRACK_ID).isEmpty());
     }
 
     @Test
     void getSequenceById(){
-        SequenceModell modell = new SequenceModell();
         InMemorySequenceModellStore.SEQUENCE_MODELS.put(modell.getId(), modell);
         assertEquals(modell, InMemorySequenceModellStore.getSequenceById(modell.getId()));
     }
 
     @Test
     void clear(){
-        SequenceModell modell = new SequenceModell();
         InMemorySequenceModellStore.SEQUENCE_MODELS.put(modell.getId(), modell);
         InMemorySequenceModellStore.clear();
-
         assertTrue(InMemorySequenceModellStore.SEQUENCE_MODELS.isEmpty());
+    }
+
+    @Test
+    void getTrackById(){
+        assertEquals(trackModell, InMemorySequenceModellStore.getTrackById(trackModell.getId()).get());
+
     }
 }

@@ -42,7 +42,12 @@ public class TrackGatewayImpl implements TrackGateway {
         Track track = InMemorySequenceStore.TRACK_MAP.get(trackId);
         notesToAdd.forEach(note -> {
             NoteUtil.addNote(track, (int) note.tick, note.midiCode, (int) note.length, note.velocity, note.channel);
-
         });
+    }
+
+    @Override
+    public void deleteNote(String trackId, long tick, int midiCode) {
+        Track track = InMemorySequenceStore.TRACK_MAP.get(trackId);
+        NoteUtil.deleteNote(track, (int) tick, midiCode);
     }
 }

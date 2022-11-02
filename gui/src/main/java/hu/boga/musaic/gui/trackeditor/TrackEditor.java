@@ -2,6 +2,7 @@ package hu.boga.musaic.gui.trackeditor;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
@@ -18,6 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -120,11 +123,11 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
         trackBoundaryIn.addChord(trackDto.id, event.getTick(), event.getPitch(), event.getLength(), currentChannel, event.getChordType());
     }
 
-    @Override
-    public void onDeleteNoteEvent(DeleteNoteEvent[] events) {
-        throw new UnsupportedOperationException("DELETE NOTE EVENT");
-
-    }
+//    @Override
+//    public void onDeleteNoteEvent(DeleteNoteEvent[] events) {
+//        throw new UnsupportedOperationException("DELETE NOTE EVENT");
+//
+//    }
 
     @Override
     public void oMoveNoteEvent(MoveNoteEvent... events) {
@@ -137,11 +140,18 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 //    }
 //
 //    @Subscribe
-//    public void onDeleteNoteEvent(DeleteNoteEvent... events) {
-//        List<NoteDto> dtos = Arrays.stream(events).map(event -> new NoteDto(event.getPitch(), event.getTick(), 0)).collect(Collectors.toList());
-//        trackBoundaryIn.deleteNote(trackIndex, dtos.toArray(NoteDto[]::new));
-//
-//    }
+    public void onDeleteNoteEvent(DeleteNoteEvent... events) {
+        List<NoteDto> dtos = Arrays.stream(events).map(event -> convertDeleteEventToNoteDto(event)).collect(Collectors.toList());
+        trackBoundaryIn.deleteNotes(trackDto.id, dtos.toArray(NoteDto[]::new));
+
+    }
+
+    NoteDto convertDeleteEventToNoteDto(DeleteNoteEvent event){
+        NoteDto dto = new NoteDto();
+        dto.midiCode = (int) event.getPitch();
+        dto.tick = (long) event.getTick();
+        return dto;
+    }
 
     @Subscribe
     private void handleRootChangedEvent(RootChangedEvent event) {

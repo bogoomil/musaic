@@ -13,4 +13,6 @@ public interface TrackGateway {
     void updateTrackProgram(String trackId, int program, int channel);
 
     void addNotesToTrack(String trackId, List<NoteModell> notesToAdd);
+
+    void deleteNote(String trackId, long tick, int midiCode);
 }

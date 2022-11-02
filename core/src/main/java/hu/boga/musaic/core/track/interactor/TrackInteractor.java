@@ -5,6 +5,7 @@ import hu.boga.musaic.core.gateway.TrackGateway;
 import hu.boga.musaic.core.modell.NoteModell;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
+import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
@@ -40,10 +41,11 @@ public class TrackInteractor implements TrackBoundaryIn {
 
     @Override
     public void removeTrack(String trackId) {
-        String seqId = InMemorySequenceModellStore.getSequenceIdByTrackId(trackId);
-        SequenceModell modell = InMemorySequenceModellStore.getSequenceById(seqId);
-        modell.tracks.removeIf(trackModell -> trackModell.getId().equals(trackId));
-        gateway.removeTrack(seqId, trackId);
+        InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
+            sequenceModell.tracks.removeIf(trackModell -> trackModell.getId().equals(trackId));
+            gateway.removeTrack(sequenceModell.getId(), trackId);
+
+        });
     }
 
     @Override
@@ -54,10 +56,24 @@ public class TrackInteractor implements TrackBoundaryIn {
 
     @Override
     public void addChord(String trackId, int tick, int pitch, int length, int channel, ChordType chordType) {
-        String sequenceId = InMemorySequenceModellStore.getSequenceIdByTrackId(trackId);
-        SequenceModell sequenceModell = InMemorySequenceModellStore.getSequenceById(sequenceId);
-        sequenceModell.getTrackById(trackId).ifPresent(trackModell -> {
-            addNotesToTrack(trackId, tick, pitch, length, channel, chordType, sequenceModell, trackModell);
+        InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
+            sequenceModell.getTrackById(trackId).ifPresent(trackModell -> {
+                addNotesToTrack(trackId, tick, pitch, length, channel, chordType, sequenceModell, trackModell);
+            });
+        });
+    }
+
+    @Override
+    public void deleteNotes(String trackId, NoteDto[] notes) {
+        InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
+            InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
+                Arrays.stream(notes).forEach(noteDto -> {
+                    trackModell.notes.removeIf(noteModell -> noteModell.tick == noteDto.tick && noteModell.midiCode == noteDto.midiCode);
+                    gateway.deleteNote(trackId, noteDto.tick, noteDto.midiCode);
+                });
+                boundaryOut.setTrackDto(new TrackModelltoDtoConverter(trackModell).convert(), sequenceModell.resolution);
+            });
+
         });
     }
 
