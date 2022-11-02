@@ -5,6 +5,7 @@ import hu.boga.musaic.midigateway.MidiConstants;
 
 import javax.sound.midi.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,6 +57,19 @@ public class TrackUtil extends MidiUtil {
     public static void addProgramChangeEvent(Track track, final int channel, final int program, final int tick) {
         removeEvents(track, TrackUtil.getMidiEventsByCommand(track, ShortMessage.PROGRAM_CHANGE));
         addShortMessage(track, tick, ShortMessage.PROGRAM_CHANGE, channel, program, 0);
+        updateNotesChannels(track, channel);
     }
 
+    private static void updateNotesChannels(Track track, int channel){
+        List<MidiEvent> noteOns = NoteUtil.getNoteOnEvents(track);
+        List<MidiEvent> noteOffs = NoteUtil.getNoteOffEvents(track);
+        noteOns.forEach(note -> updateNoteChannel(track, channel, note));
+        noteOffs.forEach(note -> updateNoteChannel(track, channel, note));
+    }
+
+    private static void updateNoteChannel(Track track, int channel, MidiEvent midiEvent) {
+        MidiUtil.removeEvents(track, Arrays.asList(midiEvent));
+        ShortMessage note = (ShortMessage) midiEvent.getMessage();
+        MidiUtil.addShortMessage(track, (int) midiEvent.getTick(), note.getCommand(), channel, note.getData1(), note.getData2());
+    }
 }

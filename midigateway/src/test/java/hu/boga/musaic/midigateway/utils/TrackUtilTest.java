@@ -4,6 +4,7 @@ import hu.boga.musaic.core.exceptions.MusaicException;
 import hu.boga.musaic.midigateway.MidiConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.matchers.Not;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.ShortMessage;
@@ -64,9 +65,18 @@ class TrackUtilTest extends MidiUtilBaseTest {
 
     @Test
     void addProgramChangeEvent(){
+
+        NoteUtil.addNote(track, 0, 12, 512, 100, 0);
+
         TrackUtil.addProgramChangeEvent(track, 1,1,0);
         TrackUtil.addProgramChangeEvent(track, 1,1,0);
         assertEquals(1, TrackUtil.getMidiEventsByCommand(track, ShortMessage.PROGRAM_CHANGE).size());
-//        assertDoesNotThrow(() -> TrackUtil.addProgramChangeEvent(track, 1,1,0));
+
+        ShortMessage on = (ShortMessage) NoteUtil.getNoteOnEvents(track).get(0).getMessage();
+        ShortMessage off = (ShortMessage) NoteUtil.getNoteOffEvents(track).get(0).getMessage();
+
+        assertEquals(1, on.getChannel());
+        assertEquals(1, off.getChannel());
     }
+
 }

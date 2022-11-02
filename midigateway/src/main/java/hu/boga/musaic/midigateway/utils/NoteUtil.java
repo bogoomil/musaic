@@ -22,6 +22,16 @@ public class NoteUtil extends MidiUtil {
         return events;
     }
 
+    public static List<MidiEvent> getNoteOffEvents(Track track){
+        List<MidiEvent> events = new ArrayList<>();
+        for(int i = 0; i < track.size(); i++){
+            if(isNoteOffEvent(track.get(i))){
+                events.add(track.get(i));
+            }
+        }
+        return events;
+    }
+
     public static void addNote(final Track track, final int tick, final int pitch, final int length, int volume, int channel) {
         addShortMessage(track, tick, ShortMessage.NOTE_ON, channel, pitch, volume);
         addShortMessage(track, tick + length, ShortMessage.NOTE_OFF, channel, pitch, 0);

@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.sound.midi.Instrument;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,6 +50,18 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
     private TrackDto trackDto;
     private int currentChannel;
 
+    ChangeListener<? super Integer> channelComboListener = (observable, oldValue, newValue) -> {
+        onProgramChangedEvent(new ProgramChangedEvent(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex()));
+    };
+
+    ChangeListener<? super Instrument> instrumentComboListener = (observable, oldValue, newValue) -> {
+        if(eventBus != null){
+            onProgramChangedEvent(new ProgramChangedEvent(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex()));
+        }
+    };
+
+
+
     @Inject
     public TrackEditor(TrackBoundaryIn trackBoundaryIn) {
         this.trackBoundaryIn = trackBoundaryIn;
@@ -56,18 +69,6 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
     public void initialize() {
         channelCombo.getItems().addAll(IntStream.rangeClosed(0, 15).boxed().collect(Collectors.toList()));
-
-        channelCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if(eventBus != null){
-                onProgramChangedEvent(new ProgramChangedEvent(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex()));
-            }
-        });
-
-        instrumentCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if(eventBus != null){
-                onProgramChangedEvent(new ProgramChangedEvent(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex()));
-            }
-        });
 
         zoomSlider.setMin(10);
         zoomSlider.setMax(400);
@@ -106,6 +107,8 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
     @Override
     public void setTrackDto(TrackDto trackDto, int resolution) {
 
+        channelCombo.valueProperty().removeListener(channelComboListener);
+        instrumentCombo.valueProperty().removeListener(instrumentComboListener);
         this.trackDto = trackDto;
 
         titledPane.setText("ch: " + trackDto.channel + " pr:" + trackDto.program + " notes: " + trackDto.notes.size() + " (" + trackDto.id + ")");
@@ -116,6 +119,9 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
         trackEditorPanel.setResolution(resolution);
         trackEditorPanel.setNotes(trackDto.notes);
         trackEditorPanel.paintNotes();
+
+        channelCombo.valueProperty().addListener(channelComboListener);
+        instrumentCombo.valueProperty().addListener(instrumentComboListener);
 
     }
 

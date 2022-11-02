@@ -57,11 +57,12 @@ class TrackInteractorTest {
     @Test
     void updateTrackName() {
         TrackDto dto = new TrackDto();
-        dto.id = TRACK_ID;
+        dto.id = trackModell.getId();
         dto.name = NEW_NAME;
         trackInteractor.updateTrackName(dto);
-
         Mockito.verify(gateway).updateTrackName(dto.id, dto.name);
+
+        assertEquals(NEW_NAME, trackModell.name);
 
     }
 
@@ -81,8 +82,12 @@ class TrackInteractorTest {
 
     @Test
     void updateTrackProgram(){
-        trackInteractor.updateTrackProgram(TRACK_ID, 0,0);
-        Mockito.verify(gateway).updateTrackProgram(TRACK_ID, 0, 0);
+        trackInteractor.updateTrackProgram(trackModell.getId(), 3,4);
+        Mockito.verify(gateway).updateTrackProgram(trackModell.getId(), 3, 4);
+
+        assertEquals(3, trackModell.program);
+        assertEquals(4, trackModell.channel);
+
     }
 
     @Test

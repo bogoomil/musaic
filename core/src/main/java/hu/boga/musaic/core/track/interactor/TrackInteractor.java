@@ -36,7 +36,10 @@ public class TrackInteractor implements TrackBoundaryIn {
 
     @Override
     public void updateTrackName(TrackDto trackDto) {
-        gateway.updateTrackName(trackDto.id, trackDto.name);
+        InMemorySequenceModellStore.getTrackById(trackDto.id).ifPresent(trackModell -> {
+            trackModell.name = trackDto.name;
+            gateway.updateTrackName(trackDto.id, trackDto.name);
+        });
     }
 
     @Override
@@ -44,14 +47,17 @@ public class TrackInteractor implements TrackBoundaryIn {
         InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
             sequenceModell.tracks.removeIf(trackModell -> trackModell.getId().equals(trackId));
             gateway.removeTrack(sequenceModell.getId(), trackId);
-
         });
     }
 
     @Override
     public void updateTrackProgram(String trackId, int program, int channel) {
         LOG.debug("updating track: {} program: {} channel: {}", trackId, program, channel);
-        gateway.updateTrackProgram(trackId, program, channel);
+        InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
+            trackModell.program = program;
+            trackModell.channel = channel;
+            gateway.updateTrackProgram(trackId, program, channel);
+        });
     }
 
     @Override
@@ -73,7 +79,6 @@ public class TrackInteractor implements TrackBoundaryIn {
                 });
                 boundaryOut.setTrackDto(new TrackModelltoDtoConverter(trackModell).convert(), sequenceModell.resolution);
             });
-
         });
     }
 
