@@ -1,13 +1,13 @@
 package hu.boga.musaic.gui.trackeditor;
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.Transform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +18,6 @@ public class NoteRectangle extends Rectangle {
     public static final Color DEFAULT_COLOR = Color.color(Color.DEEPSKYBLUE.getRed(), Color.DEEPSKYBLUE.getGreen(), Color.DEEPSKYBLUE.getBlue(), 0.7);
     private int length;
     private boolean selected;
-    private boolean isDragging;
 
     private EventBus eventBus;
     private double offset;
@@ -27,6 +26,7 @@ public class NoteRectangle extends Rectangle {
     public NoteRectangle(NoteDto noteDto, EventBus eventBus) {
         this.noteDto = noteDto;
         this.eventBus = eventBus;
+        eventBus.register(this);
         this.setFill(DEFAULT_COLOR);
         setUpEventHandlers();
     }
@@ -42,15 +42,15 @@ public class NoteRectangle extends Rectangle {
                 if(getX() < 0){
                     setX(0);
                 }
-                System.out.println("x:" + getX());
             }
         });
     }
 
     private void handleMouseDragged(MouseEvent e) {
-        isDragging = true;
         if (contains(e.getX(), e.getY())) {
+            double delta = -1 * (getX() - (e.getX() - offset));
             setX(e.getX() - offset);
+            eventBus.post(new NoteRectangleMovedEvent(noteDto.id, delta));
         }
         e.consume();
     }
@@ -72,11 +72,6 @@ public class NoteRectangle extends Rectangle {
         setFill(isSelected() ? SELECTED_COLOR : DEFAULT_COLOR);
     }
 
-    public void setDragging(boolean b) {
-        isDragging = b;
-    }
-
-
     public int getTick() {
         return (int) this.noteDto.tick;
     }
@@ -85,15 +80,27 @@ public class NoteRectangle extends Rectangle {
         return this.noteDto.midiCode;
     }
 
-    public boolean isDragging() {
-        return this.isDragging;
-    }
-
     public void toggleSlection() {
         setSelected(!isSelected());
     }
 
     public String getNoteId(){
         return noteDto.id;
+    }
+
+    private static class NoteRectangleMovedEvent {
+        String noteId;
+        double delta;
+        public NoteRectangleMovedEvent(String noteId, double delta) {
+            this.noteId = noteId;
+            this.delta = delta;
+        }
+    }
+
+    @Subscribe
+    private void handleNoteMovedEvent(NoteRectangleMovedEvent event){
+        if(this.selected && !this.noteDto.id.equals(event.noteId)){
+            this.setX(getX() + event.delta);
+        }
     }
 }
