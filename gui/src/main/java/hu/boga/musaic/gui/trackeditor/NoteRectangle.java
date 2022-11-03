@@ -3,6 +3,7 @@ package hu.boga.musaic.gui.trackeditor;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
+import hu.boga.musaic.gui.trackeditor.events.NoteMovedEvent;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.input.MouseEvent;
@@ -32,18 +33,16 @@ public class NoteRectangle extends Rectangle {
     }
 
     private void setUpEventHandlers() {
-
         setOnMousePressed(event -> offset = event.getX() - getX());
         setOnMouseDragged(event -> handleMouseDragged(event));
+        this.xProperty().addListener((observable, oldValue, newValue) -> xPropertyChanged());
+    }
 
-        this.xProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if(getX() < 0){
-                    setX(0);
-                }
-            }
-        });
+    private void xPropertyChanged() {
+        if(getX() < 0){
+            setX(0);
+        }
+        eventBus.post(new NoteMovedEvent(noteDto.id));
     }
 
     private void handleMouseDragged(MouseEvent e) {

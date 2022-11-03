@@ -34,10 +34,11 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     private NoteChangeListener noteChangeListener;
     private EventBus eventBus = new EventBus("TRACK_EDITOR_PANEL_EVENT_BUS");
 
+    private List<String> movedNoteIds = new ArrayList<>();
+
     public TrackEditorPanel() {
         super();
         this.setOnMouseClicked(event -> this.handleMouseClick(event));
-
         eventBus.register(this);
         contextMenu = new SettingsContextMenu(eventBus);
     }
@@ -46,9 +47,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     public void paintNotes() {
         getChildren().clear();
         this.initializeCanvas();
-
         this.getChildren().add(cursor);
-
         this.notes.forEach(noteDto -> {
             this.paintNote(noteDto);
         });
@@ -117,14 +116,24 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         cursor.setPrefWidth(currentNoteLength.getErtek() * get32ndsWidth());
     }
 
+    @Subscribe
+    private void handleNoteMovedEvent(NoteMovedEvent even){
+        if(!movedNoteIds.contains(even.getId())){
+            movedNoteIds.add(even.getId());
+        }
+    }
+
     private List<NoteRectangle> getAllNoteRectangles() {
         List<NoteRectangle> l = getChildren().stream().filter(node -> node instanceof NoteRectangle).map(node -> (NoteRectangle) node).collect(Collectors.toList());
-        LOG.debug("notes " + l);
         return l;
     }
 
     private List<NoteRectangle> getSelectedNoteRectangles() {
         return getAllNoteRectangles().stream().filter(noteRectangle -> noteRectangle.isSelected()).collect(Collectors.toList());
+    }
+
+    private Optional<NoteRectangle> getNoteRectangleByNoteId(String noteId){
+        return getAllNoteRectangles().stream().filter(noteRectangle -> noteRectangle.getNoteId().equals(noteId)).findFirst();
     }
 
 
@@ -173,11 +182,23 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
             }
         });
 
+        noteRectangle.setOnMouseReleased(event -> handleMouseReleasedOnNoteEvent());
+
         if (selectedPoints.contains(noteRectangle.getNoteId())) {
             noteRectangle.setSelected(true);
         }
 
         return noteRectangle;
+    }
+
+    private void handleMouseReleasedOnNoteEvent() {
+        movedNoteIds.forEach(id -> {
+            getNoteRectangleByNoteId(id).ifPresent(noteRectangle -> {
+                int newTick = getTickByX((int) noteRectangle.getX());
+                LOG.debug("MOVING NOTE: {} FROM: {} TO: {}",id, noteRectangle.getTick(), newTick );
+            });
+        });
+        movedNoteIds.clear();
     }
 
 }

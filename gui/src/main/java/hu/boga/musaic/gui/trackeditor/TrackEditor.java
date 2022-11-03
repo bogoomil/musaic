@@ -55,12 +55,8 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
     };
 
     ChangeListener<? super Instrument> instrumentComboListener = (observable, oldValue, newValue) -> {
-        if(eventBus != null){
-            programChanged(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex());
-        }
+        programChanged(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex());
     };
-
-
 
     @Inject
     public TrackEditor(TrackBoundaryIn trackBoundaryIn) {
@@ -130,14 +126,14 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
     }
 
     @Override
-    public void oMoveNoteEvent(MoveNoteEvent... events) {
-//        throw new UnsupportedOperationException("MOVE NOTE EVENT");
-    }
-
-    @Override
     public void onDeleteNoteEvent(DeleteNoteEvent... events) {
         List<NoteDto> dtos = Arrays.stream(events).map(event -> convertDeleteEventToNoteDto(event)).collect(Collectors.toList());
         trackBoundaryIn.deleteNotes(trackDto.id, dtos.toArray(NoteDto[]::new));
+
+    }
+
+    @Override
+    public void onNoteMoved(String noteId, int newTick) {
 
     }
 
