@@ -51,12 +51,12 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
     private int currentChannel;
 
     ChangeListener<? super Integer> channelComboListener = (observable, oldValue, newValue) -> {
-        onProgramChangedEvent(new ProgramChangedEvent(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex()));
+        programChanged(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex());
     };
 
     ChangeListener<? super Instrument> instrumentComboListener = (observable, oldValue, newValue) -> {
         if(eventBus != null){
-            onProgramChangedEvent(new ProgramChangedEvent(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex()));
+            programChanged(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex());
         }
     };
 
@@ -129,30 +129,19 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
         trackBoundaryIn.addChord(trackDto.id, event.getTick(), event.getPitch(), event.getLength(), currentChannel, event.getChordType());
     }
 
-//    @Override
-//    public void onDeleteNoteEvent(DeleteNoteEvent[] events) {
-//        throw new UnsupportedOperationException("DELETE NOTE EVENT");
-//
-//    }
-
     @Override
     public void oMoveNoteEvent(MoveNoteEvent... events) {
 //        throw new UnsupportedOperationException("MOVE NOTE EVENT");
     }
-//
-//    @Subscribe
-//    public void onMoveNoteEvent(MoveNoteEvent event) {
-//        trackBoundaryIn.noteMoved(trackIndex, event.getTick(), event.getPitch(), event.getNewTick());
-//    }
-//
-//    @Subscribe
+
+    @Override
     public void onDeleteNoteEvent(DeleteNoteEvent... events) {
         List<NoteDto> dtos = Arrays.stream(events).map(event -> convertDeleteEventToNoteDto(event)).collect(Collectors.toList());
         trackBoundaryIn.deleteNotes(trackDto.id, dtos.toArray(NoteDto[]::new));
 
     }
 
-    NoteDto convertDeleteEventToNoteDto(DeleteNoteEvent event){
+    private NoteDto convertDeleteEventToNoteDto(DeleteNoteEvent event){
         NoteDto dto = new NoteDto();
         dto.midiCode = (int) event.getPitch();
         dto.tick = (long) event.getTick();
@@ -169,9 +158,8 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
         trackEditorPanel.setCurrentTone(event.getTone());
     }
 
-    public void onProgramChangedEvent(ProgramChangedEvent event){
-        LOG.debug("programchanged event: " + event);
-        currentChannel = event.getChannel();
-        trackBoundaryIn.updateTrackProgram(event.getTrackId(), event.getProgram(), event.getChannel());
+    public void programChanged(final String trackId, final int program, final int channel){
+        currentChannel = channel;
+        trackBoundaryIn.updateTrackProgram(trackId, program, channel);
     }
 }

@@ -1,6 +1,7 @@
 package hu.boga.musaic.gui.trackeditor;
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 import hu.boga.musaic.gui.trackeditor.events.*;
 import hu.boga.musaic.musictheory.enums.ChordType;
@@ -31,14 +32,14 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     private ChordType currentChordType = null;
     private List<String> selectedPoints = new ArrayList<>(0);
     private NoteChangeListener noteChangeListener;
-    private EventBus eventBus = new EventBus("TRACK_EDITOR_PANEL_EVENET_BUS");
+    private EventBus eventBus = new EventBus("TRACK_EDITOR_PANEL_EVENT_BUS");
 
     public TrackEditorPanel() {
         super();
-        this.createContextMenu();
         this.setOnMouseClicked(event -> this.handleMouseClick(event));
 
-        contextMenu = createContextMenu();
+        eventBus.register(this);
+        contextMenu = new SettingsContextMenu(eventBus);
     }
 
     @Override
@@ -61,42 +62,28 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         this.noteChangeListener = noteChangeListener;
     }
 
-    private ContextMenu createContextMenu() {
-        ContextMenu contextMenu = new ContextMenu();
-        Menu creationMenu = new Menu("Creation", null,
-                new Menu("Length", null, createNoteLengthMenuItem()),
-                new Menu("Chords", null, createChordMenuItems())
-        );
-
-
-        MenuItem selectAllMenu = new MenuItem("Select all");
-        selectAllMenu.addEventHandler(ActionEvent.ACTION, event -> selectAllNotes());
-        MenuItem deSelectAllMenu = new MenuItem("Deselect all");
-        deSelectAllMenu.addEventHandler(ActionEvent.ACTION, event -> deSelectAllNotes());
-        MenuItem invertSelectionMenu = new MenuItem("Invert selection");
-        invertSelectionMenu.addEventHandler(ActionEvent.ACTION, event -> invertSelection());
-        Menu selectionMenu = new Menu("Selection", null,
-                selectAllMenu,
-                deSelectAllMenu,
-                invertSelectionMenu
-        );
-
-        MenuItem deleteSelectedNotesMenu = new MenuItem("selected");
-        deleteSelectedNotesMenu.addEventHandler(ActionEvent.ACTION, event -> deleteSelectedNotes());
-        MenuItem deleteAllNotesMenu = new MenuItem("all");
-        deleteAllNotesMenu.addEventHandler(ActionEvent.ACTION, event -> deleteAllNotes());
-        Menu deletionMenu = new Menu("Delete", null,
-                deleteSelectedNotesMenu,
-                deleteAllNotesMenu
-        );
-        contextMenu.getItems().add(creationMenu);
-        contextMenu.getItems().add(selectionMenu);
-        contextMenu.getItems().add(deletionMenu);
-
-        return contextMenu;
+    @Subscribe
+    private void handleDeleteAllNotesEvent(SettingsContextMenu.DeleteAllNotesEvent event) {
+        List<DeleteNoteEvent> events = getAllNoteRectangles().stream()
+                .map(noteRectangle -> new DeleteNoteEvent(noteRectangle.getTick(), noteRectangle.getPitch()))
+                .collect(Collectors.toList());
+        LOG.debug("deleting notes " + events);
+        this.noteChangeListener.onDeleteNoteEvent(events.toArray(DeleteNoteEvent[]::new));
+        selectedPoints.clear();
     }
 
-    private void invertSelection() {
+    @Subscribe
+    private void handleDeleteSelectedNoteEvent(SettingsContextMenu.DeleteSelectedNoteEvent event) {
+        List<DeleteNoteEvent> events = getSelectedNoteRectangles().stream()
+                .map(noteRectangle -> new DeleteNoteEvent(noteRectangle.getTick(), noteRectangle.getPitch()))
+                .collect(Collectors.toList());
+        LOG.debug("deleting notes " + events);
+        this.noteChangeListener.onDeleteNoteEvent(events.toArray(DeleteNoteEvent[]::new));
+        selectedPoints.clear();
+    }
+
+    @Subscribe
+    private void handleInvertSelectionEvent(SettingsContextMenu.InvertSelectionEvent event) {
         selectedPoints.clear();
         getAllNoteRectangles().forEach(noteRectangle -> {
             noteRectangle.toggleSlection();
@@ -106,33 +93,28 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         });
     }
 
-    private void deleteAllNotes() {
-        List<DeleteNoteEvent> events = getAllNoteRectangles().stream()
-                .map(noteRectangle -> new DeleteNoteEvent(noteRectangle.getTick(), noteRectangle.getPitch()))
-                .collect(Collectors.toList());
-        LOG.debug("deleting notes " + events);
-        this.noteChangeListener.onDeleteNoteEvent(events.toArray(DeleteNoteEvent[]::new));
-        selectedPoints.clear();
+    @Subscribe
+    private void handleDeSeletAllEventEvent(SettingsContextMenu.DeSelectAllEvent event) {
+        this.selectedPoints.clear();
+        paintNotes();
     }
 
-    private void deleteSelectedNotes() {
-        List<DeleteNoteEvent> events = getSelectedNoteRectangles().stream()
-                .map(noteRectangle -> new DeleteNoteEvent(noteRectangle.getTick(), noteRectangle.getPitch()))
-                .collect(Collectors.toList());
-        LOG.debug("deleting notes " + events);
-        this.noteChangeListener.onDeleteNoteEvent(events.toArray(DeleteNoteEvent[]::new));
-        selectedPoints.clear();
-    }
-
-    private void selectAllNotes() {
+    @Subscribe
+    private void handleSelectAllEvent(SettingsContextMenu.SelectAllEvent event) {
         List<String> allPoints = getAllNoteRectangles().stream().map(noteRectangle -> noteRectangle.getNoteId()).collect(Collectors.toList());
         this.selectedPoints.addAll(allPoints);
         paintNotes();
     }
 
-    private void deSelectAllNotes() {
-        this.selectedPoints.clear();
-        paintNotes();
+    @Subscribe
+    private void handleChordChangeEvent(SettingsContextMenu.ChordTypeChangedEvent event) {
+        currentChordType = event.getChordType();
+        cursor.setChordType(currentChordType);
+    }
+    @Subscribe
+    private void handleNoteLengthChangedEvent(SettingsContextMenu.NoteLengthChangedEvent event) {
+        currentNoteLength = event.getNoteLength();
+        cursor.setPrefWidth(currentNoteLength.getErtek() * get32ndsWidth());
     }
 
     private List<NoteRectangle> getAllNoteRectangles() {
@@ -145,53 +127,6 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         return getAllNoteRectangles().stream().filter(noteRectangle -> noteRectangle.isSelected()).collect(Collectors.toList());
     }
 
-    private RadioMenuItem[] createChordMenuItems() {
-        final ToggleGroup toggleGroup = new ToggleGroup();
-        RadioMenuItem[] items = new RadioMenuItem[ChordType.values().length + 1];
-        items[0] = new RadioMenuItem("single note");
-        items[0].setToggleGroup(toggleGroup);
-        items[0].setSelected(true);
-        items[0].addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                currentChordType = null;
-            }
-        });
-        for (int i = 0; i < ChordType.values().length; i++) {
-            ChordType currChordType = ChordType.values()[i];
-            RadioMenuItem menuItem = new RadioMenuItem(currChordType.name());
-            menuItem.setToggleGroup(toggleGroup);
-            int finalI = i;
-            menuItem.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    currentChordType = currChordType;
-                    cursor.setChordType(currChordType);
-                }
-            });
-            items[i + 1] = menuItem;
-        }
-        return items;
-
-    }
-
-    private RadioMenuItem[] createNoteLengthMenuItem() {
-        final ToggleGroup toggleGroup = new ToggleGroup();
-        RadioMenuItem[] items = new RadioMenuItem[NoteLength.values().length];
-        for (int i = 0; i < NoteLength.values().length; i++) {
-            NoteLength currLength = NoteLength.values()[i];
-            RadioMenuItem menuItem = new RadioMenuItem(currLength.name());
-            menuItem.setToggleGroup(toggleGroup);
-            int finalI = i;
-            menuItem.addEventHandler(ActionEvent.ACTION, event -> {
-                currentNoteLength = currLength;
-                cursor.setPrefWidth(currentNoteLength.getErtek() * get32ndsWidth());
-            });
-            items[i] = menuItem;
-        }
-        items[0].setSelected(true);
-        return items;
-    }
 
     private void handleMouseClick(final MouseEvent event) {
         if (event.getButton() == MouseButton.SECONDARY) {
@@ -208,14 +143,14 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
 
     private void paintNote(final NoteDto noteDto) {
         try {
-            final Rectangle rect = this.createNoteRectangle(noteDto);
+            final Rectangle rect = this.addNoteRectangle(noteDto);
             getChildren().add(rect);
         } catch (final Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    private NoteRectangle createNoteRectangle(final NoteDto noteDto) {
+    private NoteRectangle addNoteRectangle(final NoteDto noteDto) {
 
         final int x = (int) (noteDto.tick * getTickWidth());
         final NoteRectangle noteRectangle = new NoteRectangle(noteDto, eventBus);

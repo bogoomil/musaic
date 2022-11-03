@@ -25,12 +25,16 @@ public class CursorRectangle extends Pane {
     }
     public void setChordType(final ChordType chordType) {
         getChildren().clear();
-        this.chordType = chordType;
-        Chord chord = Chord.getChord(new Pitch(0), chordType);
-        Arrays.stream(chord.getPitches()).sorted(Comparator.comparingInt(p -> p.getMidiCode())).forEach(pitch -> {
-            LOG.debug("Pitch: " + pitch.getMidiCode());
-            createRectangle(pitch.getMidiCode());
-        });
+        if(chordType != null){
+            this.chordType = chordType;
+            Chord chord = Chord.getChord(new Pitch(0), chordType);
+            Arrays.stream(chord.getPitches()).sorted(Comparator.comparingInt(p -> p.getMidiCode())).forEach(pitch -> {
+                LOG.debug("Pitch: " + pitch.getMidiCode());
+                createRectangle(pitch.getMidiCode());
+            });
+        } else {
+             createRectangle(0);
+        }
     }
 
     private void createRectangle(int midiCode) {
