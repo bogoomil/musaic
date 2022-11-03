@@ -1,9 +1,13 @@
 package hu.boga.musaic.gui.trackeditor;
 
 import com.google.common.eventbus.EventBus;
+import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Transform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,14 +20,13 @@ public class NoteRectangle extends Rectangle {
     private boolean selected;
     private boolean isDragging;
 
-    private int tick;
-    private int pitch;
     private EventBus eventBus;
     private double offset;
+    private NoteDto noteDto;
 
-    public NoteRectangle(final int tick, final int pitch) {
-        this.tick = tick;
-        this.pitch = pitch;
+    public NoteRectangle(NoteDto noteDto, EventBus eventBus) {
+        this.noteDto = noteDto;
+        this.eventBus = eventBus;
         this.setFill(DEFAULT_COLOR);
         setUpEventHandlers();
     }
@@ -33,6 +36,15 @@ public class NoteRectangle extends Rectangle {
         setOnMousePressed(event -> offset = event.getX() - getX());
         setOnMouseDragged(event -> handleMouseDragged(event));
 
+        this.xProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if(getX() < 0){
+                    setX(0);
+                }
+                System.out.println("x:" + getX());
+            }
+        });
     }
 
     private void handleMouseDragged(MouseEvent e) {
@@ -66,11 +78,11 @@ public class NoteRectangle extends Rectangle {
 
 
     public int getTick() {
-        return this.tick;
+        return (int) this.noteDto.tick;
     }
 
     public int getPitch() {
-        return this.pitch;
+        return this.noteDto.midiCode;
     }
 
     public boolean isDragging() {
@@ -79,5 +91,9 @@ public class NoteRectangle extends Rectangle {
 
     public void toggleSlection() {
         setSelected(!isSelected());
+    }
+
+    public String getNoteId(){
+        return noteDto.id;
     }
 }

@@ -137,7 +137,7 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
     @Override
     public void oMoveNoteEvent(MoveNoteEvent... events) {
-        throw new UnsupportedOperationException("MOVE NOTE EVENT");
+//        throw new UnsupportedOperationException("MOVE NOTE EVENT");
     }
 //
 //    @Subscribe
