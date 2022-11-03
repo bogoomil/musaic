@@ -134,7 +134,7 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
     @Override
     public void onNoteMoved(String noteId, int newTick) {
-
+        trackBoundaryIn.moveNote(noteId, newTick);
     }
 
     private NoteDto convertDeleteEventToNoteDto(DeleteNoteEvent event){

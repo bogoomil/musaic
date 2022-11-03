@@ -2,14 +2,11 @@ package hu.boga.musaic.midigateway;
 
 import hu.boga.musaic.core.gateway.TrackGateway;
 import hu.boga.musaic.core.modell.NoteModell;
-import hu.boga.musaic.core.modell.TrackModell;
-import hu.boga.musaic.midigateway.utils.MidiUtil;
 import hu.boga.musaic.midigateway.utils.NoteUtil;
 import hu.boga.musaic.midigateway.utils.TrackUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 import java.util.List;
 
@@ -43,6 +40,12 @@ public class TrackGatewayImpl implements TrackGateway {
         notesToAdd.forEach(note -> {
             NoteUtil.addNote(track, (int) note.tick, note.midiCode, (int) note.length, note.velocity, note.channel);
         });
+    }
+
+    @Override
+    public void moveNote(String trackId, int tick, int pitch, int newTick){
+        Track track = InMemorySequenceStore.TRACK_MAP.get(trackId);
+        NoteUtil.moveNote(track, tick, pitch, newTick);
     }
 
     @Override

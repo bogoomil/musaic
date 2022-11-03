@@ -5,9 +5,6 @@ import com.google.common.eventbus.Subscribe;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 import hu.boga.musaic.gui.trackeditor.events.*;
 import hu.boga.musaic.musictheory.enums.ChordType;
-import hu.boga.musaic.musictheory.enums.NoteLength;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
@@ -30,7 +27,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     private List<NoteDto> notes;
     private ContextMenu contextMenu;
     private ChordType currentChordType = null;
-    private List<String> selectedPoints = new ArrayList<>(0);
+    private List<String> selectedNoteIds = new ArrayList<>(0);
     private NoteChangeListener noteChangeListener;
     private EventBus eventBus = new EventBus("TRACK_EDITOR_PANEL_EVENT_BUS");
 
@@ -68,7 +65,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
                 .collect(Collectors.toList());
         LOG.debug("deleting notes " + events);
         this.noteChangeListener.onDeleteNoteEvent(events.toArray(DeleteNoteEvent[]::new));
-        selectedPoints.clear();
+        selectedNoteIds.clear();
     }
 
     @Subscribe
@@ -78,30 +75,30 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
                 .collect(Collectors.toList());
         LOG.debug("deleting notes " + events);
         this.noteChangeListener.onDeleteNoteEvent(events.toArray(DeleteNoteEvent[]::new));
-        selectedPoints.clear();
+        selectedNoteIds.clear();
     }
 
     @Subscribe
     private void handleInvertSelectionEvent(SettingsContextMenu.InvertSelectionEvent event) {
-        selectedPoints.clear();
+        selectedNoteIds.clear();
         getAllNoteRectangles().forEach(noteRectangle -> {
             noteRectangle.toggleSlection();
             if (noteRectangle.isSelected()) {
-                selectedPoints.add(noteRectangle.getNoteId());
+                selectedNoteIds.add(noteRectangle.getNoteId());
             }
         });
     }
 
     @Subscribe
     private void handleDeSeletAllEventEvent(SettingsContextMenu.DeSelectAllEvent event) {
-        this.selectedPoints.clear();
+        this.selectedNoteIds.clear();
         paintNotes();
     }
 
     @Subscribe
     private void handleSelectAllEvent(SettingsContextMenu.SelectAllEvent event) {
         List<String> allPoints = getAllNoteRectangles().stream().map(noteRectangle -> noteRectangle.getNoteId()).collect(Collectors.toList());
-        this.selectedPoints.addAll(allPoints);
+        this.selectedNoteIds.addAll(allPoints);
         paintNotes();
     }
 
@@ -174,9 +171,9 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
             } else if (event.getClickCount() == 1) {
                 noteRectangle.setSelected(!noteRectangle.isSelected());
                 if (noteRectangle.isSelected()) {
-                    selectedPoints.add(noteRectangle.getNoteId());
+                    selectedNoteIds.add(noteRectangle.getNoteId());
                 } else {
-                    selectedPoints.remove(noteRectangle.getNoteId());
+                    selectedNoteIds.remove(noteRectangle.getNoteId());
                 }
                 event.consume();
             }
@@ -184,21 +181,28 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
 
         noteRectangle.setOnMouseReleased(event -> handleMouseReleasedOnNoteEvent());
 
-        if (selectedPoints.contains(noteRectangle.getNoteId())) {
+        if (selectedNoteIds.contains(noteRectangle.getNoteId())) {
             noteRectangle.setSelected(true);
         }
+
+        movedNoteIds.clear();
 
         return noteRectangle;
     }
 
     private void handleMouseReleasedOnNoteEvent() {
+        LOG.debug("------------------------------------------------------");
+        LOG.debug("Notes moved: " + movedNoteIds);
         movedNoteIds.forEach(id -> {
             getNoteRectangleByNoteId(id).ifPresent(noteRectangle -> {
                 int newTick = getTickByX((int) noteRectangle.getX());
                 LOG.debug("MOVING NOTE: {} FROM: {} TO: {}",id, noteRectangle.getTick(), newTick );
+                noteChangeListener.onNoteMoved(noteRectangle.getNoteId(), newTick);
             });
         });
         movedNoteIds.clear();
+        LOG.debug("Notes moved: " + movedNoteIds);
+        LOG.debug("------------------------------------------------------");
     }
 
 }

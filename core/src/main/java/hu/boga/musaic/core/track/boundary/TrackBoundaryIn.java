@@ -10,4 +10,6 @@ public interface TrackBoundaryIn {
     void updateTrackProgram(String trackId, int program, int channel);
     void addChord(String id, int tick, int pitch, int length, int channel, ChordType chordType);
     void deleteNotes(String id, NoteDto[] notes);
+
+    void moveNote(String noteId, int newTick);
 }

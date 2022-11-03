@@ -14,5 +14,7 @@ public interface TrackGateway {
 
     void addNotesToTrack(String trackId, List<NoteModell> notesToAdd);
 
+    void moveNote(String trackId, int tick, int pitch, int newTick);
+
     void deleteNote(String trackId, long tick, int midiCode);
 }

@@ -4,9 +4,11 @@ import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class InMemorySequenceModellStore {
     public static final Map<String, SequenceModell> SEQUENCE_MODELS = new HashMap<>();
@@ -28,5 +30,16 @@ public class InMemorySequenceModellStore {
                 .values()
                 .stream()
                 .map(sequenceModell -> sequenceModell.getTrackById(trackId)).findFirst().get();
+    }
+
+    public static Optional<TrackModell> getTrackByNoteId(String noteId){
+        for (SequenceModell sm : SEQUENCE_MODELS.values()) {
+            for (TrackModell trackModell : sm.tracks) {
+                if (trackModell.gtNoteModellById(noteId).isPresent()) {
+                    return Optional.of(trackModell);
+                }
+            }
+        }
+        return Optional.empty();
     }
 }

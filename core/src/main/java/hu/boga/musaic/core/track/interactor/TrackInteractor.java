@@ -82,6 +82,16 @@ public class TrackInteractor implements TrackBoundaryIn {
         });
     }
 
+    @Override
+    public void moveNote(String noteId, int newTick) {
+        InMemorySequenceModellStore.getTrackByNoteId(noteId).ifPresent(trackModell -> {
+            trackModell.gtNoteModellById(noteId).ifPresent(noteModell -> {
+                gateway.moveNote(trackModell.getId(), (int) noteModell.tick, noteModell.midiCode, newTick);
+                noteModell.tick = newTick;
+            });
+        });
+    }
+
     private void addNotesToTrack(String trackId, int tick, int pitch, int length, int channel, ChordType chordType, SequenceModell sequenceModell, TrackModell trackModell) {
         final int computedLength = length * sequenceModell.getTicksIn32nds();
         List<NoteModell> notes = getNotesToAdd(tick, pitch, chordType, computedLength, channel);
