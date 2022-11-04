@@ -14,7 +14,7 @@ public class TrackModell extends BaseModell {
     @Override
     public String toString() {
         return "TrackModell{" +
-                ", channel=" + channel +
+                "channel=" + channel +
                 ", program=" + program +
                 ", name='" + name + '\'' +
                 ", notes=" + notes +

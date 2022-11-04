@@ -21,7 +21,7 @@ public class NoteModell extends BaseModell{
     @Override
     public String toString() {
         NoteName noteName = NoteName.byCode(midiCode);
-        return "[" + noteName.name() + "(" + (midiCode / 12) + "), tick:" + tick + ", length: " + length + "]";
+        return "\n[" + noteName.name() + "(" + (midiCode / 12) + "), tick:" + tick + ", length: " + length + "]\n";
     }
 
     public long getEndTick(){
