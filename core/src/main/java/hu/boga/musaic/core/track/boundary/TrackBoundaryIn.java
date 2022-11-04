@@ -12,4 +12,6 @@ public interface TrackBoundaryIn {
     void deleteNotes(String id, NoteDto[] notes);
 
     void moveNote(String noteId, int newTick);
+
+    void showTrack(String id);
 }
