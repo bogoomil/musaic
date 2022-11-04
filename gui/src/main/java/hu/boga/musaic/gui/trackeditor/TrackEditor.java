@@ -121,6 +121,7 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
     }
 
+    @Override
     public void onAddChordEvent(AddChordEvent event) {
         trackBoundaryIn.addChord(trackDto.id, event.getTick(), event.getPitch(), event.getLength(), currentChannel, event.getChordType());
     }
