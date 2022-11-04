@@ -31,6 +31,7 @@ class TrackInteractorTest {
     private SequenceModell modell;
     private TrackModell trackModell;
     private TrackBoundaryOut boundaryOut;
+    private NoteModell noteModell;
 
 
     @BeforeEach
@@ -48,7 +49,7 @@ class TrackInteractorTest {
         trackModell = new TrackModell();
         modell.tracks.add(trackModell);
 
-        NoteModell noteModell = new NoteModell(12, 0, 32, 100, 0);
+        noteModell = new NoteModell(12, 0, 32, 100, 0);
         trackModell.notes.add(noteModell);
 
         InMemorySequenceModellStore.SEQUENCE_MODELS.put(modell.getId(), modell);
@@ -116,16 +117,18 @@ class TrackInteractorTest {
         noteDto.tick = 0;
         NoteDto[] dtos = new NoteDto[1];
         dtos[0] = noteDto;
-
         trackInteractor.addChord(trackModell.getId(), 345, 23, 512, 0, null);
-
         trackInteractor.deleteNotes(trackModell.getId(), dtos);
-
         ArgumentCaptor<TrackDto> captor = ArgumentCaptor.forClass(TrackDto.class);
         Mockito.verify(boundaryOut, times(2)).setTrackDto(captor.capture(), eq(modell.resolution));
         Mockito.verify(gateway).deleteNote(trackModell.getId(), 0, 12);
-
         assertEquals(1, captor.getValue().notes.size());
+    }
 
+    @Test
+    void movNote(){
+        trackInteractor.moveNote(noteModell.getId(), 100);
+        Mockito.verify(gateway).moveNote(trackModell.getId(), 0, 12, 100);
+        assertEquals(100, noteModell.tick);
     }
 }

@@ -83,6 +83,14 @@ class TrackGatewayImplTest {
             gateway.deleteNote(TRACK_ID, 0, 12);
             mockedStatic.verify(() -> NoteUtil.deleteNote(track, 0,12));
         }
+    }
 
+    @Test
+    void moveNote(){
+        InMemorySequenceStore.TRACK_MAP.put(TRACK_ID, track);
+        try (MockedStatic<NoteUtil> mockedStatic = Mockito.mockStatic(NoteUtil.class)) {
+            gateway.moveNote(TRACK_ID, 0, 12, 100);
+            mockedStatic.verify(() -> NoteUtil.moveNote(track, 0,12, 100));
+        }
     }
 }

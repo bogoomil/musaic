@@ -74,7 +74,8 @@ public class TrackInteractor implements TrackBoundaryIn {
         InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
             InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
                 Arrays.stream(notes).forEach(noteDto -> {
-                    trackModell.notes.removeIf(noteModell -> noteModell.tick == noteDto.tick && noteModell.midiCode == noteDto.midiCode);
+                    LOG.debug("deleting note: {}", noteDto.id);
+                    trackModell.notes.removeIf(noteModell -> noteModell.getId().equals(noteDto.id));
                     gateway.deleteNote(trackId, noteDto.tick, noteDto.midiCode);
                 });
                 boundaryOut.setTrackDto(new TrackModelltoDtoConverter(trackModell).convert(), sequenceModell.resolution);

@@ -139,8 +139,7 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
     private NoteDto convertDeleteEventToNoteDto(DeleteNoteEvent event){
         NoteDto dto = new NoteDto();
-        dto.midiCode = (int) event.getPitch();
-        dto.tick = (long) event.getTick();
+        dto.id = event.getNoteId();
         return dto;
     }
 

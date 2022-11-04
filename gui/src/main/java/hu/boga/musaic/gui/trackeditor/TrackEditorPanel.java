@@ -61,7 +61,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     @Subscribe
     private void handleDeleteAllNotesEvent(SettingsContextMenu.DeleteAllNotesEvent event) {
         List<DeleteNoteEvent> events = getAllNoteRectangles().stream()
-                .map(noteRectangle -> new DeleteNoteEvent(noteRectangle.getTick(), noteRectangle.getPitch()))
+                .map(noteRectangle -> new DeleteNoteEvent(noteRectangle.getNoteId()))
                 .collect(Collectors.toList());
         LOG.debug("deleting notes " + events);
         this.noteChangeListener.onDeleteNoteEvent(events.toArray(DeleteNoteEvent[]::new));
@@ -71,9 +71,11 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     @Subscribe
     private void handleDeleteSelectedNoteEvent(SettingsContextMenu.DeleteSelectedNoteEvent event) {
         List<DeleteNoteEvent> events = getSelectedNoteRectangles().stream()
-                .map(noteRectangle -> new DeleteNoteEvent(noteRectangle.getTick(), noteRectangle.getPitch()))
+                .map(noteRectangle -> new DeleteNoteEvent(noteRectangle.getNoteId()))
                 .collect(Collectors.toList());
-        LOG.debug("deleting notes " + events);
+        events.forEach(ev -> {
+            LOG.debug("deleting notes " + ev.getNoteId());
+        });
         this.noteChangeListener.onDeleteNoteEvent(events.toArray(DeleteNoteEvent[]::new));
         selectedNoteIds.clear();
     }
@@ -167,7 +169,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
 
         noteRectangle.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                this.noteChangeListener.onDeleteNoteEvent(new DeleteNoteEvent(noteDto.tick, noteDto.midiCode));
+                this.noteChangeListener.onDeleteNoteEvent(new DeleteNoteEvent(noteDto.id));
             } else if (event.getClickCount() == 1) {
                 noteRectangle.setSelected(!noteRectangle.isSelected());
                 if (noteRectangle.isSelected()) {
