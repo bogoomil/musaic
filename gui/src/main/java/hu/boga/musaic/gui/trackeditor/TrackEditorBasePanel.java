@@ -95,7 +95,8 @@ public abstract class TrackEditorBasePanel extends Pane {
 
     protected int getTickByX(final int x) {
         final double tickWidth = this.getTickWidth();
-        final int tick = (int) ((x - TrackEditorBasePanel.KEYBOARD_OFFSET) / tickWidth);
+        int tick = (int) ((x - TrackEditorBasePanel.KEYBOARD_OFFSET) / tickWidth);
+        tick = tick - (x % get32ndsWidth());
         return tick;
     }
 
@@ -203,13 +204,13 @@ public abstract class TrackEditorBasePanel extends Pane {
     }
 
     private void moveCursor(MouseEvent event) {
-        cursor.setLayoutX(event.getX());
+        cursor.setLayoutX(event.getX() - (event.getX() % get32ndsWidth()));
         int y = getYByPitch(getPitchByY((int) event.getY()).getMidiCode());
         cursor.setLayoutY(y);
     }
 
     private void showCursor(MouseEvent event) {
-        cursor.setLayoutX(event.getX());
+        cursor.setLayoutX(event.getX() - (event.getX() % get32ndsWidth()));
         cursor.setLayoutY(event.getY() - cursor.getHeight());
         cursor.setWidth(currentNoteLength.getErtek() * get32ndsWidth());
         cursor.setVisible(true);

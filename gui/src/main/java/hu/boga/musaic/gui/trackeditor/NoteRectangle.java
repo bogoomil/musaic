@@ -54,14 +54,6 @@ public class NoteRectangle extends Rectangle {
         e.consume();
     }
 
-//    public int getLength() {
-//        return this.length;
-//    }
-//
-//    public void setLength(final int length) {
-//        this.length = length;
-//    }
-
     public boolean isSelected() {
         return this.selected;
     }
