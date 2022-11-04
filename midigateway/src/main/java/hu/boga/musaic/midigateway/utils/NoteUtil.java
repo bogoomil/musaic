@@ -97,11 +97,13 @@ public class NoteUtil extends MidiUtil {
     }
 
     private static boolean isNoteOnMessage(MidiMessage message) {
-        return message instanceof ShortMessage && ((ShortMessage) message).getCommand() == ShortMessage.NOTE_ON;
+        return message.getStatus() >= 144 && message.getStatus() < 160
+                && getVelocity(message) > 0;
     }
 
     private static boolean isNoteOffMessage(MidiMessage message) {
-        return message instanceof ShortMessage && ((ShortMessage) message).getCommand() == ShortMessage.NOTE_OFF;
+        return (message.getStatus() >= 128 && message.getStatus() < 144)
+                || (message.getStatus() >= 144 && message.getStatus() < 160 && getVelocity(message) == 0);
     }
 
     private static int getNoteValue(MidiEvent noteOnOff) {
