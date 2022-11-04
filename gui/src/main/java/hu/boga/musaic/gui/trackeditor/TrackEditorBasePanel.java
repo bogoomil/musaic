@@ -189,12 +189,7 @@ public abstract class TrackEditorBasePanel extends Pane {
 
     private void paintDisabledRectangle(int y) {
         final Rectangle rectangle = new Rectangle();
-        rectangle.addEventHandler(MouseEvent.ANY, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                event.consume();
-            }
-        });
+        rectangle.addEventHandler(MouseEvent.ANY, event -> event.consume());
         rectangle.setFill(DISABLED_COLOR);
         rectangle.setX(0);
         rectangle.setY(y);
@@ -219,6 +214,4 @@ public abstract class TrackEditorBasePanel extends Pane {
         cursor.setWidth(currentNoteLength.getErtek() * get32ndsWidth());
         cursor.setVisible(true);
     }
-
-
 }

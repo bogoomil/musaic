@@ -21,11 +21,11 @@ public class SettingsContextMenu extends ContextMenu {
         );
 
         MenuItem selectAllMenu = new MenuItem("Select all");
-        selectAllMenu.addEventHandler(ActionEvent.ACTION, event -> selectAll());
+        selectAllMenu.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new SelectAllEvent()));
         MenuItem deSelectAllMenu = new MenuItem("Deselect all");
-        deSelectAllMenu.addEventHandler(ActionEvent.ACTION, event -> deSelectAll());
+        deSelectAllMenu.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new DeSelectAllEvent()));
         MenuItem invertSelectionMenu = new MenuItem("Invert selection");
-        invertSelectionMenu.addEventHandler(ActionEvent.ACTION, event -> invertSelection());
+        invertSelectionMenu.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new InvertSelectionEvent()));
         Menu selectionMenu = new Menu("Selection", null,
                 selectAllMenu,
                 deSelectAllMenu,
@@ -33,9 +33,9 @@ public class SettingsContextMenu extends ContextMenu {
         );
 
         MenuItem deleteSelectedNotesMenu = new MenuItem("selected");
-        deleteSelectedNotesMenu.addEventHandler(ActionEvent.ACTION, event -> deleteSelectedNotes());
+        deleteSelectedNotesMenu.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new DeleteSelectedNoteEvent()));
         MenuItem deleteAllNotesMenu = new MenuItem("all");
-        deleteAllNotesMenu.addEventHandler(ActionEvent.ACTION, event -> deleteAllNotes());
+        deleteAllNotesMenu.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new DeleteAllNotesEvent()));
         Menu deletionMenu = new Menu("Delete", null,
                 deleteSelectedNotesMenu,
                 deleteAllNotesMenu
@@ -51,61 +51,41 @@ public class SettingsContextMenu extends ContextMenu {
         items[0] = new RadioMenuItem("single note");
         items[0].setToggleGroup(toggleGroup);
         items[0].setSelected(true);
-        items[0].addEventHandler(ActionEvent.ACTION, event -> chordChange(null));
+        items[0].addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new ChordTypeChangedEvent(null)));
         for (int i = 0; i < ChordType.values().length; i++) {
-            ChordType currChordType = ChordType.values()[i];
-            RadioMenuItem menuItem = new RadioMenuItem(currChordType.name());
-            menuItem.setToggleGroup(toggleGroup);
-            int finalI = i;
-            menuItem.addEventHandler(ActionEvent.ACTION, event -> chordChange(currChordType));
-            items[i + 1] = menuItem;
+            createChordTypeChangeMenuItem(toggleGroup, items, i);
         }
         return items;
+    }
 
+    private void createChordTypeChangeMenuItem(ToggleGroup toggleGroup, RadioMenuItem[] items, int i) {
+        ChordType currChordType = ChordType.values()[i];
+        RadioMenuItem menuItem = new RadioMenuItem(currChordType.name());
+        menuItem.setToggleGroup(toggleGroup);
+        int finalI = i;
+        menuItem.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new ChordTypeChangedEvent(currChordType)));
+        items[i + 1] = menuItem;
     }
 
     private RadioMenuItem[] createNoteLengthMenuItem() {
         final ToggleGroup toggleGroup = new ToggleGroup();
         RadioMenuItem[] items = new RadioMenuItem[NoteLength.values().length];
         for (int i = 0; i < NoteLength.values().length; i++) {
-            NoteLength currLength = NoteLength.values()[i];
-            RadioMenuItem menuItem = new RadioMenuItem(currLength.name());
-            menuItem.setToggleGroup(toggleGroup);
-            int finalI = i;
-            menuItem.addEventHandler(ActionEvent.ACTION, event -> noteLengthChange(currLength));
-            items[i] = menuItem;
+            createNoteLengthChangeMenuItem(toggleGroup, items, i);
         }
         items[0].setSelected(true);
         return items;
     }
 
-    private void noteLengthChange(NoteLength currLength) {
-        eventBus.post(new NoteLengthChangedEvent(currLength));
+    private void createNoteLengthChangeMenuItem(ToggleGroup toggleGroup, RadioMenuItem[] items, int i) {
+        NoteLength currLength = NoteLength.values()[i];
+        RadioMenuItem menuItem = new RadioMenuItem(currLength.name());
+        menuItem.setToggleGroup(toggleGroup);
+        int finalI = i;
+        menuItem.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new NoteLengthChangedEvent(currLength)));
+        items[i] = menuItem;
     }
 
-    private void chordChange(ChordType chordType) {
-        eventBus.post(new ChordTypeChangedEvent(chordType));
-    }
-
-    private void deleteAllNotes() {
-        eventBus.post(new DeleteAllNotesEvent());
-    }
-
-    private void deleteSelectedNotes() {
-        eventBus.post(new DeleteSelectedNoteEvent());
-    }
-
-    private void invertSelection() {
-        eventBus.post(new InvertSelectionEvent());
-    }
-
-    private void deSelectAll() {
-        eventBus.post(new DeSelectAllEvent());
-    }
-
-    private void selectAll() {
-        eventBus.post(new SelectAllEvent());
-    }
 
     public static class NoteLengthChangedEvent{
         NoteLength noteLength;
