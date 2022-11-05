@@ -3,9 +3,6 @@ package hu.boga.musaic.gui.trackeditor;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
-import hu.boga.musaic.gui.trackeditor.events.NoteMovedEvent;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -93,5 +90,17 @@ public class NoteRectangle extends Rectangle {
         if(this.selected && !this.noteDto.id.equals(event.noteId)){
             this.setX(getX() + event.delta);
         }
+    }
+
+    public static class NoteMovedEvent{
+        String id;
+        public NoteMovedEvent(String id) {
+            this.id = id;
+        }
+
+        public String getId() {
+            return id;
+        }
+
     }
 }

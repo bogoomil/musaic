@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class TrackEditorPanel extends TrackEditorBasePanel {
@@ -116,7 +117,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     }
 
     @Subscribe
-    private void handleNoteMovedEvent(NoteMovedEvent even){
+    private void handleNoteMovedEvent(NoteRectangle.NoteMovedEvent even){
         if(!movedNoteIds.contains(even.getId())){
             movedNoteIds.add(even.getId());
         }
@@ -177,8 +178,8 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
                 } else {
                     selectedNoteIds.remove(noteRectangle.getNoteId());
                 }
-                event.consume();
             }
+            event.consume();
         });
 
         noteRectangle.setOnMouseReleased(event -> handleMouseReleasedOnNoteEvent());
@@ -193,18 +194,18 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     }
 
     private void handleMouseReleasedOnNoteEvent() {
-        LOG.debug("------------------------------------------------------");
-        LOG.debug("Notes moved: " + movedNoteIds);
-        movedNoteIds.forEach(id -> {
-            getNoteRectangleByNoteId(id).ifPresent(noteRectangle -> {
-                int newTick = getTickByX((int) noteRectangle.getX());
-                LOG.debug("MOVING NOTE: {} FROM: {} TO: {}",id, noteRectangle.getTick(), newTick );
-                noteChangeListener.onNoteMoved(noteRectangle.getNoteId(), newTick);
+        if(movedNoteIds.size() > 0){
+            NoteMovedEvent[] events = new NoteMovedEvent[movedNoteIds.size()];
+            AtomicInteger index = new AtomicInteger(0);
+            movedNoteIds.forEach(id -> {
+                getNoteRectangleByNoteId(id).ifPresent(noteRectangle -> {
+                    int newTick = getTickByX((int) noteRectangle.getX());
+                    events[index.getAndIncrement()] = new NoteMovedEvent(id, newTick);
+                    LOG.debug("MOVING NOTE: {} FROM: {} TO: {}",id, noteRectangle.getTick(), newTick );
+                });
             });
-        });
-        movedNoteIds.clear();
-        LOG.debug("Notes moved: " + movedNoteIds);
-        LOG.debug("------------------------------------------------------");
+            noteChangeListener.onNoteMoved(events);
+            movedNoteIds.clear();
+        }
     }
-
 }

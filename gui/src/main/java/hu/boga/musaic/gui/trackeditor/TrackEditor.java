@@ -134,8 +134,11 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
     }
 
     @Override
-    public void onNoteMoved(String noteId, int newTick) {
-        trackBoundaryIn.moveNote(noteId, newTick);
+    public void onNoteMoved(NoteMovedEvent... events) {
+        Arrays.stream(events).forEach(event -> {
+            trackBoundaryIn.moveNote(event.getId(), event.getNewTick());
+        });
+        trackBoundaryIn.showTrack(trackDto.id);
     }
 
 
