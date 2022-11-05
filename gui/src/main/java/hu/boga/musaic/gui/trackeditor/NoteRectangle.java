@@ -3,6 +3,7 @@ package hu.boga.musaic.gui.trackeditor;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
+import hu.boga.musaic.gui.trackeditor.events.NoteMovedEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -39,6 +40,7 @@ public class NoteRectangle extends Rectangle {
         if(getX() < 0){
             setX(0);
         }
+        LOG.debug("Posting NoteMovedEvent {}", noteDto.id );
         eventBus.post(new NoteMovedEvent(noteDto.id));
     }
 
@@ -76,15 +78,6 @@ public class NoteRectangle extends Rectangle {
         return noteDto.id;
     }
 
-    private static class NoteRectangleMovedEvent {
-        String noteId;
-        double delta;
-        public NoteRectangleMovedEvent(String noteId, double delta) {
-            this.noteId = noteId;
-            this.delta = delta;
-        }
-    }
-
     @Subscribe
     private void handleNoteMovedEvent(NoteRectangleMovedEvent event){
         if(this.selected && !this.noteDto.id.equals(event.noteId)){
@@ -102,5 +95,14 @@ public class NoteRectangle extends Rectangle {
             return id;
         }
 
+    }
+
+    private static class NoteRectangleMovedEvent {
+        String noteId;
+        double delta;
+        public NoteRectangleMovedEvent(String noteId, double delta) {
+            this.noteId = noteId;
+            this.delta = delta;
+        }
     }
 }

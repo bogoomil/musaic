@@ -203,6 +203,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
 
         noteRectangle.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
+                eventBus.unregister(noteRectangle);
                 this.noteChangeListener.onDeleteNoteEvent(new DeleteNoteEvent(noteDto.id));
             } else if (event.getClickCount() == 1) {
                 noteRectangle.setSelected(!noteRectangle.isSelected());
@@ -220,9 +221,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         if (selectedNoteIds.contains(noteRectangle.getNoteId())) {
             noteRectangle.setSelected(true);
         }
-
         movedNoteIds.clear();
-
         return noteRectangle;
     }
 
@@ -233,15 +232,15 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     }
 
     private void performNotesMove() {
-        NoteMovedEvent[] events = new NoteMovedEvent[movedNoteIds.size()];
+        List<NoteMovedEvent> events = new ArrayList<>();
         AtomicInteger index = new AtomicInteger(0);
         movedNoteIds.forEach(id -> {
             getNoteRectangleByNoteId(id).ifPresent(noteRectangle -> {
                 int newTick = getTickByX((int) noteRectangle.getX());
-                events[index.getAndIncrement()] = new NoteMovedEvent(id, newTick);
+                events.add(new NoteMovedEvent(id, newTick));
             });
         });
-        noteChangeListener.onNoteMoved(events);
+        noteChangeListener.onNoteMoved(events.toArray(new NoteMovedEvent[0]));
         movedNoteIds.clear();
     }
 }
