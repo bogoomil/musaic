@@ -34,11 +34,45 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
 
     private List<String> movedNoteIds = new ArrayList<>();
 
+    private Point2D dragStart;
+    private Point2D dragEnd;
+
     public TrackEditorPanel() {
         super();
         this.setOnMouseClicked(event -> this.handleMouseClick(event));
+        this.setOnDragDetected(this::handleDragDetected);
+
+        this.setOnMouseReleased(this::handleMousReleased);
         eventBus.register(this);
         contextMenu = new SettingsContextMenu(eventBus);
+    }
+
+    private void handleMousReleased(MouseEvent event) {
+        if(dragStart != null){
+            dragEnd = new Point2D(event.getX(), event.getY());
+            selectNotesDraggedOver();
+        }
+    }
+
+    private void selectNotesDraggedOver() {
+        this.getChildren().forEach(node -> {
+            if(node instanceof  NoteRectangle){
+                NoteRectangle nr = (NoteRectangle) node;
+                double width = dragEnd.getX() - dragStart.getX();
+                double height = dragEnd.getY() - dragStart.getY();
+                if(nr.intersects(dragStart.getX(), dragStart.getY(), width, height)){
+                    nr.toggleSlection();
+                }
+
+            }
+        });
+        dragStart = null;
+    }
+
+    private void handleDragDetected(MouseEvent event) {
+        dragStart = new Point2D(event.getX(), event.getY());
+        event.consume();
+        LOG.debug("START DRAG {}", dragStart);
     }
 
     @Override
@@ -195,17 +229,21 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
 
     private void handleMouseReleasedOnNoteEvent() {
         if(movedNoteIds.size() > 0){
-            NoteMovedEvent[] events = new NoteMovedEvent[movedNoteIds.size()];
-            AtomicInteger index = new AtomicInteger(0);
-            movedNoteIds.forEach(id -> {
-                getNoteRectangleByNoteId(id).ifPresent(noteRectangle -> {
-                    int newTick = getTickByX((int) noteRectangle.getX());
-                    events[index.getAndIncrement()] = new NoteMovedEvent(id, newTick);
-                    LOG.debug("MOVING NOTE: {} FROM: {} TO: {}",id, noteRectangle.getTick(), newTick );
-                });
-            });
-            noteChangeListener.onNoteMoved(events);
-            movedNoteIds.clear();
+            performNotesMove();
         }
+    }
+
+    private void performNotesMove() {
+        NoteMovedEvent[] events = new NoteMovedEvent[movedNoteIds.size()];
+        AtomicInteger index = new AtomicInteger(0);
+        movedNoteIds.forEach(id -> {
+            getNoteRectangleByNoteId(id).ifPresent(noteRectangle -> {
+                int newTick = getTickByX((int) noteRectangle.getX());
+                events[index.getAndIncrement()] = new NoteMovedEvent(id, newTick);
+                LOG.debug("MOVING NOTE: {} FROM: {} TO: {}",id, noteRectangle.getTick(), newTick );
+            });
+        });
+        noteChangeListener.onNoteMoved(events);
+        movedNoteIds.clear();
     }
 }
