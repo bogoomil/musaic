@@ -43,10 +43,8 @@ public class MidiGatewayImpl implements MidiGateway {
     @Override
     public void updateTempo(SequenceModell modell) {
         Sequence sequence = InMemorySequenceStore.SEQUENCE_MAP.get(modell.getId());
-        LOG.debug("original tempo: " + TempoUtil.getTempo(sequence));
         TempoUtil.removeTempoEvents(sequence);
         TempoUtil.addTempoEvents(sequence, (int) modell.tempo);
-        LOG.debug("tempo updated to: " + TempoUtil.getTempo(sequence));
     }
 
     @Override

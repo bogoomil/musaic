@@ -31,16 +31,20 @@ public class NoteRectangle extends Rectangle {
     }
 
     private void setUpEventHandlers() {
-        setOnMousePressed(event -> offset = event.getX() - getX());
+        setOnMousePressed(this::handleousePressed);
         setOnMouseDragged(event -> handleMouseDragged(event));
         this.xProperty().addListener((observable, oldValue, newValue) -> xPropertyChanged());
+    }
+
+    private void handleousePressed(MouseEvent event) {
+        offset = event.getX() - getX();
+        event.consume();
     }
 
     private void xPropertyChanged() {
         if(getX() < 0){
             setX(0);
         }
-        LOG.debug("Posting NoteMovedEvent {}", noteDto.id );
         eventBus.post(new NoteMovedEvent(noteDto.id));
     }
 

@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class TrackInteractor implements TrackBoundaryIn {
@@ -40,6 +41,7 @@ public class TrackInteractor implements TrackBoundaryIn {
             trackModell.name = trackDto.name;
             gateway.updateTrackName(trackDto.id, trackDto.name);
         });
+        showTrack(trackDto.id);
     }
 
     @Override
@@ -58,7 +60,9 @@ public class TrackInteractor implements TrackBoundaryIn {
             trackModell.channel = channel;
             gateway.updateTrackProgram(trackId, program, channel);
         });
+        showTrack(trackId);
     }
+
 
     @Override
     public void addChord(String trackId, int tick, int pitch, int length, int channel, ChordType chordType) {
@@ -67,6 +71,7 @@ public class TrackInteractor implements TrackBoundaryIn {
                 addNotesToTrack(trackId, tick, pitch, length, channel, chordType, sequenceModell, trackModell);
             });
         });
+        showTrack(trackId);
     }
 
     @Override
@@ -78,9 +83,10 @@ public class TrackInteractor implements TrackBoundaryIn {
                     trackModell.notes.removeIf(noteModell -> noteModell.getId().equals(noteDto.id));
                     gateway.deleteNote(trackId, noteDto.tick, noteDto.midiCode);
                 });
-                boundaryOut.setTrackDto(new TrackModelltoDtoConverter(trackModell).convert(), sequenceModell.resolution);
+//                boundaryOut.setTrackDto(new TrackModelltoDtoConverter(trackModell).convert(), sequenceModell.resolution);
             });
         });
+        showTrack(trackId);
     }
 
     @Override
@@ -90,6 +96,7 @@ public class TrackInteractor implements TrackBoundaryIn {
                 gateway.moveNote(trackModell.getId(), (int) noteModell.tick, noteModell.midiCode, newTick);
                 noteModell.tick = newTick;
             });
+            showTrack(trackModell.getId());
         });
     }
 
@@ -97,6 +104,7 @@ public class TrackInteractor implements TrackBoundaryIn {
     public void showTrack(String id) {
         InMemorySequenceModellStore.getSequenceByTrackId(id).ifPresent(sequenceModell -> {
             sequenceModell.getTrackById(id).ifPresent(trackModell -> {
+                logNotes(trackModell);
                 boundaryOut.setTrackDto(new TrackModelltoDtoConverter(trackModell).convert(), sequenceModell.resolution);
             });
         });
@@ -108,7 +116,7 @@ public class TrackInteractor implements TrackBoundaryIn {
         List<NoteModell> notes = getNotesToAdd(tick, pitch, chordType, computedLength, channel);
         trackModell.notes.addAll(notes);
         gateway.addNotesToTrack(trackId, notes);
-        boundaryOut.setTrackDto(new TrackModelltoDtoConverter(trackModell).convert(), sequenceModell.resolution);
+//        boundaryOut.setTrackDto(new TrackModelltoDtoConverter(trackModell).convert(), sequenceModell.resolution);
     }
 
     private List<NoteModell> getNotesToAdd(int tick, int pitch, ChordType chordType, int computedLength, int channel) {
@@ -124,5 +132,20 @@ public class TrackInteractor implements TrackBoundaryIn {
             });
         }
         return notes;
+    }
+
+    private void logNotes(TrackModell trackModell){
+        LOG.debug("----------------------------------------------------------------");
+        trackModell.notes.stream()
+                .sorted(Comparator.comparingLong(noteModell -> noteModell.tick))
+                .forEach(noteModell -> LOG.debug(getSpaces(noteModell.tick) + noteModell.toString()));
+    }
+
+    private String getSpaces(long tick) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for(int i = 0; i < tick / 16; i++){
+            stringBuilder.append("   ");
+        }
+        return stringBuilder.toString();
     }
 }

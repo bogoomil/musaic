@@ -16,7 +16,7 @@ class NoteModellTest {
 
     @Test
     void testToString() {
-        assertEquals("\n[Cs(0), tick:1, length: 1]\n", noteModell.toString());
+        assertEquals("[Cs(0), tick:1, length: 1]", noteModell.toString());
     }
 
     @Test

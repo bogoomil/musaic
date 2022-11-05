@@ -34,49 +34,61 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
 
     private List<String> movedNoteIds = new ArrayList<>();
 
-    private Point2D dragStart;
-    private Point2D dragEnd;
+    private Rectangle selectionRect = new Rectangle();
 
     public TrackEditorPanel() {
         super();
         this.setOnMouseClicked(event -> this.handleMouseClick(event));
-        this.setOnDragDetected(this::handleDragDetected);
+
+        this.setOnMousePressed(event -> {
+            selectionRect.setVisible(true);
+            selectionRect.setX(event.getX());
+            selectionRect.setY(event.getY());
+        });
+
+        this.setOnMouseDragged(event -> {
+            double width = event.getX() - selectionRect.getX();
+            double height = event.getY() - selectionRect.getY();
+            selectionRect.setWidth(width);
+            selectionRect.setHeight(height);
+
+        });
 
         this.setOnMouseReleased(this::handleMousReleased);
+
         eventBus.register(this);
         contextMenu = new SettingsContextMenu(eventBus);
+
+        selectionRect.setStroke(Color.RED);
     }
 
     private void handleMousReleased(MouseEvent event) {
-        if(dragStart != null){
-            dragEnd = new Point2D(event.getX(), event.getY());
-            selectNotesDraggedOver();
-        }
+        selectNotesDraggedOver();
+        resetSelectionRect();
+    }
+
+    private void resetSelectionRect() {
+        selectionRect.setVisible(false);
+        selectionRect.setWidth(0);
+        selectionRect.setHeight(0);
     }
 
     private void selectNotesDraggedOver() {
         this.getChildren().forEach(node -> {
             if(node instanceof  NoteRectangle){
                 NoteRectangle nr = (NoteRectangle) node;
-                double width = dragEnd.getX() - dragStart.getX();
-                double height = dragEnd.getY() - dragStart.getY();
-                if(nr.intersects(dragStart.getX(), dragStart.getY(), width, height)){
+                if(nr.intersects(selectionRect.getBoundsInLocal())){
                     nr.toggleSlection();
                 }
-
             }
         });
-        dragStart = null;
-    }
-
-    private void handleDragDetected(MouseEvent event) {
-        dragStart = new Point2D(event.getX(), event.getY());
-        event.consume();
     }
 
     @Override
     public void paintNotes() {
         getChildren().clear();
+        getChildren().add(selectionRect);
+        selectionRect.setVisible(false);
         this.initializeCanvas();
         this.getChildren().add(cursor);
         this.notes.forEach(noteDto -> {
