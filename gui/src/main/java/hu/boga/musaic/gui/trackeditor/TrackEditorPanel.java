@@ -72,7 +72,6 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     private void handleDragDetected(MouseEvent event) {
         dragStart = new Point2D(event.getX(), event.getY());
         event.consume();
-        LOG.debug("START DRAG {}", dragStart);
     }
 
     @Override
@@ -240,7 +239,6 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
             getNoteRectangleByNoteId(id).ifPresent(noteRectangle -> {
                 int newTick = getTickByX((int) noteRectangle.getX());
                 events[index.getAndIncrement()] = new NoteMovedEvent(id, newTick);
-                LOG.debug("MOVING NOTE: {} FROM: {} TO: {}",id, noteRectangle.getTick(), newTick );
             });
         });
         noteChangeListener.onNoteMoved(events);

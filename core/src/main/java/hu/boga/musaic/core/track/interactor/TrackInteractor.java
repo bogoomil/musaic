@@ -66,7 +66,6 @@ public class TrackInteractor implements TrackBoundaryIn {
             sequenceModell.getTrackById(trackId).ifPresent(trackModell -> {
                 addNotesToTrack(trackId, tick, pitch, length, channel, chordType, sequenceModell, trackModell);
             });
-            LOG.debug("TRACK: {}", sequenceModell.getTrackById(trackId));
         });
     }
 
@@ -81,7 +80,6 @@ public class TrackInteractor implements TrackBoundaryIn {
                 });
                 boundaryOut.setTrackDto(new TrackModelltoDtoConverter(trackModell).convert(), sequenceModell.resolution);
             });
-            LOG.debug("TRACK: {}", sequenceModell.getTrackById(trackId));
         });
     }
 
@@ -92,8 +90,6 @@ public class TrackInteractor implements TrackBoundaryIn {
                 gateway.moveNote(trackModell.getId(), (int) noteModell.tick, noteModell.midiCode, newTick);
                 noteModell.tick = newTick;
             });
-            LOG.debug("TRACK: {}", trackModell);
-
         });
     }
 
