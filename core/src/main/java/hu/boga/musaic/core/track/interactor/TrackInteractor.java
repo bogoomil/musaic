@@ -83,7 +83,6 @@ public class TrackInteractor implements TrackBoundaryIn {
                     trackModell.notes.removeIf(noteModell -> noteModell.getId().equals(noteDto.id));
                     gateway.deleteNote(trackId, noteDto.tick, noteDto.midiCode);
                 });
-//                boundaryOut.setTrackDto(new TrackModelltoDtoConverter(trackModell).convert(), sequenceModell.resolution);
             });
         });
         showTrack(trackId);
@@ -104,7 +103,6 @@ public class TrackInteractor implements TrackBoundaryIn {
     public void showTrack(String id) {
         InMemorySequenceModellStore.getSequenceByTrackId(id).ifPresent(sequenceModell -> {
             sequenceModell.getTrackById(id).ifPresent(trackModell -> {
-                logNotes(trackModell);
                 boundaryOut.setTrackDto(new TrackModelltoDtoConverter(trackModell).convert(), sequenceModell.resolution);
             });
         });
@@ -116,7 +114,6 @@ public class TrackInteractor implements TrackBoundaryIn {
         List<NoteModell> notes = getNotesToAdd(tick, pitch, chordType, computedLength, channel);
         trackModell.notes.addAll(notes);
         gateway.addNotesToTrack(trackId, notes);
-//        boundaryOut.setTrackDto(new TrackModelltoDtoConverter(trackModell).convert(), sequenceModell.resolution);
     }
 
     private List<NoteModell> getNotesToAdd(int tick, int pitch, ChordType chordType, int computedLength, int channel) {
@@ -134,18 +131,18 @@ public class TrackInteractor implements TrackBoundaryIn {
         return notes;
     }
 
-    private void logNotes(TrackModell trackModell){
-        LOG.debug("----------------------------------------------------------------");
-        trackModell.notes.stream()
-                .sorted(Comparator.comparingLong(noteModell -> noteModell.tick))
-                .forEach(noteModell -> LOG.debug(getSpaces(noteModell.tick) + noteModell.toString()));
-    }
-
-    private String getSpaces(long tick) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for(int i = 0; i < tick / 16; i++){
-            stringBuilder.append("   ");
-        }
-        return stringBuilder.toString();
-    }
+//    private void logNotes(TrackModell trackModell){
+//        LOG.debug("----------------------------------------------------------------");
+//        trackModell.notes.stream()
+//                .sorted(Comparator.comparingLong(noteModell -> noteModell.tick))
+//                .forEach(noteModell -> LOG.debug(getSpaces(noteModell.tick) + noteModell.toString()));
+//    }
+//
+//    private String getSpaces(long tick) {
+//        StringBuilder stringBuilder = new StringBuilder();
+//        for(int i = 0; i < tick / 16; i++){
+//            stringBuilder.append("   ");
+//        }
+//        return stringBuilder.toString();
+//    }
 }

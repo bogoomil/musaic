@@ -62,6 +62,7 @@ class TrackInteractorTest {
         dto.name = NEW_NAME;
         trackInteractor.updateTrackName(dto);
         Mockito.verify(gateway).updateTrackName(dto.id, dto.name);
+        Mockito.verify(boundaryOut).setTrackDto(Mockito.any(), eq(modell.resolution));
 
         assertEquals(NEW_NAME, trackModell.name);
 
@@ -85,7 +86,7 @@ class TrackInteractorTest {
     void updateTrackProgram() {
         trackInteractor.updateTrackProgram(trackModell.getId(), 3, 4);
         Mockito.verify(gateway).updateTrackProgram(trackModell.getId(), 3, 4);
-
+        Mockito.verify(boundaryOut).setTrackDto(Mockito.any(), eq(modell.resolution));
         assertEquals(3, trackModell.program);
         assertEquals(4, trackModell.channel);
 
@@ -137,6 +138,8 @@ class TrackInteractorTest {
     void movNote() {
         trackInteractor.moveNote(noteModell.getId(), 100);
         Mockito.verify(gateway).moveNote(trackModell.getId(), 0, 12, 100);
+        Mockito.verify(boundaryOut).setTrackDto(Mockito.any(), eq(modell.resolution));
+
         assertEquals(100, noteModell.tick);
     }
 
