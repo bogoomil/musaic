@@ -20,27 +20,27 @@ public class TrackModell extends BaseModell {
                 "\nid:" + getId() +
                 ", ch: " + channel +
                 ", pr: " + program +
-                ", name: " + name + getNotesString();
+                ", name: " + name + ", notes: " + notes;
 
     }
 
-    private String getNotesString() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        notes.stream().sorted(Comparator.comparingLong(n -> n.tick)).forEach(note -> {
-            stringBuilder.append("\n" + getSpaces(note.tick) + note.toString());
-        });
-
-        return stringBuilder.toString();
-    }
-
-    private String getSpaces(long tick) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < tick / 16; i++){
-            stringBuilder.append("[]");
-        }
-        return stringBuilder.toString();
-    }
+//    private String getNotesString() {
+//        StringBuilder stringBuilder = new StringBuilder();
+//
+//        notes.stream().sorted(Comparator.comparingLong(n -> n.tick)).forEach(note -> {
+//            stringBuilder.append("\n" + getSpaces(note.tick) + note.toString());
+//        });
+//
+//        return stringBuilder.toString();
+//    }
+//
+//    private String getSpaces(long tick) {
+//        StringBuilder stringBuilder = new StringBuilder();
+//        for (int i = 0; i < tick / 16; i++){
+//            stringBuilder.append("[]");
+//        }
+//        return stringBuilder.toString();
+//    }
 
     public long getTickLength() {
         return this.notes.stream().mapToLong(noteModell -> noteModell.getEndTick()).max().orElse(0L);
