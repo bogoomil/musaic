@@ -80,12 +80,9 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
             }
         });
-        trackName.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                trackDto.name = trackName.getText();
-                trackBoundaryIn.updateTrackName(trackDto);
-            }
+        trackName.textProperty().addListener((observable, oldValue, newValue) -> {
+            trackDto.name = trackName.getText();
+            trackBoundaryIn.updateTrackName(trackDto);
         });
         trackEditorPanel.setNoteChangeListener(this);
     }
