@@ -52,6 +52,7 @@ public class TrackInteractor implements TrackBoundaryIn {
         InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
             trackModell.program = program;
             trackModell.channel = channel;
+            trackModell.notes.forEach(note -> note.channel = channel);
         });
         showTrack(trackId);
     }
