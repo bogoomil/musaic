@@ -104,6 +104,16 @@ public class TrackInteractor implements TrackBoundaryIn {
         });
     }
 
+    @Override
+    public void setMuted(String id, boolean muted) {
+        InMemorySequenceModellStore.getSequenceByTrackId(id).ifPresent(sequenceModell -> {
+            sequenceModell.getTrackById(id).ifPresent(trackModell -> {
+               trackModell.muted = muted;
+            });
+            LOG.debug("sequence to show: {}", sequenceModell);
+        });
+    }
+
     private void addNotesToTrack(String trackId, int tick, int pitch, int length, int channel, ChordType chordType, SequenceModell sequenceModell, TrackModell trackModell) {
         final int computedLength = length * sequenceModell.getTicksIn32nds();
         List<NoteModell> notes = getNotesToAdd(tick, pitch, chordType, computedLength, channel);

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import hu.boga.musaic.gui.controls.*?>
+<?import hu.boga.musaic.gui.trackeditor.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import hu.boga.musaic.gui.controls.*?>
-<?import hu.boga.musaic.gui.trackeditor.TrackEditorPanel?>
 
-<?import hu.boga.musaic.gui.controls.InstrumentCombo?>
 <TitledPane fx:id="titledPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.trackeditor.TrackEditor">
     <BorderPane prefHeight="200.0" prefWidth="200.0">
         <top>
@@ -33,6 +32,8 @@
                             <Slider fx:id="zoomSlider" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                             <Label text="Name" />
                             <TextField fx:id="trackName" GridPane.columnIndex="1" />
+                          <CheckBox fx:id="cbMuted" text="Muted"  GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+
                         </children>
                     </GridPane>
                 </children>

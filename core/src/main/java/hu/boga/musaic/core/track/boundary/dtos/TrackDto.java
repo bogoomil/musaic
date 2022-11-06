@@ -11,6 +11,7 @@ public class TrackDto {
     public List<NoteDto> notes;
 
     public String id;
+    public boolean muted;
 
     @Override
     public String toString() {

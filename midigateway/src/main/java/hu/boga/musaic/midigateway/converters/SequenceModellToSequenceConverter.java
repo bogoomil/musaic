@@ -20,7 +20,9 @@ public class SequenceModellToSequenceConverter {
     public Sequence convert() throws InvalidMidiDataException {
         Sequence sequence = new Sequence(modell.division, modell.resolution);
         modell.tracks.forEach(trackModell -> {
-            convertTracks(sequence, trackModell);
+            if(!trackModell.muted){
+                convertTracks(sequence, trackModell);
+            }
         });
         TempoUtil.addTempoEvents(sequence, (int) modell.tempo);
         return sequence;

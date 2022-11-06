@@ -19,6 +19,7 @@ public class TrackModelltoDtoConverter {
         dto.name = modell.name;
         dto.program = modell.program;
         dto.id = modell.getId();
+        dto.muted = modell.muted;
 
         dto.notes = modell.notes.stream()
                 .map(noteModell -> new NoteModellToDtoConverter(noteModell).convert())

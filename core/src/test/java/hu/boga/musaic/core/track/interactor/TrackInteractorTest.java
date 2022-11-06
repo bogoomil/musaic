@@ -83,6 +83,7 @@ class TrackInteractorTest {
         Mockito.verify(boundaryOut).setTrackDto(Mockito.any(), eq(modell.resolution));
         assertEquals(3, trackModell.program);
         assertEquals(4, trackModell.channel);
+        assertEquals(4, noteModell.channel);
 
     }
 

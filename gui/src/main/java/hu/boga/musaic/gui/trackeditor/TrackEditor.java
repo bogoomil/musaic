@@ -14,7 +14,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +40,7 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
     public TextField trackName;
     @FXML
     public Label zoomLabel;
+    public CheckBox cbMuted;
     @FXML
     ComboBox<Integer> channelCombo;
 
@@ -56,6 +56,10 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
     ChangeListener<? super Instrument> instrumentComboListener = (observable, oldValue, newValue) -> {
         programChanged(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex());
+    };
+
+    ChangeListener<? super Boolean> mutedListener = (observable, oldValue, newValue) -> {
+        trackBoundaryIn.setMuted(trackDto.id, cbMuted.isSelected());
     };
 
     @Inject
@@ -87,6 +91,7 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
         trackEditorPanel.setNoteChangeListener(this);
     }
 
+
     public void removeTrack(ActionEvent actionEvent) {
         trackBoundaryIn.removeTrack(trackDto.id);
         this.eventBus.post(new TrackDeletedEvent(trackDto.id));
@@ -102,6 +107,7 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
         channelCombo.valueProperty().removeListener(channelComboListener);
         instrumentCombo.valueProperty().removeListener(instrumentComboListener);
+        cbMuted.selectedProperty().removeListener(mutedListener);
         this.trackDto = trackDto;
 
         titledPane.setText("ch: " + trackDto.channel + " pr:" + trackDto.program + " notes: " + trackDto.notes.size() + " (" + trackDto.id + ")");
@@ -112,9 +118,12 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
         trackEditorPanel.setResolution(resolution);
         trackEditorPanel.setNotes(trackDto.notes);
         trackEditorPanel.paintNotes();
+        cbMuted.setSelected(trackDto.muted);
 
         channelCombo.valueProperty().addListener(channelComboListener);
         instrumentCombo.valueProperty().addListener(instrumentComboListener);
+        cbMuted.selectedProperty().addListener(mutedListener);
+
 
     }
 

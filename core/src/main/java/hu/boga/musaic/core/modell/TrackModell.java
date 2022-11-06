@@ -10,6 +10,8 @@ public class TrackModell extends BaseModell {
     public int channel;
     public int program;
     public String name = "";
+    public boolean muted;
+    public boolean solo;
     public List<NoteModell> notes = new ArrayList<>();
 
     @Override
