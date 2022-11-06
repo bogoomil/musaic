@@ -22,14 +22,25 @@ public class InMemorySequenceModellStore {
     }
 
     public static Optional<SequenceModell> getSequenceByTrackId(String trackId){
-        return SEQUENCE_MODELS.values().stream().filter(sequenceModell -> sequenceModell.getTrackById(trackId).isPresent()).findFirst();
+        for(SequenceModell sequenceModell : SEQUENCE_MODELS.values()){
+            for(TrackModell trackModell : sequenceModell.tracks){
+                if(trackId.equals(trackModell.getId())){
+                    return Optional.of(sequenceModell);
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     public static Optional<TrackModell> getTrackById(String trackId){
-        return SEQUENCE_MODELS
-                .values()
-                .stream()
-                .map(sequenceModell -> sequenceModell.getTrackById(trackId)).findFirst().get();
+        for(SequenceModell sequenceModell : SEQUENCE_MODELS.values()){
+            for(TrackModell trackModell : sequenceModell.tracks){
+                if(trackId.equals(trackModell.getId())){
+                    return Optional.of(trackModell);
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     public static Optional<TrackModell> getTrackByNoteId(String noteId){

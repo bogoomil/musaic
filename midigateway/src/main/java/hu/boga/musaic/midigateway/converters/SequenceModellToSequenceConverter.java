@@ -4,6 +4,7 @@ import hu.boga.musaic.core.exceptions.MusaicException;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.midigateway.utils.NoteUtil;
+import hu.boga.musaic.midigateway.utils.TempoUtil;
 import hu.boga.musaic.midigateway.utils.TrackUtil;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -21,6 +22,7 @@ public class SequenceModellToSequenceConverter {
         modell.tracks.forEach(trackModell -> {
             convertTracks(sequence, trackModell);
         });
+        TempoUtil.addTempoEvents(sequence, (int) modell.tempo);
         return sequence;
     }
 

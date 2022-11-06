@@ -69,8 +69,11 @@ public class TrackInteractor implements TrackBoundaryIn {
 
     @Override
     public void deleteNotes(String trackId, NoteDto[] notes) {
+        LOG.debug("deleting notes: {}, trackid: {}", Arrays.asList(notes), trackId);
         InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
+            LOG.debug("sequence: {}", sequenceModell.getId());
             InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
+                LOG.debug("track: {}", trackModell.getId());
                 Arrays.stream(notes).forEach(noteDto -> {
                     LOG.debug("deleting note: {}", noteDto.id);
                     trackModell.notes.removeIf(noteModell -> noteModell.getId().equals(noteDto.id));
@@ -96,8 +99,8 @@ public class TrackInteractor implements TrackBoundaryIn {
             sequenceModell.getTrackById(id).ifPresent(trackModell -> {
                 boundaryOut.setTrackDto(new TrackModelltoDtoConverter(trackModell).convert(), sequenceModell.resolution);
             });
+            LOG.debug("sequence to show: {}", sequenceModell);
         });
-
     }
 
     private void addNotesToTrack(String trackId, int tick, int pitch, int length, int channel, ChordType chordType, SequenceModell sequenceModell, TrackModell trackModell) {

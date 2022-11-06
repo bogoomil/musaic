@@ -1,10 +1,14 @@
 package hu.boga.musaic.midigateway;
 
 import hu.boga.musaic.core.exceptions.MusaicException;
+import hu.boga.musaic.midigateway.utils.TempoUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sound.midi.*;
 
 public class Player {
+    private static final Logger LOG = LoggerFactory.getLogger(Player.class);
     private static final Sequencer sequencer;
 
     static {
@@ -19,6 +23,8 @@ public class Player {
     }
 
     public static void playSequence(Sequence sequence){
+        LOG.debug("start playback, tempo: {}", TempoUtil.getTempo(sequence));
+
         if(sequence == null){
             throw new MusaicException("sequence is null");
         }

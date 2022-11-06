@@ -6,11 +6,16 @@ import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.midigateway.Player;
 import hu.boga.musaic.midigateway.Saver;
 import hu.boga.musaic.midigateway.converters.SequenceModellToSequenceConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.Sequence;
 
 public class SequenceGatewayImpl implements SequenceGateway {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SequenceGatewayImpl.class);
+
     @Override
     public SequenceModell open(String path) {
         return new SequenceReader().open(path);
@@ -29,6 +34,7 @@ public class SequenceGatewayImpl implements SequenceGateway {
 
     @Override
     public void play(SequenceModell modell) {
+        LOG.debug("start playback");
         Sequence sequence = null;
         try {
             sequence = new SequenceModellToSequenceConverter(modell).convert();

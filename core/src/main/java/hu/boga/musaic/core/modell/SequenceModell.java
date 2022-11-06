@@ -41,14 +41,13 @@ public class SequenceModell extends BaseModell{
 
     @Override
     public String toString() {
-        return "SequenceModell{" +
-                "id='" + getId() + '\'' +
-                ", tracks=" + tracks +
-                ", resolution=" + resolution +
-                ", division=" + division +
-                ", tickLength=" + getTickLength() +
-                ", tempo=" + tempo +
-                '}';
-    }
+        return "\n--------------------------------------------------------" +
+                "\nSequenceModell" +
+                "\nid: " + getId() +
+                ", res: " + resolution +
+                ", div: " + division +
+                ", tempo: " + tempo +
+                "\n" + tracks;
 
+    }
 }

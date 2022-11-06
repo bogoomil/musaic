@@ -11,7 +11,6 @@ module midigateway {
 
     opens hu.boga.musaic.midigateway to com.google.guice;
 
-    opens hu.boga.musaic.core.gateway.sequence to com.google.guice;
     opens hu.boga.musaic.midigateway.converters to com.google.guice;
     opens hu.boga.musaic.midigateway.sequence to com.google.guice;
     opens hu.boga.musaic.midigateway.utils to com.google.guice;
