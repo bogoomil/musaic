@@ -15,5 +15,5 @@ public interface SequenceBoundaryIn {
 
     void stop();
 
-    void reloadSequence(SequenceDto sequenceDto);
+    void reloadSequence(String sequenceId);
 }

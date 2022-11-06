@@ -35,7 +35,7 @@ public class SequenceInteractor implements SequenceBoundaryIn {
 
     @Override
     public void load(String id) {
-        SequenceDto dto = getModell(id).map(modell -> new SequenceModellToDtoConverter(modell).convert()).orElseThrow();
+        SequenceDto dto = new SequenceModellToDtoConverter(InMemorySequenceModellStore.getSequenceById(id)).convert();
         boundaryOut.displaySequence(dto);
     }
 
@@ -77,8 +77,8 @@ public class SequenceInteractor implements SequenceBoundaryIn {
     }
 
     @Override
-    public void reloadSequence(SequenceDto sequenceDto) {
-        SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceDto.id);
+    public void reloadSequence(String sequenceId) {
+        SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId);
         boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());
     }
 
@@ -88,10 +88,4 @@ public class SequenceInteractor implements SequenceBoundaryIn {
         return modell;
     }
 
-    private Optional<SequenceModell> getModell(String id){
-        if(InMemorySequenceModellStore.SEQUENCE_MODELS.containsKey(id)) {
-            return Optional.of(InMemorySequenceModellStore.SEQUENCE_MODELS.get(id));
-        }
-        return Optional.empty();
-    }
 }

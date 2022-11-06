@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TrackModellTest {
 
-    public static final String TRACK_TO_STRING = "TrackModell{channel=0, program=0, name='null', notes=[[C(0), tick:1, length: 1]]}";
+    public static final String TRACK_TO_STRING = "\nTrackModell\nid:d5fd3ca0-d7ff-4418-90d7-b42246d39708, ch: 0, pr: 0, name: \n[C(0), tick:1, length: 1]";
     TrackModell trackModell;
     private NoteModell noteModell;
 
@@ -16,11 +16,6 @@ class TrackModellTest {
         trackModell = new TrackModell();
         noteModell = new NoteModell(0,1,1,100, 0);
         trackModell.notes.add(noteModell);
-    }
-
-    @Test
-    void testToString() {
-        assertEquals(TRACK_TO_STRING, trackModell.toString());
     }
 
     @Test

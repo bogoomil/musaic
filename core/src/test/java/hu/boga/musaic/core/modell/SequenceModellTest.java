@@ -46,11 +46,6 @@ class SequenceModellTest {
     }
 
     @Test
-    void testToString() {
-        assertTrue(modell.toString().contains(TO_STRING));
-    }
-
-    @Test
     void testGetTickLength(){
         assertEquals(2, modell.getTickLength());
     }

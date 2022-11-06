@@ -156,7 +156,7 @@ public class SequenceEditor implements SequenceBoundaryOut {
     @Subscribe
     public void onTrackDeletedEvent(TrackDeletedEvent event) {
         accordion.getPanes().removeIf(titledPane -> !titledPane.getText().equals(PROPERTIES_PANEL_TEXT));
-        boundaryIn.reloadSequence(sequenceDto);
+        boundaryIn.reloadSequence(sequenceDto.id);
     }
 
 }
