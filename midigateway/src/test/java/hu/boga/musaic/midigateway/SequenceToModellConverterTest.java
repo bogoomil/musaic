@@ -1,12 +1,12 @@
 package hu.boga.musaic.midigateway;
 
 import hu.boga.musaic.core.modell.SequenceModell;
+import hu.boga.musaic.midigateway.converters.SequenceToModellConverter;
 import hu.boga.musaic.midigateway.utils.TempoUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.Sequence;
 
 import static org.junit.jupiter.api.Assertions.*;
 

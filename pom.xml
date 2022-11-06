@@ -180,7 +180,7 @@
                 </executions>
                 <configuration>
                     <verbose>false</verbose>
-                    <skip>false</skip>
+                    <skip>true</skip>
                     <failWhenNoMutations>false</failWhenNoMutations>
                     <excludedClasses>
                         <param>hu.boga.musaic.core.sequence.boundary.dtos.*</param>

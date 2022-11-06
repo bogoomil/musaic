@@ -1,7 +1,6 @@
 package hu.boga.musaic.core.track.interactor;
 
 import hu.boga.musaic.core.InMemorySequenceModellStore;
-import hu.boga.musaic.core.gateway.TrackGateway;
 import hu.boga.musaic.core.modell.NoteModell;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
@@ -27,7 +26,6 @@ class TrackInteractorTest {
     public static final String NEW_NAME = "NEW_NAME";
     public static final String TRACK_ID = "TRACK_ID";
     TrackInteractor trackInteractor;
-    private TrackGateway gateway;
     private SequenceModell modell;
     private TrackModell trackModell;
     private TrackBoundaryOut boundaryOut;
@@ -41,9 +39,8 @@ class TrackInteractorTest {
 
         boundaryOut = Mockito.mock(TrackBoundaryOut.class);
         TrackBoundaryIn boundaryIn = Mockito.mock(TrackBoundaryIn.class);
-        gateway = Mockito.mock(TrackGateway.class);
 
-        trackInteractor = new TrackInteractor(gateway, boundaryOut);
+        trackInteractor = new TrackInteractor(boundaryOut);
 
         modell = new SequenceModell();
         trackModell = new TrackModell();
@@ -61,7 +58,6 @@ class TrackInteractorTest {
         dto.id = trackModell.getId();
         dto.name = NEW_NAME;
         trackInteractor.updateTrackName(dto);
-        Mockito.verify(gateway).updateTrackName(dto.id, dto.name);
         Mockito.verify(boundaryOut).setTrackDto(Mockito.any(), eq(modell.resolution));
 
         assertEquals(NEW_NAME, trackModell.name);
@@ -76,7 +72,6 @@ class TrackInteractorTest {
             mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceByTrackId(trackModell.getId())).thenReturn(Optional.of(modell));
             mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceById(modell.getId())).thenReturn(modell);
             trackInteractor.removeTrack(trackModell.getId());
-            Mockito.verify(gateway).removeTrack(modell.getId(), trackModell.getId());
 
             assertEquals(1, modell.tracks.size());
         }
@@ -85,7 +80,6 @@ class TrackInteractorTest {
     @Test
     void updateTrackProgram() {
         trackInteractor.updateTrackProgram(trackModell.getId(), 3, 4);
-        Mockito.verify(gateway).updateTrackProgram(trackModell.getId(), 3, 4);
         Mockito.verify(boundaryOut).setTrackDto(Mockito.any(), eq(modell.resolution));
         assertEquals(3, trackModell.program);
         assertEquals(4, trackModell.channel);
@@ -106,7 +100,6 @@ class TrackInteractorTest {
         trackInteractor.addChord(trackModell.getId(), 0, 12, 32, 0, ChordType.MAJ);
         ArgumentCaptor<TrackDto> captor = ArgumentCaptor.forClass(TrackDto.class);
         Mockito.verify(boundaryOut).setTrackDto(captor.capture(), eq(modell.resolution));
-        Mockito.verify(gateway).addNotesToTrack(eq(trackModell.getId()), Mockito.any());
         assertEquals(4, captor.getValue().notes.size());
 
     }
@@ -120,7 +113,6 @@ class TrackInteractorTest {
         trackInteractor.deleteNotes(trackModell.getId(), dtos);
         ArgumentCaptor<TrackDto> captor = ArgumentCaptor.forClass(TrackDto.class);
         Mockito.verify(boundaryOut, times(2)).setTrackDto(captor.capture(), eq(modell.resolution));
-        Mockito.verify(gateway).deleteNote(trackModell.getId(), 0, 12);
         assertEquals(1, captor.getValue().notes.size());
     }
 
@@ -137,9 +129,7 @@ class TrackInteractorTest {
     @Test
     void movNote() {
         trackInteractor.moveNote(noteModell.getId(), 100);
-        Mockito.verify(gateway).moveNote(trackModell.getId(), 0, 12, 100);
         Mockito.verify(boundaryOut).setTrackDto(Mockito.any(), eq(modell.resolution));
-
         assertEquals(100, noteModell.tick);
     }
 
@@ -147,6 +137,5 @@ class TrackInteractorTest {
     void showTrack(){
         trackInteractor.showTrack(trackModell.getId());
         Mockito.verify(boundaryOut).setTrackDto(Mockito.any(), eq(modell.resolution));
-
     }
 }

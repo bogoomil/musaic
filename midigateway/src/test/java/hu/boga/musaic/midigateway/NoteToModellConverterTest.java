@@ -1,7 +1,7 @@
 package hu.boga.musaic.midigateway;
 
 import hu.boga.musaic.core.modell.NoteModell;
-import hu.boga.musaic.midigateway.utils.MidiUtilBaseTest;
+import hu.boga.musaic.midigateway.converters.NoteToModellConverter;
 import hu.boga.musaic.midigateway.utils.NoteUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

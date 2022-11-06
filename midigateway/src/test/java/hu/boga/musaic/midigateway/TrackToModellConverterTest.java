@@ -1,15 +1,12 @@
 package hu.boga.musaic.midigateway;
 
-import hu.boga.musaic.core.exceptions.MusaicException;
 import hu.boga.musaic.core.modell.TrackModell;
-import hu.boga.musaic.midigateway.TrackToModellConverter;
-import hu.boga.musaic.midigateway.utils.MidiUtilBaseTest;
+import hu.boga.musaic.midigateway.converters.TrackToModellConverter;
 import hu.boga.musaic.midigateway.utils.TrackUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.Track;
 
 import static org.junit.jupiter.api.Assertions.*;
 

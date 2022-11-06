@@ -1,7 +1,6 @@
 package hu.boga.musaic.core.track.interactor;
 
 import hu.boga.musaic.core.InMemorySequenceModellStore;
-import hu.boga.musaic.core.gateway.TrackGateway;
 import hu.boga.musaic.core.modell.NoteModell;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
@@ -19,19 +18,16 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 public class TrackInteractor implements TrackBoundaryIn {
 
     private static final Logger LOG = LoggerFactory.getLogger(TrackInteractor.class);
 
-    TrackGateway gateway;
     TrackBoundaryOut boundaryOut;
 
     @Inject
-    public TrackInteractor(TrackGateway gateway, TrackBoundaryOut boundaryOut) {
-        this.gateway = gateway;
+    public TrackInteractor(TrackBoundaryOut boundaryOut) {
         this.boundaryOut = boundaryOut;
     }
 
@@ -39,7 +35,6 @@ public class TrackInteractor implements TrackBoundaryIn {
     public void updateTrackName(TrackDto trackDto) {
         InMemorySequenceModellStore.getTrackById(trackDto.id).ifPresent(trackModell -> {
             trackModell.name = trackDto.name;
-            gateway.updateTrackName(trackDto.id, trackDto.name);
         });
         showTrack(trackDto.id);
     }
@@ -48,7 +43,6 @@ public class TrackInteractor implements TrackBoundaryIn {
     public void removeTrack(String trackId) {
         InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
             sequenceModell.tracks.removeIf(trackModell -> trackModell.getId().equals(trackId));
-            gateway.removeTrack(sequenceModell.getId(), trackId);
         });
     }
 
@@ -58,7 +52,6 @@ public class TrackInteractor implements TrackBoundaryIn {
         InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
             trackModell.program = program;
             trackModell.channel = channel;
-            gateway.updateTrackProgram(trackId, program, channel);
         });
         showTrack(trackId);
     }
@@ -81,7 +74,6 @@ public class TrackInteractor implements TrackBoundaryIn {
                 Arrays.stream(notes).forEach(noteDto -> {
                     LOG.debug("deleting note: {}", noteDto.id);
                     trackModell.notes.removeIf(noteModell -> noteModell.getId().equals(noteDto.id));
-                    gateway.deleteNote(trackId, noteDto.tick, noteDto.midiCode);
                 });
             });
         });
@@ -92,7 +84,6 @@ public class TrackInteractor implements TrackBoundaryIn {
     public void moveNote(String noteId, int newTick) {
         InMemorySequenceModellStore.getTrackByNoteId(noteId).ifPresent(trackModell -> {
             trackModell.gtNoteModellById(noteId).ifPresent(noteModell -> {
-                gateway.moveNote(trackModell.getId(), (int) noteModell.tick, noteModell.midiCode, newTick);
                 noteModell.tick = newTick;
             });
             showTrack(trackModell.getId());
@@ -113,7 +104,6 @@ public class TrackInteractor implements TrackBoundaryIn {
         final int computedLength = length * sequenceModell.getTicksIn32nds();
         List<NoteModell> notes = getNotesToAdd(tick, pitch, chordType, computedLength, channel);
         trackModell.notes.addAll(notes);
-        gateway.addNotesToTrack(trackId, notes);
     }
 
     private List<NoteModell> getNotesToAdd(int tick, int pitch, ChordType chordType, int computedLength, int channel) {
@@ -130,19 +120,4 @@ public class TrackInteractor implements TrackBoundaryIn {
         }
         return notes;
     }
-
-//    private void logNotes(TrackModell trackModell){
-//        LOG.debug("----------------------------------------------------------------");
-//        trackModell.notes.stream()
-//                .sorted(Comparator.comparingLong(noteModell -> noteModell.tick))
-//                .forEach(noteModell -> LOG.debug(getSpaces(noteModell.tick) + noteModell.toString()));
-//    }
-//
-//    private String getSpaces(long tick) {
-//        StringBuilder stringBuilder = new StringBuilder();
-//        for(int i = 0; i < tick / 16; i++){
-//            stringBuilder.append("   ");
-//        }
-//        return stringBuilder.toString();
-//    }
 }

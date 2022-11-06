@@ -1,20 +1,18 @@
 package hu.boga.musaic.core.sequence.interactor;
 
 import hu.boga.musaic.core.InMemorySequenceModellStore;
+import hu.boga.musaic.core.gateway.sequence.SequenceGateway;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
-import hu.boga.musaic.core.gateway.MidiGateway;
 import hu.boga.musaic.core.sequence.interactor.converters.SequenceModellToDtoConverter;
 import hu.boga.musaic.core.track.interactor.converters.TrackModelltoDtoConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 public class SequenceInteractor implements SequenceBoundaryIn {
@@ -22,10 +20,10 @@ public class SequenceInteractor implements SequenceBoundaryIn {
     private static final Logger LOG = LoggerFactory.getLogger(SequenceInteractor.class);
 
     private final SequenceBoundaryOut boundaryOut;
-    private final MidiGateway gateway;
+    private final SequenceGateway gateway;
 
     @Inject
-    public SequenceInteractor(SequenceBoundaryOut boundaryOut, MidiGateway gateway) {
+    public SequenceInteractor(SequenceBoundaryOut boundaryOut, SequenceGateway gateway) {
         this.boundaryOut = boundaryOut;
         this.gateway = gateway;
     }
@@ -52,19 +50,18 @@ public class SequenceInteractor implements SequenceBoundaryIn {
 
     @Override
     public void play(String sequenceId) {
-        gateway.play(sequenceId);
+        gateway.play(InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId));
     }
 
     @Override
     public void save(String sequenceId, String path) {
-        gateway.save(sequenceId, path);
+        gateway.save(InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId), path);
     }
 
     @Override
     public void setTempo(String sequenceId, int tempo) {
         SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId);
         modell.tempo = tempo;
-        gateway.updateTempo(modell);
     }
 
     @Override
@@ -72,14 +69,12 @@ public class SequenceInteractor implements SequenceBoundaryIn {
         SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId);
         TrackModell trackModell = new TrackModell();
         modell.tracks.add(trackModell);
-        gateway.addTrack(modell);
         boundaryOut.displayNewTrack(new TrackModelltoDtoConverter(trackModell).convert());
     }
 
     @Override
     public void stop() {
         gateway.stop();
-
     }
 
     @Override
@@ -91,7 +86,6 @@ public class SequenceInteractor implements SequenceBoundaryIn {
     private SequenceModell createNewSequence(){
         SequenceModell modell = new SequenceModell();
         InMemorySequenceModellStore.SEQUENCE_MODELS.put(modell.getId(), modell);
-        gateway.initMidiSequence(modell);
         return modell;
     }
 

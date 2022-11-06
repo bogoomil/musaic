@@ -1,4 +1,4 @@
-package hu.boga.musaic.midigateway;
+package hu.boga.musaic.midigateway.converters;
 
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.midigateway.utils.TempoUtil;
