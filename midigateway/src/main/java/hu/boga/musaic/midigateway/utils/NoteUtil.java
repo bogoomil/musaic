@@ -96,11 +96,6 @@ public class NoteUtil extends MidiUtil {
         return isNoteOffMessage(event.getMessage());
     }
 
-    private static boolean isNoteOnMessage(MidiMessage message) {
-        return message.getStatus() >= 144 && message.getStatus() < 160
-                && getVelocity(message) > 0;
-    }
-
     private static boolean isNoteOffMessage(MidiMessage message) {
         return (message.getStatus() >= 128 && message.getStatus() < 144)
                 || (message.getStatus() >= 144 && message.getStatus() < 160 && getVelocity(message) == 0);
@@ -120,6 +115,11 @@ public class NoteUtil extends MidiUtil {
 
     private static boolean isNoteOnEvent(MidiEvent event) {
         return isNoteOnMessage(event.getMessage());
+    }
+
+    private static boolean isNoteOnMessage(MidiMessage message) {
+        return message.getStatus() >= 144 && message.getStatus() < 160
+                && getVelocity(message) > 0;
     }
 
     public static class NoteOnOffPair{
