@@ -1,7 +1,6 @@
 package hu.boga.musaic.midigateway.converters;
 
-import hu.boga.musaic.core.modell.NoteModell;
-import hu.boga.musaic.midigateway.utils.MidiUtil;
+import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.midigateway.utils.NoteUtil;
 
 import javax.sound.midi.ShortMessage;

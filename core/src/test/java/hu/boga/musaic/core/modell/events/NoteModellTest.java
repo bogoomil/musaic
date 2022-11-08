@@ -1,5 +1,6 @@
-package hu.boga.musaic.core.modell;
+package hu.boga.musaic.core.modell.events;
 
+import hu.boga.musaic.core.modell.events.NoteModell;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

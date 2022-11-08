@@ -43,7 +43,7 @@ public class TempoUtil extends MidiUtil {
             final int shift = (3 - 1 - i) * 8;
             array[i] = (byte) (microSecsPerQuarterNote >> shift);
         }
-        track.add(createMetaEvent(0, MidiConstants.METAMESSAGE_SET_TEMPO, array));
+        track.add(createMidiEventMetaMessage(0, MidiConstants.METAMESSAGE_SET_TEMPO, array));
     }
 
     private static Integer getTempoInBPM(MetaMessage mm) {

@@ -1,10 +1,9 @@
 package hu.boga.musaic.core.sequence.interactor.converters;
 
-import hu.boga.musaic.core.modell.NoteModell;
+import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
-import hu.boga.musaic.core.sequence.interactor.converters.SequenceModellToDtoConverter;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,7 @@ class SequenceModellToDtoConverterTest {
     void setUp() {
         trackModell = easyRandom.nextObject(TrackModell.class);
         noteModell = easyRandom.nextObject(NoteModell.class);
-        trackModell.notes.add(noteModell);
+        trackModell.eventModells.add(noteModell);
 
         modell = easyRandom.nextObject(SequenceModell.class);
         modell.tracks.add(trackModell);

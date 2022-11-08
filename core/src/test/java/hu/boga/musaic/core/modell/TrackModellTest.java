@@ -1,5 +1,6 @@
 package hu.boga.musaic.core.modell;
 
+import hu.boga.musaic.core.modell.events.NoteModell;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,7 @@ class TrackModellTest {
     void setUp() {
         trackModell = new TrackModell();
         noteModell = new NoteModell(0,1,1,100, 0);
-        trackModell.notes.add(noteModell);
+        trackModell.eventModells.add(noteModell);
     }
 
     @Test

@@ -1,6 +1,7 @@
-package hu.boga.musaic.midigateway;
+package hu.boga.musaic.midigateway.converters;
 
-import hu.boga.musaic.core.modell.NoteModell;
+import hu.boga.musaic.core.modell.events.NoteModell;
+import hu.boga.musaic.midigateway.converters.ConverterBaseTest;
 import hu.boga.musaic.midigateway.converters.NoteToModellConverter;
 import hu.boga.musaic.midigateway.utils.NoteUtil;
 import org.junit.jupiter.api.BeforeEach;

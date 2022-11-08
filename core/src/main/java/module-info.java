@@ -10,6 +10,7 @@ module core {
     exports hu.boga.musaic.core.track.interactor;
     exports hu.boga.musaic.core.track.boundary.dtos;
     exports hu.boga.musaic.core.gateway.sequence;
+    exports hu.boga.musaic.core.modell.events;
 
     requires com.google.guice;
     requires javax.inject;

@@ -1,6 +1,6 @@
 package hu.boga.musaic.core;
 
-import hu.boga.musaic.core.modell.NoteModell;
+import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +51,7 @@ class InMemorySequenceModellStoreTest {
     @Test
     void getTrackByNoteId(){
         NoteModell note = new NoteModell(12, 1,512,100,0);
-        trackModell.notes.add(note);
+        trackModell.eventModells.add(note);
 
         assertEquals(trackModell, InMemorySequenceModellStore.getTrackByNoteId(note.getId()).get());
         assertTrue(InMemorySequenceModellStore.getTrackByNoteId("Zerge").isEmpty());

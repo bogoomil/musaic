@@ -16,12 +16,12 @@ public class TrackModelltoDtoConverter {
         TrackDto dto = new TrackDto();
 
         dto.channel = modell.channel;
-        dto.name = modell.name;
+        dto.name = modell.getName();
         dto.program = modell.program;
         dto.id = modell.getId();
         dto.muted = modell.muted;
 
-        dto.notes = modell.notes.stream()
+        dto.notes = modell.getNotes().stream()
                 .map(noteModell -> new NoteModellToDtoConverter(noteModell).convert())
                 .collect(Collectors.toList());
 

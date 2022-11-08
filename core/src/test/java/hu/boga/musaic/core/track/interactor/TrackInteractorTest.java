@@ -1,7 +1,7 @@
 package hu.boga.musaic.core.track.interactor;
 
 import hu.boga.musaic.core.InMemorySequenceModellStore;
-import hu.boga.musaic.core.modell.NoteModell;
+import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
@@ -18,6 +18,7 @@ import org.mockito.Mockito;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 
@@ -47,7 +48,7 @@ class TrackInteractorTest {
         modell.tracks.add(trackModell);
 
         noteModell = new NoteModell(12, 0, 32, 100, 0);
-        trackModell.notes.add(noteModell);
+        trackModell.eventModells.add(noteModell);
 
         InMemorySequenceModellStore.SEQUENCE_MODELS.put(modell.getId(), modell);
     }
@@ -60,7 +61,7 @@ class TrackInteractorTest {
         trackInteractor.updateTrackName(dto);
         Mockito.verify(boundaryOut).setTrackDto(Mockito.any(), eq(modell.resolution));
 
-        assertEquals(NEW_NAME, trackModell.name);
+        assertEquals(NEW_NAME, trackModell.getName());
 
     }
 
@@ -109,7 +110,7 @@ class TrackInteractorTest {
     void deleteNotes() {
         trackInteractor.addChord(trackModell.getId(), 345, 23, 512, 0, null);
 
-        NoteDto[] dtos = getNoteDtos(trackModell.notes.get(0).getId());
+        NoteDto[] dtos = getNoteDtos(trackModell.eventModells.get(0).getId());
 
         trackInteractor.deleteNotes(trackModell.getId(), dtos);
         ArgumentCaptor<TrackDto> captor = ArgumentCaptor.forClass(TrackDto.class);
@@ -138,5 +139,11 @@ class TrackInteractorTest {
     void showTrack(){
         trackInteractor.showTrack(trackModell.getId());
         Mockito.verify(boundaryOut).setTrackDto(Mockito.any(), eq(modell.resolution));
+    }
+
+    @Test
+    void setMuted(){
+        trackInteractor.setMuted(trackModell.getId(), true);
+        assertTrue(trackModell.muted);
     }
 }

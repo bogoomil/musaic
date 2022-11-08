@@ -3,9 +3,7 @@ package hu.boga.musaic.midigateway.sequence;
 import hu.boga.musaic.core.exceptions.MusaicException;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
-import hu.boga.musaic.midigateway.converters.NoteToModellConverter;
-import hu.boga.musaic.midigateway.converters.SequenceToModellConverter;
-import hu.boga.musaic.midigateway.converters.TrackToModellConverter;
+import hu.boga.musaic.midigateway.converters.*;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
@@ -39,8 +37,10 @@ public class SequenceReader {
     }
 
     private TrackModell convertTracks(Track track) {
-        TrackModell trackModell = new TrackToModellConverter(track).convert();
-        trackModell.notes = new NoteToModellConverter(track).convert();
+        TrackModell trackModell = new TrackModell();
+        trackModell.eventModells.addAll(new NoteToModellConverter(track).convert());
+        trackModell.eventModells.addAll(new MetaMessageEventToModellConverter(track).convert());
+        trackModell.eventModells.addAll(new ShortMessageEventToModellConverter(track).convert());
         return trackModell;
     }
 }

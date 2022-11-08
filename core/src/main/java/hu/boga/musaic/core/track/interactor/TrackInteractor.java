@@ -1,7 +1,7 @@
 package hu.boga.musaic.core.track.interactor;
 
 import hu.boga.musaic.core.InMemorySequenceModellStore;
-import hu.boga.musaic.core.modell.NoteModell;
+import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
@@ -34,7 +34,7 @@ public class TrackInteractor implements TrackBoundaryIn {
     @Override
     public void updateTrackName(TrackDto trackDto) {
         InMemorySequenceModellStore.getTrackById(trackDto.id).ifPresent(trackModell -> {
-            trackModell.name = trackDto.name;
+            trackModell.setName(trackDto.name);
         });
         showTrack(trackDto.id);
     }
@@ -52,7 +52,7 @@ public class TrackInteractor implements TrackBoundaryIn {
         InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
             trackModell.program = program;
             trackModell.channel = channel;
-            trackModell.notes.forEach(note -> note.channel = channel);
+            trackModell.getNotes().forEach(note -> note.channel = channel);
         });
         showTrack(trackId);
     }
@@ -77,7 +77,7 @@ public class TrackInteractor implements TrackBoundaryIn {
                 LOG.debug("track: {}", trackModell.getId());
                 Arrays.stream(notes).forEach(noteDto -> {
                     LOG.debug("deleting note: {}", noteDto.id);
-                    trackModell.notes.removeIf(noteModell -> noteModell.getId().equals(noteDto.id));
+                    trackModell.eventModells.removeIf(noteModell -> noteModell.getId().equals(noteDto.id));
                 });
             });
         });
@@ -87,7 +87,7 @@ public class TrackInteractor implements TrackBoundaryIn {
     @Override
     public void moveNote(String noteId, int newTick) {
         InMemorySequenceModellStore.getTrackByNoteId(noteId).ifPresent(trackModell -> {
-            trackModell.gtNoteModellById(noteId).ifPresent(noteModell -> {
+            trackModell.getNoteModellById(noteId).ifPresent(noteModell -> {
                 noteModell.tick = newTick;
             });
             showTrack(trackModell.getId());
@@ -117,7 +117,7 @@ public class TrackInteractor implements TrackBoundaryIn {
     private void addNotesToTrack(String trackId, int tick, int pitch, int length, int channel, ChordType chordType, SequenceModell sequenceModell, TrackModell trackModell) {
         final int computedLength = length * sequenceModell.getTicksIn32nds();
         List<NoteModell> notes = getNotesToAdd(tick, pitch, chordType, computedLength, channel);
-        trackModell.notes.addAll(notes);
+        trackModell.eventModells.addAll(notes);
     }
 
     private List<NoteModell> getNotesToAdd(int tick, int pitch, ChordType chordType, int computedLength, int channel) {

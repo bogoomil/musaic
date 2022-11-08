@@ -1,8 +1,6 @@
 package hu.boga.musaic.core.modell;
 
-import hu.boga.musaic.core.modell.NoteModell;
-import hu.boga.musaic.core.modell.SequenceModell;
-import hu.boga.musaic.core.modell.TrackModell;
+import hu.boga.musaic.core.modell.events.NoteModell;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +17,7 @@ class SequenceModellTest {
     void setUp() {
         trackModell = new TrackModell();
         NoteModell noteModell = new NoteModell(0,1,1,100, 0);
-        trackModell.notes.add(noteModell);
+        trackModell.eventModells.add(noteModell);
 
         modell = new SequenceModell();
         modell.tracks.add(trackModell);

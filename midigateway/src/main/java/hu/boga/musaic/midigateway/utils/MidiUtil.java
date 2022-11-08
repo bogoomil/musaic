@@ -14,7 +14,7 @@ public class MidiUtil {
         throw new UnsupportedOperationException();
     }
 
-    protected static MidiEvent createMetaEvent(final long tick, final int type, final byte[] array) {
+    public static MidiEvent createMidiEventMetaMessage(final long tick, final int type, final byte[] array) {
         final MetaMessage metaMessage = new MetaMessage();
         try {
             metaMessage.setMessage(type, array, array.length);
@@ -31,17 +31,22 @@ public class MidiUtil {
     }
 
     protected static List<MidiEvent> getMetaEventsByType(Track track, int type) {
-        List<MidiEvent> events = new ArrayList<>();
-        for (int i = 0; i < track.size(); i++) {
-            MidiEvent event = track.get(i);
-            if (event.getMessage() instanceof MetaMessage && ((MetaMessage) event.getMessage()).getType() == type) {
-                events.add(event);
-            }
-        }
-        return events;
+        return getMidiEventsMetaMessage(track)
+                .stream()
+                .filter(midiEvent -> ((MetaMessage)midiEvent.getMessage()).getType() == type)
+                .collect(Collectors.toList());
     }
 
-    protected static void addShortMessage(final Track track, final int tick, final int command, final int channel, final int data1, final int data2) {
+    protected static void addMidiEventShortMessage(final Track track, final int tick, final int command, final int channel, final int data1, final int data2) {
+        final MidiEvent event = createMidiEventShortMessage(tick, command, channel, data1, data2);
+        track.add(event);
+    }
+
+    protected static void addMidiEventMetaMessage(final Track track, int tick, int type, byte[] data){
+        final MidiEvent event = createMidiEventMetaMessage(tick, type, data);
+    }
+
+    public static MidiEvent createMidiEventShortMessage(int tick, int command, int channel, int data1, int data2) {
         final ShortMessage shortMessage = new ShortMessage();
         try {
             shortMessage.setMessage(command, channel, data1, data2);
@@ -49,26 +54,40 @@ public class MidiUtil {
             throw new MusaicException(e.getMessage(), e);
         }
         final MidiEvent event = new MidiEvent(shortMessage, tick);
-        track.add(event);
+        return event;
     }
 
-    public static void removeEvents(Track track, final List<MidiEvent> events) {
-        events.forEach(track::remove);
-    }
+//    public static void removeEvents(Track track, final List<MidiEvent> events) {
+//        events.forEach(track::remove);
+//    }
 
-    protected static List<MidiMessage> getMidiMessagesByCommand(final Track track, final int command) {
-        return getMidiEventsByCommand(track, command).stream().map(MidiEvent::getMessage).collect(Collectors.toList());
-    }
+//    protected static List<MidiMessage> getShortMessagesByCommand(final Track track, final int command) {
+//        return getMidiEventsByShortMessageCommand(track, command).stream().map(MidiEvent::getMessage).collect(Collectors.toList());
+//    }
 
-    public static List<MidiEvent> getMidiEventsByCommand(final Track track, final int command) {
+//    public static List<MidiEvent> getMidiEventsByShortMessageCommand(final Track track, final int command) {
+//        return getMidiEventsShortMessage(track)
+//                .stream().filter(midiEvent -> ((ShortMessage)midiEvent.getMessage()).getCommand() == command)
+//                .collect(Collectors.toList());
+//    }
+
+    public static List<MidiEvent> getMidiEventsShortMessage(Track track){
         final List<MidiEvent> retVal = new ArrayList<>();
         for (int i = 0; i < track.size(); i++) {
             final MidiEvent event = track.get(i);
             if (event.getMessage() instanceof ShortMessage) {
-                final ShortMessage msg = (ShortMessage) event.getMessage();
-                if (msg.getCommand() == command) {
-                    retVal.add(event);
-                }
+                retVal.add(event);
+            }
+        }
+        return retVal;
+    }
+
+    public static List<MidiEvent> getMidiEventsMetaMessage(Track track){
+        final List<MidiEvent> retVal = new ArrayList<>();
+        for (int i = 0; i < track.size(); i++) {
+            final MidiEvent event = track.get(i);
+            if (event.getMessage() instanceof MetaMessage) {
+                retVal.add(event);
             }
         }
         return retVal;

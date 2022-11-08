@@ -33,8 +33,8 @@ public class NoteUtil extends MidiUtil {
     }
 
     public static void addNote(final Track track, final int tick, final int pitch, final int length, int volume, int channel) {
-        addShortMessage(track, tick, ShortMessage.NOTE_ON, channel, pitch, volume);
-        addShortMessage(track, tick + length, ShortMessage.NOTE_OFF, channel, pitch, 0);
+        addMidiEventShortMessage(track, tick, ShortMessage.NOTE_ON, channel, pitch, volume);
+        addMidiEventShortMessage(track, tick + length, ShortMessage.NOTE_OFF, channel, pitch, 0);
     }
 
     public static void moveNote(Track track, final int tick, final int pitch, final int newTick) {
@@ -43,8 +43,8 @@ public class NoteUtil extends MidiUtil {
         final MidiEvent noteOff = findMatchingNoteOff(track, index, noteOn);
         final long length = noteOff.getTick() - noteOn.getTick();
         final ShortMessage shortMessage = (ShortMessage) noteOn.getMessage();
-        addShortMessage(track, newTick, ShortMessage.NOTE_ON, shortMessage.getChannel(), shortMessage.getData1(), shortMessage.getData2());
-        addShortMessage(track, (int) (newTick + length), ShortMessage.NOTE_OFF, shortMessage.getChannel(), shortMessage.getData1(), shortMessage.getData2());
+        addMidiEventShortMessage(track, newTick, ShortMessage.NOTE_ON, shortMessage.getChannel(), shortMessage.getData1(), shortMessage.getData2());
+        addMidiEventShortMessage(track, (int) (newTick + length), ShortMessage.NOTE_OFF, shortMessage.getChannel(), shortMessage.getData1(), shortMessage.getData2());
         track.remove(noteOn);
         track.remove(noteOff);
     }
@@ -67,6 +67,10 @@ public class NoteUtil extends MidiUtil {
 
     public static int getVelocity(MidiMessage noteOnOff) {
         return noteOnOff.getMessage()[2];
+    }
+
+    public static boolean isNoteOnOffEvent(MidiEvent event){
+        return isNoteOnEvent(event) || isNoteOffEvent(event);
     }
 
     private static int indexOfNoteOnEvent(Track track, final int tick, final int pitch) {

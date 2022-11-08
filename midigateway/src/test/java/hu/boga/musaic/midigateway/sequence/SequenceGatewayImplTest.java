@@ -6,15 +6,10 @@ import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.midigateway.Player;
 import hu.boga.musaic.midigateway.Saver;
-import hu.boga.musaic.midigateway.utils.TempoUtil;
-import org.jeasy.random.EasyRandom;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-
-import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
@@ -34,7 +29,7 @@ class SequenceGatewayImplTest {
         sequenceModell.division = SequenceModell.DEFAULT_DIVISION;
         sequenceModell.resolution = SequenceModell.DEFAULT_RESOLUTION;
         trackModell = new TrackModell();
-        trackModell.name = "teszt";
+        trackModell.setName("teszt");
         sequenceModell.tracks.add(trackModell);
 
         gateway = new SequenceGatewayImpl();
@@ -45,7 +40,7 @@ class SequenceGatewayImplTest {
         SequenceModell model = gateway.open(PATH);
         assertNotNull(model);
         assertEquals(1, model.tracks.size());
-        assertEquals(3, model.tracks.get(0).notes.size());
+        assertEquals(6, model.tracks.get(0).eventModells.size());
     }
 
     @Test

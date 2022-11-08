@@ -1,6 +1,5 @@
-package hu.boga.musaic.midigateway;
+package hu.boga.musaic.midigateway.converters;
 
-import hu.boga.musaic.midigateway.utils.TempoUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

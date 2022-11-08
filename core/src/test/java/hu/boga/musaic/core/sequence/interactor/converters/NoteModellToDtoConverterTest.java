@@ -1,8 +1,7 @@
 package hu.boga.musaic.core.sequence.interactor.converters;
 
-import hu.boga.musaic.core.modell.NoteModell;
+import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
-import hu.boga.musaic.core.sequence.interactor.converters.NoteModellToDtoConverter;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

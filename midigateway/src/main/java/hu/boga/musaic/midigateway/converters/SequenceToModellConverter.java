@@ -17,12 +17,7 @@ public class SequenceToModellConverter {
         SequenceModell model = new SequenceModell();
         model.division = sequence.getDivisionType();
         model.resolution = sequence.getResolution();
-        model.tempo = getTempo();
-
+        model.tempo = TempoUtil.getTempo(sequence);
         return model;
-    }
-
-    private float getTempo() {
-        return TempoUtil.getTempo(sequence);
     }
 }
