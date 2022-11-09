@@ -30,7 +30,6 @@ class TrackModelltoDtoConverterTest {
         TrackDto dto = converter.convert();
         assertEquals(trackModell.eventModells.size(), dto.notes.size());
         assertEquals(trackModell.channel, dto.channel);
-        assertEquals(trackModell.program, dto.program);
         assertEquals(trackModell.getId(), dto.id);
         assertEquals(trackModell.getName(), dto.name);
 

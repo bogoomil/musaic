@@ -82,6 +82,20 @@ public class SequenceInteractor implements SequenceBoundaryIn {
         boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());
     }
 
+    @Override
+    public void updateChannelColorMapping(String sequenceId, int channel, String color) {
+        SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId);
+        modell.channelToColorMapping[channel] = color;
+        boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());
+    }
+
+    @Override
+    public void updateChannelToProgramMappings(String id, int i, int selectedProgram) {
+        SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(id);
+        modell.updateChannelToProgramMapping(i, selectedProgram);
+        boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());
+    }
+
     private SequenceModell createNewSequence(){
         SequenceModell modell = new SequenceModell();
         InMemorySequenceModellStore.SEQUENCE_MODELS.put(modell.getId(), modell);

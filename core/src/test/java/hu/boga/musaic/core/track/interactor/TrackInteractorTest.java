@@ -79,10 +79,9 @@ class TrackInteractorTest {
     }
 
     @Test
-    void updateTrackProgram() {
-        trackInteractor.updateTrackProgram(trackModell.getId(), 3, 4);
+    void updateTrackhannel() {
+        trackInteractor.updateTrackChannel(trackModell.getId(), 4);
         Mockito.verify(boundaryOut).setTrackDto(Mockito.any(), eq(modell.resolution));
-        assertEquals(3, trackModell.program);
         assertEquals(4, trackModell.channel);
         assertEquals(4, noteModell.channel);
 

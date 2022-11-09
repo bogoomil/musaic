@@ -11,7 +11,6 @@ import hu.boga.musaic.gui.trackeditor.events.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.slf4j.Logger;
@@ -28,8 +27,6 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(TrackEditor.class);
 
-    @FXML
-    public InstrumentCombo instrumentCombo;
     @FXML
     public TitledPane titledPane;
     @FXML
@@ -51,11 +48,11 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
     private int currentChannel;
 
     ChangeListener<? super Integer> channelComboListener = (observable, oldValue, newValue) -> {
-        programChanged(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex());
+        tracksChnnelchanged(trackDto.id, channelCombo.getSelectionModel().getSelectedIndex());
     };
 
     ChangeListener<? super Instrument> instrumentComboListener = (observable, oldValue, newValue) -> {
-        programChanged(trackDto.id, instrumentCombo.getSelectedProgram(), channelCombo.getSelectionModel().getSelectedIndex());
+        tracksChnnelchanged(trackDto.id, channelCombo.getSelectionModel().getSelectedIndex());
     };
 
     ChangeListener<? super Boolean> mutedListener = (observable, oldValue, newValue) -> {
@@ -106,13 +103,11 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
     public void setTrackDto(TrackDto trackDto, int resolution) {
 
         channelCombo.valueProperty().removeListener(channelComboListener);
-        instrumentCombo.valueProperty().removeListener(instrumentComboListener);
         cbMuted.selectedProperty().removeListener(mutedListener);
         this.trackDto = trackDto;
 
-        titledPane.setText("ch: " + trackDto.channel + " pr:" + trackDto.program + " notes: " + trackDto.notes.size() + " (" + trackDto.id + ")");
+        titledPane.setText("ch: " + trackDto.channel + " notes: " + trackDto.notes.size() + " (" + trackDto.id + ")");
         channelCombo.getSelectionModel().select(trackDto.channel);
-        instrumentCombo.selectInstrument(trackDto.program);
         trackName.setText(trackDto.name);
 
         trackEditorPanel.setResolution(resolution);
@@ -121,7 +116,6 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
         cbMuted.setSelected(trackDto.muted);
 
         channelCombo.valueProperty().addListener(channelComboListener);
-        instrumentCombo.valueProperty().addListener(instrumentComboListener);
         cbMuted.selectedProperty().addListener(mutedListener);
 
 
@@ -164,8 +158,8 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
         trackEditorPanel.setCurrentTone(event.getTone());
     }
 
-    public void programChanged(final String trackId, final int program, final int channel){
+    public void tracksChnnelchanged(final String trackId, final int channel){
         currentChannel = channel;
-        trackBoundaryIn.updateTrackProgram(trackId, program, channel);
+        trackBoundaryIn.updateTrackChannel(trackId, channel);
     }
 }

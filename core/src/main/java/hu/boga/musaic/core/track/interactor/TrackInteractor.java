@@ -47,12 +47,10 @@ public class TrackInteractor implements TrackBoundaryIn {
     }
 
     @Override
-    public void updateTrackProgram(String trackId, int program, int channel) {
-        LOG.debug("updating track: {} program: {} channel: {}", trackId, program, channel);
+    public void updateTrackChannel(String trackId, int channel) {
+        LOG.debug("updating track: {}, channel: {}", trackId, channel);
         InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
-            trackModell.program = program;
             trackModell.channel = channel;
-            trackModell.getNotes().forEach(note -> note.channel = channel);
         });
         showTrack(trackId);
     }
@@ -100,7 +98,6 @@ public class TrackInteractor implements TrackBoundaryIn {
             sequenceModell.getTrackById(id).ifPresent(trackModell -> {
                 boundaryOut.setTrackDto(new TrackModelltoDtoConverter(trackModell).convert(), sequenceModell.resolution);
             });
-            LOG.debug("sequence to show: {}", sequenceModell);
         });
     }
 
@@ -116,11 +113,11 @@ public class TrackInteractor implements TrackBoundaryIn {
 
     private void addNotesToTrack(String trackId, int tick, int pitch, int length, int channel, ChordType chordType, SequenceModell sequenceModell, TrackModell trackModell) {
         final int computedLength = length * sequenceModell.getTicksIn32nds();
-        List<NoteModell> notes = getNotesToAdd(tick, pitch, chordType, computedLength, channel);
+        List<NoteModell> notes = prepareNotesToAdd(tick, pitch, chordType, computedLength, channel);
         trackModell.eventModells.addAll(notes);
     }
 
-    private List<NoteModell> getNotesToAdd(int tick, int pitch, ChordType chordType, int computedLength, int channel) {
+    private List<NoteModell> prepareNotesToAdd(int tick, int pitch, ChordType chordType, int computedLength, int channel) {
         List<NoteModell> notes = new ArrayList<>();
         if(chordType == null){
             NoteModell note = new NoteModell(pitch, tick, computedLength, 100, channel);

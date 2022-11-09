@@ -30,6 +30,9 @@ public class SequenceModellToDtoConverter {
                 .map(trackModell -> new TrackModelltoDtoConverter(trackModell).convert())
                 .collect(Collectors.toList());
 
+        dto.channelToProgramMappings = modell.getChannelToProgramMappings();
+
+        dto.channelToColorMappings = modell.channelToColorMapping;
         return dto;
     }
 }

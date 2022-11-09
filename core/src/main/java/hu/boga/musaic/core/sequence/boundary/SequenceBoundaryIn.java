@@ -14,4 +14,8 @@ public interface SequenceBoundaryIn {
     void stop();
 
     void reloadSequence(String sequenceId);
+
+    void updateChannelColorMapping(String sequenceId, int channel, String color);
+
+    void updateChannelToProgramMappings(String id, int i, int selectedProgram);
 }

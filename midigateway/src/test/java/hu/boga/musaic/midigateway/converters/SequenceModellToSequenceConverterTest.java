@@ -29,7 +29,6 @@ class SequenceModellToSequenceConverterTest {
         sequenceModell.division = SequenceModell.DEFAULT_DIVISION;
         sequenceModell.resolution = SequenceModell.DEFAULT_RESOLUTION;
         trackModell = new TrackModell();
-        trackModell.program = 12;
         trackModell.channel = 3;
         trackModell.setName("teszt");
         sequenceModell.tracks.add(trackModell);

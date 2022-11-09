@@ -17,7 +17,6 @@ public class TrackModelltoDtoConverter {
 
         dto.channel = modell.channel;
         dto.name = modell.getName();
-        dto.program = modell.program;
         dto.id = modell.getId();
         dto.muted = modell.muted;
 

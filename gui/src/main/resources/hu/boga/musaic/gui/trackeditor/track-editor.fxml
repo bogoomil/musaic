@@ -26,7 +26,6 @@
                             <Label text="Channel" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                             <ComboBox fx:id="channelCombo" prefHeight="24.0" prefWidth="114.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                             <Label text="Program" GridPane.rowIndex="1" />
-                            <InstrumentCombo fx:id="instrumentCombo" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                             <Button mnemonicParsing="false" onAction="#removeTrack" text="Track-" GridPane.columnIndex="2" />
                             <Label fx:id="zoomLabel" text="zoom" GridPane.rowIndex="2" />
                             <Slider fx:id="zoomSlider" GridPane.columnIndex="1" GridPane.rowIndex="2" />

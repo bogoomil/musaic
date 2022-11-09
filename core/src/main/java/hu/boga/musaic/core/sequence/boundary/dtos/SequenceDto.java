@@ -19,5 +19,9 @@ public class SequenceDto {
     public float tickSize;
     public float ticksPerSecond;
 
+    public int[] channelToProgramMappings;
+    public String [] channelToColorMappings;
+
+
 
 }
