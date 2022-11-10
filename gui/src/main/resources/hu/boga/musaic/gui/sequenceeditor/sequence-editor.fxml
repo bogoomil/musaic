@@ -22,7 +22,7 @@
             <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="2.0"/>
         </HBox>
     </top>
-    <left>
+    <center>
         <VBox>
             <TitledPane text="Properties" textFill="#028d00">
                 <VBox>
@@ -40,5 +40,5 @@
             </TitledPane>
             <Accordion fx:id="accordion" BorderPane.alignment="CENTER" />
         </VBox>
-    </left>
+    </center>
 </BorderPane>
