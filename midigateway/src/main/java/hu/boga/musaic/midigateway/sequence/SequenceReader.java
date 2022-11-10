@@ -41,6 +41,9 @@ public class SequenceReader {
         trackModell.eventModells.addAll(new NoteToModellConverter(track).convert());
         trackModell.eventModells.addAll(new MetaMessageEventToModellConverter(track).convert());
         trackModell.eventModells.addAll(new ShortMessageEventToModellConverter(track).convert());
+        if(!trackModell.getNotes().isEmpty()){
+            trackModell.channel = trackModell.getNotes().get(0).channel;
+        }
         return trackModell;
     }
 }

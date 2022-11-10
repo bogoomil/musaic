@@ -15,7 +15,7 @@ public class SequenceModell extends BaseModell{
     public static final int DEFAULT_DIVISION = 0;
     public static final int DEFAULT_RESOLUTION = 128;
 
-    public List<TrackModell> tracks = Arrays.asList(new TrackModell());
+    public List<TrackModell> tracks = new ArrayList(Arrays.asList(new TrackModell()));
     public int resolution = DEFAULT_RESOLUTION;
     public float division = DEFAULT_DIVISION;
     public float tempo = DEFAULT_TEMPO;

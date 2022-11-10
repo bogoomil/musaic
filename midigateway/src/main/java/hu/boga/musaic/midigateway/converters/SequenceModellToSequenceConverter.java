@@ -46,7 +46,7 @@ public class SequenceModellToSequenceConverter {
 
     private void convertNotes(TrackModell trackModell, Track track) {
         trackModell.getNotes().forEach(noteModell -> {
-            NoteUtil.addNote(track, (int) noteModell.tick, noteModell.midiCode, (int) noteModell.length, noteModell.velocity, noteModell.channel);
+            NoteUtil.addNote(track, (int) noteModell.tick, noteModell.midiCode, (int) noteModell.length, noteModell.velocity, trackModell.channel);
         });
     }
 
