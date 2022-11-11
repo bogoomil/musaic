@@ -32,35 +32,10 @@ public class TrackInteractor implements TrackBoundaryIn {
     }
 
     @Override
-    public void updateTrackName(TrackDto trackDto) {
-        InMemorySequenceModellStore.getTrackById(trackDto.id).ifPresent(trackModell -> {
-            trackModell.setName(trackDto.name);
-        });
-        showTrack(trackDto.id);
-    }
-
-    @Override
-    public void removeTrack(String trackId) {
-        InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
-            sequenceModell.tracks.removeIf(trackModell -> trackModell.getId().equals(trackId));
-        });
-    }
-
-    @Override
-    public void updateTrackChannel(String trackId, int channel) {
-        LOG.debug("updating track: {}, channel: {}", trackId, channel);
-        InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
-            trackModell.channel = channel;
-        });
-        showTrack(trackId);
-    }
-
-
-    @Override
-    public void addChord(String trackId, int tick, int pitch, int length, int channel, ChordType chordType) {
+    public void addChord(String trackId, int tick, int pitch, int length, ChordType chordType) {
         InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
             sequenceModell.getTrackById(trackId).ifPresent(trackModell -> {
-                addNotesToTrack(trackId, tick, pitch, length, channel, chordType, sequenceModell, trackModell);
+                addNotesToTrack(trackId, tick, pitch, length, chordType, sequenceModell, trackModell);
             });
         });
         showTrack(trackId);
@@ -101,19 +76,10 @@ public class TrackInteractor implements TrackBoundaryIn {
         });
     }
 
-    @Override
-    public void setMuted(String id, boolean muted) {
-        InMemorySequenceModellStore.getSequenceByTrackId(id).ifPresent(sequenceModell -> {
-            sequenceModell.getTrackById(id).ifPresent(trackModell -> {
-               trackModell.muted = muted;
-            });
-            LOG.debug("sequence to show: {}", sequenceModell);
-        });
-    }
 
-    private void addNotesToTrack(String trackId, int tick, int pitch, int length, int channel, ChordType chordType, SequenceModell sequenceModell, TrackModell trackModell) {
+    private void addNotesToTrack(String trackId, int tick, int pitch, int length, ChordType chordType, SequenceModell sequenceModell, TrackModell trackModell) {
         final int computedLength = length * sequenceModell.getTicksIn32nds();
-        List<NoteModell> notes = prepareNotesToAdd(tick, pitch, chordType, computedLength, channel);
+        List<NoteModell> notes = prepareNotesToAdd(tick, pitch, chordType, computedLength, trackModell.channel);
         trackModell.eventModells.addAll(notes);
     }
 

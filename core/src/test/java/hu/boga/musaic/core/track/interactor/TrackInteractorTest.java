@@ -54,42 +54,8 @@ class TrackInteractorTest {
     }
 
     @Test
-    void updateTrackName() {
-        TrackDto dto = new TrackDto();
-        dto.id = trackModell.getId();
-        dto.name = NEW_NAME;
-        trackInteractor.updateTrackName(dto);
-        Mockito.verify(boundaryOut).setTrackDto(Mockito.any(), eq(modell.resolution));
-
-        assertEquals(NEW_NAME, trackModell.getName());
-
-    }
-
-    @Test
-    void removeTrack() {
-        modell.tracks.add(new TrackModell());
-
-        try (MockedStatic<InMemorySequenceModellStore> mockedStatic = Mockito.mockStatic(InMemorySequenceModellStore.class)) {
-            mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceByTrackId(trackModell.getId())).thenReturn(Optional.of(modell));
-            mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceById(modell.getId())).thenReturn(modell);
-            trackInteractor.removeTrack(trackModell.getId());
-
-            assertEquals(1, modell.tracks.size());
-        }
-    }
-
-    @Test
-    void updateTrackhannel() {
-        trackInteractor.updateTrackChannel(trackModell.getId(), 4);
-        Mockito.verify(boundaryOut).setTrackDto(Mockito.any(), eq(modell.resolution));
-        assertEquals(4, trackModell.channel);
-        assertEquals(4, noteModell.channel);
-
-    }
-
-    @Test
     void addSingleNote() {
-        trackInteractor.addChord(trackModell.getId(), 0, 12, 32, 0, null);
+        trackInteractor.addChord(trackModell.getId(), 0, 12, 32, null);
         ArgumentCaptor<TrackDto> captor = ArgumentCaptor.forClass(TrackDto.class);
         Mockito.verify(boundaryOut).setTrackDto(captor.capture(), eq(modell.resolution));
         assertEquals(2, captor.getValue().notes.size());
@@ -98,7 +64,7 @@ class TrackInteractorTest {
 
     @Test
     void addChord() {
-        trackInteractor.addChord(trackModell.getId(), 0, 12, 32, 0, ChordType.MAJ);
+        trackInteractor.addChord(trackModell.getId(), 0, 12, 32, ChordType.MAJ);
         ArgumentCaptor<TrackDto> captor = ArgumentCaptor.forClass(TrackDto.class);
         Mockito.verify(boundaryOut).setTrackDto(captor.capture(), eq(modell.resolution));
         assertEquals(4, captor.getValue().notes.size());
@@ -107,7 +73,7 @@ class TrackInteractorTest {
 
     @Test
     void deleteNotes() {
-        trackInteractor.addChord(trackModell.getId(), 345, 23, 512, 0, null);
+        trackInteractor.addChord(trackModell.getId(), 345, 23, 512, null);
 
         NoteDto[] dtos = getNoteDtos(trackModell.eventModells.get(0).getId());
 
@@ -138,11 +104,5 @@ class TrackInteractorTest {
     void showTrack(){
         trackInteractor.showTrack(trackModell.getId());
         Mockito.verify(boundaryOut).setTrackDto(Mockito.any(), eq(modell.resolution));
-    }
-
-    @Test
-    void setMuted(){
-        trackInteractor.setMuted(trackModell.getId(), true);
-        assertTrue(trackModell.muted);
     }
 }

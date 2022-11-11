@@ -6,16 +6,10 @@ public interface SequenceBoundaryIn {
     void open(String path);
     void play(String sequenceId);
     void save(String sequenceId, String path);
-
     void setTempo(String sequenceId, int intValue);
-
     void addTrack(String sequenceId);
-
     void stop();
-
     void reloadSequence(String sequenceId);
-
     void updateChannelColorMapping(String sequenceId, int channel, String color);
-
-    void updateChannelToProgramMappings(String id, int i, int selectedProgram);
+    void updateChannelToProgramMappings(String sequenceId, int channel, int program);
 }

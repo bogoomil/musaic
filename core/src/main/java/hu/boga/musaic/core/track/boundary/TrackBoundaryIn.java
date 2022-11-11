@@ -5,13 +5,9 @@ import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.musictheory.enums.ChordType;
 
 public interface TrackBoundaryIn {
-    void updateTrackName(TrackDto trackDto);
-    void removeTrack(String id);
-    void updateTrackChannel(String trackId,int channel);
-    void addChord(String id, int tick, int pitch, int length, int channel, ChordType chordType);
-    void deleteNotes(String id, NoteDto[] notes);
+    void showTrack(String trackId);
+    void addChord(String trackId, int tick, int pitch, int length, ChordType chordType);
+    void deleteNotes(String trackId, NoteDto[] notes);
     void moveNote(String noteId, int newTick);
-    void showTrack(String id);
 
-    void setMuted(String id, boolean muted);
 }

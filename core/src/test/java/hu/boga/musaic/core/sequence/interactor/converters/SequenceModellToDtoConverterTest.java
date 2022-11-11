@@ -41,6 +41,5 @@ class SequenceModellToDtoConverterTest {
         assertEquals(dto.ticksIn32nds, modell.getTicksIn32nds());
         assertEquals(dto.tickSize, modell.getTickSize());
 
-        assertEquals(dto.tracks.get(0).id, trackModell.getId());
     }
 }

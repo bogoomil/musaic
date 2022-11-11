@@ -21,12 +21,6 @@ class TrackModellTest {
     }
 
     @Test
-    void testToString() {
-        assertTrue(trackModell.toString().contains(TRACK_TO_STRING));
-//        assertEquals(TRACK_TO_STRING, trackModell.toString());
-    }
-
-    @Test
     void getTickLength() {
         assertEquals(2, trackModell.getTickLength());
     }
