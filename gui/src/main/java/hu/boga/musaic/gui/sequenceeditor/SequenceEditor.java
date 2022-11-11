@@ -38,7 +38,6 @@ public class SequenceEditor implements SequenceBoundaryOut {
     private final SequenceBoundaryIn boundaryIn;
 
 
-
     public Label division;
     public Label resolution;
     public Label tickLength;
@@ -55,9 +54,11 @@ public class SequenceEditor implements SequenceBoundaryOut {
 
     public final EventBus eventBus = new EventBus();
     public VBox propertiesVBox;
+    public ComboBox tracksCombo;
+    public StackPane stackPane;
 
-    @FXML
-    private Accordion accordion;
+//    @FXML
+//    private Accordion accordion;
 
     private SequenceDto sequenceDto;
 
@@ -86,7 +87,7 @@ public class SequenceEditor implements SequenceBoundaryOut {
 
     private void initTemposSettings(Number newValue) {
         tempoLabel.setText("Tempo: " + newValue.intValue());
-        if(sequenceDto.id != null){
+        if (sequenceDto.id != null) {
             boundaryIn.setTempo(sequenceDto.id, newValue.intValue());
         }
     }
@@ -123,38 +124,40 @@ public class SequenceEditor implements SequenceBoundaryOut {
         this.tempoLabel.setText("Tempo: " + sequenceDto.tempo);
 
         this.propertiesVBox.getChildren().clear();
+        this.tracksCombo.getItems().clear();
 
-        for(int i = 0; i < 16; i++){
-            createChannelMappingPanel(i);
-        }
-        accordion.getPanes().clear();
+        createChannelMappingPanel();
+
+        stackPane.getChildren().clear();
         sequenceDto.tracks.forEach(trackDto -> displayNewTrack(trackDto));
     }
 
-    private void createChannelMappingPanel(int i) {
-        InstrumentCombo instrCombo = new InstrumentCombo();
-        instrCombo.selectInstrument(sequenceDto.channelToProgramMappings[i]);
+    private void createChannelMappingPanel() {
+        for (int i = 0; i < 16; i++) {
+            HBox hBox = new HBox();
+            InstrumentCombo instrCombo = new InstrumentCombo();
+            instrCombo.selectInstrument(sequenceDto.channelToProgramMappings[i]);
 
-        instrCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
-            boundaryIn.updateChannelToProgramMappings(sequenceDto.id, i, instrCombo.getSelectedProgram());
-        });
-
-        HBox hBox = new HBox();
-        hBox.getChildren().add(instrCombo);
-        ColorPicker colorPicker = new ColorPicker();
-        if(sequenceDto.channelToColorMappings[i] != null){
-            instrCombo.setBackground(new Background(
-                    new BackgroundFill(
-                            Color.web(sequenceDto.channelToColorMappings[i]),
-                            CornerRadii.EMPTY,
-                            Insets.EMPTY)));
-            colorPicker.setValue(Color.web(sequenceDto.channelToColorMappings[i]));
+            int finalI = i;
+            instrCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
+                boundaryIn.updateChannelToProgramMappings(sequenceDto.id, finalI, instrCombo.getSelectedProgram());
+            });
+            hBox.getChildren().add(instrCombo);
+            ColorPicker colorPicker = new ColorPicker();
+            if (sequenceDto.channelToColorMappings[i] != null) {
+                instrCombo.setBackground(new Background(
+                        new BackgroundFill(
+                                Color.web(sequenceDto.channelToColorMappings[i]),
+                                CornerRadii.EMPTY,
+                                Insets.EMPTY)));
+                colorPicker.setValue(Color.web(sequenceDto.channelToColorMappings[i]));
+            }
+            hBox.getChildren().add(colorPicker);
+            colorPicker.setOnAction(event -> {
+                boundaryIn.updateChannelColorMapping(sequenceDto.id, finalI, colorPicker.getValue().toString());
+            });
+            propertiesVBox.getChildren().add(hBox);
         }
-        hBox.getChildren().add(colorPicker);
-        colorPicker.setOnAction(event -> {
-            boundaryIn.updateChannelColorMapping(sequenceDto.id, i, colorPicker.getValue().toString());
-        });
-        propertiesVBox.getChildren().add(hBox);
     }
 
     public void initSequence() {
@@ -169,7 +172,7 @@ public class SequenceEditor implements SequenceBoundaryOut {
     public void displayNewTrack(TrackDto trackDto) {
         FXMLLoader loader = new FXMLLoader(TrackEditor.class.getResource("track-editor.fxml"));
         loader.setControllerFactory(GuiceModule.INJECTOR::getInstance);
-        TitledPane trackEditorPanel = null;
+        BorderPane trackEditorPanel = null;
         try {
             trackEditorPanel = loader.load();
         } catch (IOException e) {
@@ -182,7 +185,18 @@ public class SequenceEditor implements SequenceBoundaryOut {
 
         eventBus.register(controller);
 
-        accordion.getPanes().add(trackEditorPanel);
+        stackPane.getChildren().add(trackEditorPanel);
+
+        tracksCombo.getItems().add(trackDto.name == null || "".equals(trackDto.name) ? trackDto.id : trackDto.name);
+        tracksCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
+            stackPane.getChildren().forEach(child -> child.setVisible(false));
+            int index = tracksCombo.getSelectionModel().getSelectedIndex();
+            if(index > 0){
+                stackPane.getChildren().get(index).setVisible(true);
+            }
+        });
+
+
     }
 
     public void onNewTrackButtonClicked(ActionEvent actionEvent) {
@@ -191,7 +205,7 @@ public class SequenceEditor implements SequenceBoundaryOut {
 
     @Subscribe
     public void onTrackDeletedEvent(TrackDeletedEvent event) {
-        accordion.getPanes().removeIf(titledPane -> !titledPane.getText().equals(PROPERTIES_PANEL_TEXT));
+        stackPane.getChildren().clear();
         boundaryIn.reloadSequence(sequenceDto.id);
     }
 

@@ -13,6 +13,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,8 +29,8 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(TrackEditor.class);
 
-    @FXML
-    public TitledPane titledPane;
+//    @FXML
+//    public TitledPane titledPane;
     @FXML
     public TrackEditorPanel trackEditorPanel;
     @FXML
@@ -38,6 +40,8 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
     @FXML
     public Label zoomLabel;
     public CheckBox cbMuted;
+
+    public BorderPane borderPane;
     @FXML
     ComboBox<Integer> channelCombo;
 
@@ -106,7 +110,7 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
         cbMuted.selectedProperty().removeListener(mutedListener);
         this.trackDto = trackDto;
 
-        titledPane.setText("ch: " + trackDto.channel + " notes: " + trackDto.notes.size() + " (" + trackDto.id + ")");
+//        anchorPane.setText("ch: " + trackDto.channel + " notes: " + trackDto.notes.size() + " (" + trackDto.id + ")");
         channelCombo.getSelectionModel().select(trackDto.channel);
         trackName.setText(trackDto.name);
 

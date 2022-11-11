@@ -22,7 +22,7 @@
             <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="2.0"/>
         </HBox>
     </top>
-    <center>
+    <left>
         <VBox>
             <TitledPane text="Properties" textFill="#028d00">
                 <VBox>
@@ -38,7 +38,10 @@
                     <VBox fx:id="propertiesVBox"></VBox>
                 </VBox>
             </TitledPane>
-            <Accordion fx:id="accordion" BorderPane.alignment="CENTER" />
+            <ComboBox fx:id="tracksCombo"/>
         </VBox>
+    </left>
+    <center>
+        <StackPane fx:id="stackPane" BorderPane.alignment="CENTER" />
     </center>
 </BorderPane>
