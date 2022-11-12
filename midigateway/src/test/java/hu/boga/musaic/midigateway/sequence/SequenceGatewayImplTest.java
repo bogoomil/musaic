@@ -39,8 +39,8 @@ class SequenceGatewayImplTest {
     void open() {
         SequenceModell model = gateway.open(PATH);
         assertNotNull(model);
-        assertEquals(1, model.tracks.size());
-        assertEquals(6, model.tracks.get(0).eventModells.size());
+        assertEquals(2, model.tracks.size());
+        assertEquals(6, model.tracks.get(1).eventModells.size());
     }
 
     @Test
