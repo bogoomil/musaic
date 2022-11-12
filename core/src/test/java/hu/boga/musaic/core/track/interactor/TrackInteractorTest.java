@@ -12,10 +12,7 @@ import hu.boga.musaic.musictheory.enums.ChordType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -57,7 +54,7 @@ class TrackInteractorTest {
     void addSingleNote() {
         trackInteractor.addChord(trackModell.getId(), 0, 12, 32, null);
         ArgumentCaptor<TrackDto> captor = ArgumentCaptor.forClass(TrackDto.class);
-        Mockito.verify(boundaryOut).setTrackDto(captor.capture(), eq(modell.resolution));
+        Mockito.verify(boundaryOut).displayTrack(captor.capture());
         assertEquals(2, captor.getValue().notes.size());
         assertEquals(512, captor.getValue().notes.get(1).length);
     }
@@ -66,7 +63,7 @@ class TrackInteractorTest {
     void addChord() {
         trackInteractor.addChord(trackModell.getId(), 0, 12, 32, ChordType.MAJ);
         ArgumentCaptor<TrackDto> captor = ArgumentCaptor.forClass(TrackDto.class);
-        Mockito.verify(boundaryOut).setTrackDto(captor.capture(), eq(modell.resolution));
+        Mockito.verify(boundaryOut).displayTrack(captor.capture());
         assertEquals(4, captor.getValue().notes.size());
 
     }
@@ -79,7 +76,7 @@ class TrackInteractorTest {
 
         trackInteractor.deleteNotes(trackModell.getId(), dtos);
         ArgumentCaptor<TrackDto> captor = ArgumentCaptor.forClass(TrackDto.class);
-        Mockito.verify(boundaryOut, times(2)).setTrackDto(captor.capture(), eq(modell.resolution));
+        Mockito.verify(boundaryOut, times(2)).displayTrack(captor.capture());
         assertEquals(1, captor.getValue().notes.size());
     }
 
@@ -96,13 +93,13 @@ class TrackInteractorTest {
     @Test
     void movNote() {
         trackInteractor.moveNote(noteModell.getId(), 100);
-        Mockito.verify(boundaryOut).setTrackDto(Mockito.any(), eq(modell.resolution));
+        Mockito.verify(boundaryOut).displayTrack(Mockito.any());
         assertEquals(100, noteModell.tick);
     }
 
     @Test
     void showTrack(){
         trackInteractor.showTrack(trackModell.getId());
-        Mockito.verify(boundaryOut).setTrackDto(Mockito.any(), eq(modell.resolution));
+        Mockito.verify(boundaryOut).displayTrack(Mockito.any());
     }
 }

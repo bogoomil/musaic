@@ -43,6 +43,7 @@ public class TrackPropertiesInteractor implements TrackPropertiesBoundaryIn {
 
     @Override
     public void updateTrackName(TrackDto trackDto) {
+        LOG.debug("updating track name: {}", trackDto.name);
         InMemorySequenceModellStore.getTrackById(trackDto.id).ifPresent(trackModell -> {
             trackModell.setName(trackDto.name);
             boundaryOut.displayTrack(new TrackModelltoDtoConverter(trackModell).convert());
@@ -56,6 +57,4 @@ public class TrackPropertiesInteractor implements TrackPropertiesBoundaryIn {
             sequenceModell.tracks.removeIf(trackModell -> trackModell.getId().equals(trackId));
         });
     }
-
-
 }

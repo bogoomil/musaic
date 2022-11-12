@@ -7,7 +7,6 @@ import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
-import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.core.track.interactor.converters.TrackModelltoDtoConverter;
 import hu.boga.musaic.musictheory.Chord;
 import hu.boga.musaic.musictheory.Pitch;
@@ -71,7 +70,7 @@ public class TrackInteractor implements TrackBoundaryIn {
     public void showTrack(String id) {
         InMemorySequenceModellStore.getSequenceByTrackId(id).ifPresent(sequenceModell -> {
             sequenceModell.getTrackById(id).ifPresent(trackModell -> {
-                boundaryOut.setTrackDto(new TrackModelltoDtoConverter(trackModell).convert(), sequenceModell.resolution);
+                boundaryOut.displayTrack(new TrackModelltoDtoConverter(trackModell).convert());
             });
         });
     }
