@@ -8,15 +8,11 @@ import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.gui.controls.InstrumentCombo;
-import hu.boga.musaic.gui.controls.ModeCombo;
-import hu.boga.musaic.gui.controls.NoteNameCombo;
 import hu.boga.musaic.gui.controls.TempoSlider;
 import hu.boga.musaic.gui.trackeditor.TrackEditor;
-import hu.boga.musaic.gui.trackeditor.events.ModeChangedEvent;
-import hu.boga.musaic.gui.trackeditor.events.RootChangedEvent;
+import hu.boga.musaic.gui.trackeditor.TrackProperties;
 import hu.boga.musaic.gui.trackeditor.events.TrackDeletedEvent;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -29,14 +25,11 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class SequenceEditor implements SequenceBoundaryOut {
-    private static final String DEFAULT_NAME = "new_project.mid";
-    private static final Logger LOG = LoggerFactory.getLogger(SequenceEditor.class);
-    public static final String PROPERTIES_PANEL_TEXT = "Properties";
-    private final SequenceBoundaryIn boundaryIn;
 
+    private static final Logger LOG = LoggerFactory.getLogger(SequenceEditor.class);
+    private final SequenceBoundaryIn boundaryIn;
 
     public Label division;
     public Label resolution;
@@ -45,23 +38,17 @@ public class SequenceEditor implements SequenceBoundaryOut {
     public Label ticksIn32nds;
     public Label ticksPerSecond;
     public Label tickSize;
-    public Label tempoLabel;
 
+    public Label tempoLabel;
     public TempoSlider tempoSlider;
-    public NoteNameCombo rootCombo;
-    public ModeCombo modeCombo;
-    public Button btnClearMode;
 
     public final EventBus eventBus = new EventBus();
     public VBox propertiesVBox;
-    public ComboBox tracksCombo;
-    public StackPane stackPane;
-
-//    @FXML
-//    private Accordion accordion;
+    public AnchorPane centerPane;
+    public VBox tracksVBox;
 
     private SequenceDto sequenceDto;
-
+    private TrackEditor trackEditor;
 
     @Inject
     public SequenceEditor(SequenceBoundaryIn boundaryInProvider) {
@@ -74,15 +61,35 @@ public class SequenceEditor implements SequenceBoundaryOut {
                     initTemposSettings(newValue);
                 }
         );
-        rootCombo.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new RootChangedEvent(rootCombo.getSelectedNoteName())));
-        modeCombo.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new ModeChangedEvent(modeCombo.getSelectedTone())));
+        initTrackEditor();
+    }
 
-        btnClearMode.setOnAction(event -> {
-            modeCombo.getSelectionModel().clearSelection();
-            eventBus.post(new ModeChangedEvent(null));
-            rootCombo.getSelectionModel().clearSelection();
-            eventBus.post(new RootChangedEvent(null));
-        });
+    private void initTrackEditor() {
+        FXMLLoader loader = new FXMLLoader(TrackEditor.class.getResource("track-editor.fxml"));
+        loader.setControllerFactory(GuiceModule.INJECTOR::getInstance);
+        BorderPane borderPane = null;
+        try {
+            borderPane = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        trackEditor = loader.getController();
+        centerPane.getChildren().add(borderPane);
+    }
+
+    private void initTrackPropertiesPanel(TrackDto trackDto) {
+        FXMLLoader loader = new FXMLLoader(TrackEditor.class.getResource("track-properties.fxml"));
+        loader.setControllerFactory(GuiceModule.INJECTOR::getInstance);
+        AnchorPane pane = null;
+        try {
+            pane = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        TrackProperties trackProperties = loader.getController();
+        trackProperties.setTrackDto(trackDto, trackEditor);
+        trackProperties.setEventBus(eventBus);
+        tracksVBox.getChildren().add(pane);
     }
 
     private void initTemposSettings(Number newValue) {
@@ -109,6 +116,7 @@ public class SequenceEditor implements SequenceBoundaryOut {
     @Override
     public void displaySequence(SequenceDto sequenceDto) {
         this.sequenceDto = sequenceDto;
+        trackEditor.setResolution(sequenceDto.resolution);
         updateGui(sequenceDto);
     }
 
@@ -124,11 +132,10 @@ public class SequenceEditor implements SequenceBoundaryOut {
         this.tempoLabel.setText("Tempo: " + sequenceDto.tempo);
 
         this.propertiesVBox.getChildren().clear();
-        this.tracksCombo.getItems().clear();
+        this.tracksVBox.getChildren().clear();
 
         createChannelMappingPanel();
 
-        stackPane.getChildren().clear();
         sequenceDto.tracks.forEach(trackDto -> displayNewTrack(trackDto));
     }
 
@@ -170,33 +177,8 @@ public class SequenceEditor implements SequenceBoundaryOut {
 
     @Override
     public void displayNewTrack(TrackDto trackDto) {
-        FXMLLoader loader = new FXMLLoader(TrackEditor.class.getResource("track-editor.fxml"));
-        loader.setControllerFactory(GuiceModule.INJECTOR::getInstance);
-        BorderPane trackEditorPanel = null;
-        try {
-            trackEditorPanel = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        TrackEditor controller = loader.getController();
-
-        controller.setTrackDto(trackDto, sequenceDto.resolution);
-        controller.setEventBus(eventBus);
-
-        eventBus.register(controller);
-
-        stackPane.getChildren().add(trackEditorPanel);
-
-        tracksCombo.getItems().add(trackDto.name == null || "".equals(trackDto.name) ? trackDto.id : trackDto.name);
-        tracksCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
-            stackPane.getChildren().forEach(child -> child.setVisible(false));
-            int index = tracksCombo.getSelectionModel().getSelectedIndex();
-            if(index > 0){
-                stackPane.getChildren().get(index).setVisible(true);
-            }
-        });
-
-
+        trackEditor.setTrack(trackDto.id);
+        initTrackPropertiesPanel(trackDto);
     }
 
     public void onNewTrackButtonClicked(ActionEvent actionEvent) {
@@ -205,7 +187,6 @@ public class SequenceEditor implements SequenceBoundaryOut {
 
     @Subscribe
     public void onTrackDeletedEvent(TrackDeletedEvent event) {
-        stackPane.getChildren().clear();
         boundaryIn.reloadSequence(sequenceDto.id);
     }
 

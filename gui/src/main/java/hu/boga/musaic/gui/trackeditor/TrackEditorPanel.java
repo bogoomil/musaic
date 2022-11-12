@@ -186,7 +186,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         if (event.getButton() == MouseButton.SECONDARY) {
             this.contextMenu.show(this, event.getScreenX(), event.getScreenY());
         } else if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-            final AddChordEvent addChordEvent = new AddChordEvent(this.getTickByX((int) event.getX()), this.getPitchByY((int) event.getY()).getMidiCode(), currentNoteLength.getErtek(), currentChordType);
+            final AddChordEvent addChordEvent = new AddChordEvent(this.getTickByX((int) getCaculatedX(event.getX())), this.getPitchByY((int) event.getY()).getMidiCode(), currentNoteLength.getErtek(), currentChordType);
             this.noteChangeListener.onAddChordEvent(addChordEvent);
         }
     }
@@ -248,7 +248,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         AtomicInteger index = new AtomicInteger(0);
         movedNoteIds.forEach(id -> {
             getNoteRectangleByNoteId(id).ifPresent(noteRectangle -> {
-                int newTick = getTickByX((int) noteRectangle.getX());
+                int newTick = getTickByX((int) getCaculatedX(noteRectangle.getX()));
                 events.add(new NoteMovedEvent(id, newTick));
             });
         });

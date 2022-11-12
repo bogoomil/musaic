@@ -7,6 +7,8 @@ import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
 import hu.boga.musaic.gui.controls.InstrumentCombo;
+import hu.boga.musaic.gui.controls.ModeCombo;
+import hu.boga.musaic.gui.controls.NoteNameCombo;
 import hu.boga.musaic.gui.trackeditor.events.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -29,39 +31,21 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(TrackEditor.class);
 
-//    @FXML
-//    public TitledPane titledPane;
     @FXML
     public TrackEditorPanel trackEditorPanel;
-    @FXML
+
     public Slider zoomSlider;
-    @FXML
-    public TextField trackName;
-    @FXML
     public Label zoomLabel;
-    public CheckBox cbMuted;
-
     public BorderPane borderPane;
-    @FXML
-    ComboBox<Integer> channelCombo;
+    public NoteNameCombo rootCombo;
+    public ModeCombo modeCombo;
+    public Button btnClearMode;
+    public Label xLabel;
 
-    TrackBoundaryIn trackBoundaryIn;
+    private TrackBoundaryIn trackBoundaryIn;
 
-    private EventBus eventBus;
     private TrackDto trackDto;
-    private int currentChannel;
-
-    ChangeListener<? super Integer> channelComboListener = (observable, oldValue, newValue) -> {
-        tracksChnnelchanged(trackDto.id, channelCombo.getSelectionModel().getSelectedIndex());
-    };
-
-    ChangeListener<? super Instrument> instrumentComboListener = (observable, oldValue, newValue) -> {
-        tracksChnnelchanged(trackDto.id, channelCombo.getSelectionModel().getSelectedIndex());
-    };
-
-    ChangeListener<? super Boolean> mutedListener = (observable, oldValue, newValue) -> {
-        trackBoundaryIn.setMuted(trackDto.id, cbMuted.isSelected());
-    };
+    private int resolution;
 
     @Inject
     public TrackEditor(TrackBoundaryIn trackBoundaryIn) {
@@ -69,72 +53,50 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
     }
 
     public void initialize() {
-        channelCombo.getItems().addAll(IntStream.rangeClosed(0, 15).boxed().collect(Collectors.toList()));
-
         zoomSlider.setMin(10);
         zoomSlider.setMax(400);
         zoomSlider.adjustValue(100);
         zoomLabel.setText("Zoom: 100%");
-        zoomSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                float zoomFactor = newValue.floatValue() / 100;
-                trackEditorPanel.setZoomFactor(zoomFactor);
-                trackEditorPanel.paintNotes();
-                zoomLabel.setText("Zoom: " + newValue.intValue() + "%");
+        zoomSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            float zoomFactor = newValue.floatValue() / 100;
+            trackEditorPanel.setZoomFactor(zoomFactor);
+            trackEditorPanel.paintNotes();
+            zoomLabel.setText("Zoom: " + newValue.intValue() + "%");
 
-            }
-        });
-        trackName.textProperty().addListener((observable, oldValue, newValue) -> {
-            trackDto.name = trackName.getText();
-            trackBoundaryIn.updateTrackName(trackDto);
         });
         trackEditorPanel.setNoteChangeListener(this);
+        rootCombo.addEventHandler(ActionEvent.ACTION, event -> trackEditorPanel.setCurrentRoot(rootCombo.getSelectedNoteName()));
+        modeCombo.addEventHandler(ActionEvent.ACTION, event -> trackEditorPanel.setCurrentTone(modeCombo.getSelectedTone()));
+
+        btnClearMode.setOnAction(event -> {
+            modeCombo.getSelectionModel().clearSelection();
+            rootCombo.getSelectionModel().clearSelection();
+            trackEditorPanel.setCurrentRoot(null);
+            trackEditorPanel.setCurrentTone(null);
+        });
     }
 
-
-    public void removeTrack(ActionEvent actionEvent) {
-        trackBoundaryIn.removeTrack(trackDto.id);
-        this.eventBus.post(new TrackDeletedEvent(trackDto.id));
-    }
-
-    public void setEventBus(final EventBus eventBus) {
-        this.eventBus = eventBus;
-        eventBus.register(this);
+    public void setTrack(String trackId){
+        trackBoundaryIn.showTrack(trackId);
     }
 
     @Override
-    public void setTrackDto(TrackDto trackDto, int resolution) {
-
-        channelCombo.valueProperty().removeListener(channelComboListener);
-        cbMuted.selectedProperty().removeListener(mutedListener);
+    public void displayTrack(TrackDto trackDto) {
         this.trackDto = trackDto;
-
-//        anchorPane.setText("ch: " + trackDto.channel + " notes: " + trackDto.notes.size() + " (" + trackDto.id + ")");
-        channelCombo.getSelectionModel().select(trackDto.channel);
-        trackName.setText(trackDto.name);
-
         trackEditorPanel.setResolution(resolution);
         trackEditorPanel.setNotes(trackDto.notes);
         trackEditorPanel.paintNotes();
-        cbMuted.setSelected(trackDto.muted);
-
-        channelCombo.valueProperty().addListener(channelComboListener);
-        cbMuted.selectedProperty().addListener(mutedListener);
-
-
     }
 
     @Override
     public void onAddChordEvent(AddChordEvent event) {
-        trackBoundaryIn.addChord(trackDto.id, event.getTick(), event.getPitch(), event.getLength(), currentChannel, event.getChordType());
+        trackBoundaryIn.addChord(trackDto.id, event.getTick(), event.getPitch(), event.getLength(), event.getChordType());
     }
 
     @Override
     public void onDeleteNoteEvent(DeleteNoteEvent... events) {
         List<NoteDto> dtos = Arrays.stream(events).map(event -> convertDeleteEventToNoteDto(event)).collect(Collectors.toList());
         trackBoundaryIn.deleteNotes(trackDto.id, dtos.toArray(NoteDto[]::new));
-
     }
 
     @Override
@@ -152,18 +114,7 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
         return dto;
     }
 
-    @Subscribe
-    private void handleRootChangedEvent(RootChangedEvent event) {
-        trackEditorPanel.setCurrentRoot(event.getNoteName());
-    }
-
-    @Subscribe
-    private void handleModeChangedEvent(ModeChangedEvent event) {
-        trackEditorPanel.setCurrentTone(event.getTone());
-    }
-
-    public void tracksChnnelchanged(final String trackId, final int channel){
-        currentChannel = channel;
-        trackBoundaryIn.updateTrackChannel(trackId, channel);
+    public void setResolution(int resolution) {
+        this.resolution = resolution;
     }
 }

@@ -6,7 +6,6 @@ import hu.boga.musaic.musictheory.Scale;
 import hu.boga.musaic.musictheory.enums.NoteLength;
 import hu.boga.musaic.musictheory.enums.NoteName;
 import hu.boga.musaic.musictheory.enums.Tone;
-import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -204,13 +203,17 @@ public abstract class TrackEditorBasePanel extends Pane {
     }
 
     private void moveCursor(MouseEvent event) {
-        cursor.setLayoutX(event.getX() - (event.getX() % get32ndsWidth()));
+        cursor.setLayoutX(getCaculatedX(event.getX()));
         int y = getYByPitch(getPitchByY((int) event.getY()).getMidiCode());
         cursor.setLayoutY(y);
     }
 
+    protected double getCaculatedX(double x) {
+        return x - (x % get32ndsWidth());
+    }
+
     private void showCursor(MouseEvent event) {
-        cursor.setLayoutX(event.getX() - (event.getX() % get32ndsWidth()));
+        cursor.setLayoutX(getCaculatedX(event.getX()));
         cursor.setLayoutY(event.getY() - cursor.getHeight());
         cursor.setWidth(currentNoteLength.getErtek() * get32ndsWidth());
         cursor.setVisible(true);

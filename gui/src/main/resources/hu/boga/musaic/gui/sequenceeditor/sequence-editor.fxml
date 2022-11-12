@@ -1,47 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import hu.boga.musaic.gui.controls.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import hu.boga.musaic.gui.controls.NoteNameCombo?>
-<?import hu.boga.musaic.gui.controls.ModeCombo?>
-<?import hu.boga.musaic.gui.controls.TempoSlider?>
-<BorderPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="hu.boga.musaic.gui.sequenceeditor.SequenceEditor">
+<BorderPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.sequenceeditor.SequenceEditor">
     <top>
         <HBox BorderPane.alignment="CENTER">
-            <Button mnemonicParsing="false" onAction="#saveSequence" text="Save"/>
-            <Separator minWidth="18.0" orientation="VERTICAL" prefWidth="10.0"/>
-            <Button mnemonicParsing="false" onAction="#onNewTrackButtonClicked" text="Track+"/>
-            <Separator minWidth="18.0" orientation="VERTICAL" prefWidth="10.0"/>
-            <Button mnemonicParsing="false" onAction="#onPlayCurrentSec" text="Play"/>
-            <Button mnemonicParsing="false" onAction="#stopPlayback" text="Stop"/>
-            <NoteNameCombo fx:id="rootCombo" prefWidth="150.0"/>
-            <ModeCombo fx:id="modeCombo" prefWidth="150.0"/>
-            <Button fx:id="btnClearMode" mnemonicParsing="false" text="clear mode"/>
-            <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="2.0"/>
+            <Button mnemonicParsing="false" onAction="#saveSequence" text="Save" />
+            <Separator minWidth="18.0" orientation="VERTICAL" prefWidth="10.0" />
+            <Button mnemonicParsing="false" onAction="#onNewTrackButtonClicked" text="Track+" />
+            <Separator minWidth="18.0" orientation="VERTICAL" prefWidth="10.0" />
+            <Button mnemonicParsing="false" onAction="#onPlayCurrentSec" text="Play" />
+            <Button mnemonicParsing="false" onAction="#stopPlayback" text="Stop" />
+            <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="2.0" />
         </HBox>
     </top>
     <left>
         <VBox>
             <TitledPane text="Properties" textFill="#028d00">
                 <VBox>
-                    <Label fx:id="division"/>
-                    <Label fx:id="resolution"/>
-                    <Label fx:id="tickLength"/>
-                    <Label fx:id="ticksPerMeasure"/>
-                    <Label fx:id="ticksIn32nds"/>
-                    <Label fx:id="ticksPerSecond"/>
-                    <Label fx:id="tickSize"/>
-                    <Label fx:id="tempoLabel" text="Tempo"/>
+                    <Label fx:id="division" />
+                    <Label fx:id="resolution" />
+                    <Label fx:id="tickLength" />
+                    <Label fx:id="ticksPerMeasure" />
+                    <Label fx:id="ticksIn32nds" />
+                    <Label fx:id="ticksPerSecond" />
+                    <Label fx:id="tickSize" />
+                    <Label fx:id="tempoLabel" text="Tempo" />
                     <TempoSlider fx:id="tempoSlider" prefHeight="16.0" prefWidth="307.0" />
-                    <VBox fx:id="propertiesVBox"></VBox>
+                    <VBox fx:id="propertiesVBox" />
                 </VBox>
             </TitledPane>
-            <ComboBox fx:id="tracksCombo"/>
+            <TitledPane text="Tracks">
+                <VBox fx:id="tracksVBox" />
+            </TitledPane>
         </VBox>
     </left>
     <center>
-        <StackPane fx:id="stackPane" BorderPane.alignment="CENTER" />
+        <AnchorPane fx:id="centerPane" style="-fx-pref-width: 100%; -fx-pref-height: 100%;" BorderPane.alignment="CENTER" />
     </center>
 </BorderPane>

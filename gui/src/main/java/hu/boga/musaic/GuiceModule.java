@@ -9,9 +9,13 @@ import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.interactor.SequenceInteractor;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
+import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryIn;
+import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryOut;
 import hu.boga.musaic.core.track.interactor.TrackInteractor;
+import hu.boga.musaic.core.track.interactor.TrackPropertiesInteractor;
 import hu.boga.musaic.gui.trackeditor.TrackEditor;
 import hu.boga.musaic.gui.sequenceeditor.SequenceEditor;
+import hu.boga.musaic.gui.trackeditor.TrackProperties;
 import hu.boga.musaic.midigateway.sequence.SequenceGatewayImpl;
 
 import javax.inject.Singleton;
@@ -27,6 +31,9 @@ public class GuiceModule extends AbstractModule {
 
         bind(TrackBoundaryIn.class).to(TrackInteractor.class);
         bind(TrackBoundaryOut.class).to(TrackEditor.class);
+
+        bind(TrackPropertiesBoundaryIn.class).to(TrackPropertiesInteractor.class);
+        bind(TrackPropertiesBoundaryOut.class).to(TrackProperties.class);
 
         bind(SequenceGateway.class).to(SequenceGatewayImpl.class).in(Singleton.class);
 
