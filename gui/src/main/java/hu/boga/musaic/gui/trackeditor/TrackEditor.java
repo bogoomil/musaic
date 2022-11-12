@@ -82,7 +82,7 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
         try{
             setTopPaneColor(Color.web(currentColor));
         }catch (Exception e){
-            setTopPaneColor(Color.RED);
+            setTopPaneColor(Color.GRAY);
         }
 
         trackBoundaryIn.showTrack(trackId);

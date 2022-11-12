@@ -1,6 +1,9 @@
 package hu.boga.musaic.gui.controls;
 
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.util.Callback;
 
 import javax.sound.midi.Instrument;
 import javax.sound.midi.MidiSystem;
@@ -23,17 +26,22 @@ public class InstrumentCombo extends ComboBox<Instrument> {
     public InstrumentCombo() {
         super();
         getItems().addAll(instruments);
-//        setConverter(new StringConverter<Instrument>() {
-//            @Override
-//            public String toString(Instrument object) {
-//                return object.getName();
-//            }
-//
-//            @Override
-//            public Instrument fromString(String string) {
-//                return null;
-//            }
-//        });
+        this.setCellFactory(new Callback<ListView<Instrument>, ListCell<Instrument>>() {
+            class InstrumentListCell extends ListCell<Instrument> {
+                @Override protected void updateItem(Instrument item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (!empty && item != null) {
+                        setText(item.getName());
+                    } else {
+                        setText(null);
+                    }
+                }
+            }
+
+            @Override public ListCell<Instrument> call(ListView<Instrument> p) {
+                return new InstrumentListCell();
+            }
+        });
     }
 
     public static Optional<Instrument> getInstrumentByData(int instrumentsProgram) {

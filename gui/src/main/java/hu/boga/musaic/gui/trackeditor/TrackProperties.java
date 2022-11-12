@@ -6,6 +6,8 @@ import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryOut;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.gui.trackeditor.events.TrackDeletedEvent;
 import javafx.beans.value.ChangeListener;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -47,6 +49,15 @@ public class TrackProperties implements TrackPropertiesBoundaryOut {
     private ChangeListener<? super Boolean> mutedListener = (observable, oldValue, newValue) -> boundaryIn.setMuted(trackDto.id, chxbMute.isSelected());
     private TrackEditor trackEditor;
     private String[] channelToColorMapping;
+    private ChangeListener<? super String> trackNameListener = (observable, oldValue, newValue) -> {
+        trackDto.name = trackName.getText();
+        boundaryIn.updateTrackName(trackDto);
+    };
+    private EventHandler<ActionEvent> delAction = event -> {
+        boundaryIn.removeTrack(trackDto.id);
+        this.eventBus.post(new TrackDeletedEvent(trackDto.id));
+    };
+    private EventHandler<ActionEvent> btnNotesOnAction = ev -> trackEditor.setTrack(trackDto.id, channelToColorMapping[trackDto.channel]);
 
     @Inject
     public TrackProperties(TrackPropertiesBoundaryIn boundaryIn) {
@@ -61,6 +72,9 @@ public class TrackProperties implements TrackPropertiesBoundaryOut {
     }
 
     void updateGui(){
+
+        trackName.textProperty().removeListener(trackNameListener);
+
         cbChannel.valueProperty().removeListener(channelComboListener);
         chxbMute.selectedProperty().removeListener(mutedListener);
         this.trackDto = trackDto;
@@ -76,9 +90,13 @@ public class TrackProperties implements TrackPropertiesBoundaryOut {
         try{
             setMainPanelColor(Color.web(channelToColorMapping[trackDto.channel]));
         }catch (Exception e){
-            setMainPanelColor(Color.RED);
+            setMainPanelColor(Color.GRAY);
         }
         trackEditor.setTrack(trackDto.id, channelToColorMapping[trackDto.channel]);
+
+        trackName.textProperty().addListener(trackNameListener);
+        btnDelTrack.setOnAction(delAction);
+        btnNotes.setOnAction(btnNotesOnAction);
 
     }
 
@@ -92,15 +110,6 @@ public class TrackProperties implements TrackPropertiesBoundaryOut {
 
     public void initialize() {
         cbChannel.getItems().addAll(IntStream.rangeClosed(0, 15).boxed().collect(Collectors.toList()));
-        trackName.textProperty().addListener((observable, oldValue, newValue) -> {
-            trackDto.name = trackName.getText();
-            boundaryIn.updateTrackName(trackDto);
-        });
-        btnDelTrack.setOnAction(event -> {
-            boundaryIn.removeTrack(trackDto.id);
-            this.eventBus.post(new TrackDeletedEvent(trackDto.id));
-        });
-        btnNotes.setOnAction(ev -> trackEditor.setTrack(trackDto.id, channelToColorMapping[trackDto.channel]));
     }
 
     private void channelChanged(final String trackId, final int channel){

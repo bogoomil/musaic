@@ -116,6 +116,13 @@ public abstract class TrackEditorBasePanel extends Pane {
         final int w32nds = this.get32ndsWidth();
         int counter = 0;
         for (int x = 0; x < this.getWorkingWidth(); x += w32nds) {
+
+            if(x % (16 * w32nds) == 0){
+                Rectangle rectangle = new Rectangle(x, 0, w32nds * 8, getPrefHeight());
+                rectangle.setFill(Color.color(Color.LAWNGREEN.getRed(),Color.LAWNGREEN.getGreen(),Color.LAWNGREEN.getBlue(),0.3));
+                getChildren().add(rectangle);
+            }
+
             final Line line = new Line();
             line.setStartX(x);
             line.setStartY(0);
