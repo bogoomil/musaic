@@ -44,7 +44,7 @@ public class SequenceEditor implements SequenceBoundaryOut {
 
     public final EventBus eventBus = new EventBus();
     public VBox propertiesVBox;
-    public AnchorPane centerPane;
+    public HBox centerPane;
     public VBox tracksVBox;
 
     private SequenceDto sequenceDto;
@@ -87,7 +87,7 @@ public class SequenceEditor implements SequenceBoundaryOut {
             e.printStackTrace();
         }
         TrackProperties trackProperties = loader.getController();
-        trackProperties.setTrackDto(trackDto, trackEditor);
+        trackProperties.setTrackDto(trackDto, trackEditor, sequenceDto.channelToColorMappings);
         trackProperties.setEventBus(eventBus);
         tracksVBox.getChildren().add(pane);
     }
@@ -177,7 +177,7 @@ public class SequenceEditor implements SequenceBoundaryOut {
 
     @Override
     public void displayNewTrack(TrackDto trackDto) {
-        trackEditor.setTrack(trackDto.id);
+        trackEditor.setTrack(trackDto.id, null);
         initTrackPropertiesPanel(trackDto);
     }
 

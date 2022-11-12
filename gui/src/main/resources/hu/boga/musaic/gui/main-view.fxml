@@ -3,31 +3,29 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0"
-            xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="hu.boga.musaic.gui.MainController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.MainController">
     <top>
         <MenuBar>
             <Menu text="File">
-                <MenuItem onAction="#newProject" text="New"/>
-                <MenuItem onAction="#openFile" text="Open"/>
-                <SeparatorMenuItem/>
-                <MenuItem text="Exit"/>
+                <MenuItem onAction="#newProject" text="New" />
+                <MenuItem onAction="#openFile" text="Open" />
+                <SeparatorMenuItem />
+                <MenuItem text="Exit" />
             </Menu>
             <Menu text="Edit">
-                <MenuItem text="Copy"/>
-                <MenuItem text="Cut"/>
-                <MenuItem text="Paste"/>
+                <MenuItem text="Copy" />
+                <MenuItem text="Cut" />
+                <MenuItem text="Paste" />
             </Menu>
             <Menu text="Help">
-                <MenuItem disable="true" text="Search"/>
-                <MenuItem text="Online Manual" visible="false"/>
-                <SeparatorMenuItem/>
-                <MenuItem text="About"/>
+                <MenuItem disable="true" text="Search" />
+                <MenuItem text="Online Manual" visible="false" />
+                <SeparatorMenuItem />
+                <MenuItem text="About" />
             </Menu>
         </MenuBar>
     </top>
     <center>
-        <TabPane fx:id="mainTab" style="-fx-border-color: black; -fx-border-width: 5;" tabClosingPolicy="SELECTED_TAB"/>
+        <TabPane fx:id="mainTab" tabClosingPolicy="SELECTED_TAB" />
     </center>
 </BorderPane>

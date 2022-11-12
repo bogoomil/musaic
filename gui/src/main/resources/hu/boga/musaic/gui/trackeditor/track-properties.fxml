@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<AnchorPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.trackeditor.TrackProperties">
+<AnchorPane fx:id="mainPanel" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.trackeditor.TrackProperties">
    <children>
       <VBox layoutX="4.0" layoutY="7.0">
          <children>

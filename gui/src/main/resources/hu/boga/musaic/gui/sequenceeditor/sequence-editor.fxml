@@ -28,7 +28,7 @@
                     <Label fx:id="ticksPerSecond" />
                     <Label fx:id="tickSize" />
                     <Label fx:id="tempoLabel" text="Tempo" />
-                    <TempoSlider fx:id="tempoSlider" prefHeight="16.0" prefWidth="307.0" />
+                    <TempoSlider fx:id="tempoSlider" prefHeight="16.0" prefWidth="293.0" />
                     <VBox fx:id="propertiesVBox" />
                 </VBox>
             </TitledPane>
@@ -38,6 +38,6 @@
         </VBox>
     </left>
     <center>
-        <AnchorPane fx:id="centerPane" style="-fx-pref-width: 100%; -fx-pref-height: 100%;" BorderPane.alignment="CENTER" />
+        <HBox fx:id="centerPane" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-style: dotted;" BorderPane.alignment="CENTER" />
     </center>
 </BorderPane>

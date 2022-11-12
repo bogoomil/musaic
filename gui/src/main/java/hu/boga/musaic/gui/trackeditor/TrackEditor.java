@@ -14,9 +14,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +42,7 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
     public ModeCombo modeCombo;
     public Button btnClearMode;
     public Label xLabel;
+    public AnchorPane topAnchorPane;
 
     private TrackBoundaryIn trackBoundaryIn;
 
@@ -76,8 +78,22 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
         });
     }
 
-    public void setTrack(String trackId){
+    public void setTrack(String trackId, String currentColor){
+        try{
+            setTopPaneColor(Color.web(currentColor));
+        }catch (Exception e){
+            setTopPaneColor(Color.RED);
+        }
+
         trackBoundaryIn.showTrack(trackId);
+    }
+
+    private void setTopPaneColor(Color color) {
+        topAnchorPane.setBackground(new Background(
+                new BackgroundFill(
+                        color,
+                        CornerRadii.EMPTY,
+                        Insets.EMPTY)));
     }
 
     @Override

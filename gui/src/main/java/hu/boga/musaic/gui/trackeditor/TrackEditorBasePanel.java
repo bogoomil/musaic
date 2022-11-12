@@ -38,6 +38,7 @@ public abstract class TrackEditorBasePanel extends Pane {
         this.setOnMouseEntered(event -> showCursor(event));
         this.setOnMouseMoved(event -> moveCursor(event));
         this.setOnMouseExited(event -> hideCursor());
+
     }
 
     public abstract void paintNotes();
