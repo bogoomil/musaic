@@ -78,7 +78,7 @@ public class TrackInteractor implements TrackBoundaryIn {
                         .filter(noteModell -> noteModell.tick >= fromTick && noteModell.tick < toTick)
                         .forEach(noteModell -> {
                             NoteModell modellToAdd = noteModell.clone();
-                            modellToAdd.tick = modellToAdd.tick + sequenceModell.resolution * 4;
+                            modellToAdd.tick = modellToAdd.tick + (toTick - fromTick);
                             trackModell.eventModells.add(modellToAdd);
                         });
 
