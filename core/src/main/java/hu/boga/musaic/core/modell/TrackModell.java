@@ -15,15 +15,6 @@ public class TrackModell extends BaseModell {
     public boolean solo;
     public List<EventModell> eventModells = new ArrayList<>();
 
-//    @Override
-//    public String toString() {
-//        return "\nTrackModell" +
-//                "\nid:" + getId() +
-//                ", ch: " + channel +
-//                ", pr: " + program +
-//                ", name: " + getName() + ", notes: " + eventModells;
-//
-//    }
 
     public String getName(){
         return getMetaMessageEventsByCommand(CommandEnum.TRACK_NAME).stream().map(metaMessageEventModell -> new String(metaMessageEventModell.data, StandardCharsets.UTF_8)).findAny().orElse("");

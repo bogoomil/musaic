@@ -23,6 +23,10 @@ public class NoteModell extends EventModell{
         return "[" + noteName.name() + "(" + (midiCode / 12) + "), tick:" + tick + ", length: " + length + "]";
     }
 
+    public NoteModell clone(){
+        return new NoteModell(this.midiCode, this.tick, this.length, this.velocity, this.channel);
+    }
+
     public long getEndTick(){
         return tick + length;
     }

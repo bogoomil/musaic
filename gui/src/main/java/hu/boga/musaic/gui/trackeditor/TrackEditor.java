@@ -44,6 +44,7 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
     public Button btnClearMode;
     public Label xLabel;
     public AnchorPane topAnchorPane;
+    public Button btnDuplicateLoop;
 
     private TrackBoundaryIn trackBoundaryIn;
     private NoteBoundaryIn noteBoundaryIn;
@@ -148,5 +149,9 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
     public int getLoopEnd(){
         return trackEditorPanel.getLoopEndTick();
+    }
+
+    public void duplicate(ActionEvent actionEvent) {
+        this.trackBoundaryIn.duplicate(trackDto.id, getLoopStart(), getLoopEnd());
     }
 }

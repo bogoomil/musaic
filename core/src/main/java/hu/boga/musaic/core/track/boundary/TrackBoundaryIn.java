@@ -1,7 +1,6 @@
 package hu.boga.musaic.core.track.boundary;
 
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
-import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.musictheory.enums.ChordType;
 
 public interface TrackBoundaryIn {
@@ -9,5 +8,5 @@ public interface TrackBoundaryIn {
     void addChord(String trackId, int tick, int pitch, int length, ChordType chordType);
     void deleteNotes(String trackId, NoteDto[] notes);
     void moveNote(String noteId, int newTick);
-
+    void duplicate(String trackId, int fromTick, int toTick);
 }

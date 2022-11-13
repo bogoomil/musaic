@@ -16,13 +16,11 @@ public class NoteInteractor implements NoteBoundaryIn{
 
     @Override
     public void play(String trackId, int midiCode, int lengthInTicks){
-
         InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
             int tempo = (int) sequenceModell.tempo;
             int resolution = sequenceModell.resolution;
             TrackModell trackModell = sequenceModell.getTrackById(trackId).get();
             int channel = trackModell.channel;
-
             this.synthGateway.playOneNote(tempo, channel, resolution, midiCode, lengthInTicks);
         });
     }

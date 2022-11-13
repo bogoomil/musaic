@@ -1,12 +1,14 @@
 package hu.boga.musaic.core.track.interactor;
 
 import hu.boga.musaic.core.InMemorySequenceModellStore;
+import hu.boga.musaic.core.modell.events.EventModell;
 import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
+import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.core.track.interactor.converters.TrackModelltoDtoConverter;
 import hu.boga.musaic.musictheory.Chord;
 import hu.boga.musaic.musictheory.Pitch;
@@ -18,6 +20,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class TrackInteractor implements TrackBoundaryIn {
 
@@ -45,7 +48,7 @@ public class TrackInteractor implements TrackBoundaryIn {
         LOG.debug("deleting notes: {}, trackid: {}", Arrays.asList(notes), trackId);
         InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
             LOG.debug("sequence: {}", sequenceModell.getId());
-            InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
+            sequenceModell.getTrackById(trackId).ifPresent(trackModell -> {
                 LOG.debug("track: {}", trackModell.getId());
                 Arrays.stream(notes).forEach(noteDto -> {
                     LOG.debug("deleting note: {}", noteDto.id);
@@ -64,6 +67,30 @@ public class TrackInteractor implements TrackBoundaryIn {
             });
             showTrack(trackModell.getId());
         });
+    }
+
+    @Override
+    public void duplicate(String trackId, int fromTick, int toTick) {
+        InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
+            sequenceModell.getTrackById(trackId).ifPresent(trackModell -> {
+
+                trackModell.getNotes().stream()
+                        .filter(noteModell -> noteModell.tick >= fromTick && noteModell.tick < toTick)
+                        .forEach(noteModell -> {
+                            NoteModell modellToAdd = noteModell.clone();
+                            modellToAdd.tick = modellToAdd.tick + sequenceModell.resolution * 4;
+                            trackModell.eventModells.add(modellToAdd);
+                        });
+
+                TrackModelltoDtoConverter converter = new TrackModelltoDtoConverter(trackModell);
+                TrackDto dto = converter.convert();
+                boundaryOut.displayTrack(dto);
+            });
+        });
+    }
+
+    private Optional<TrackModell> getTrackByTrackId(String trackId) {
+        return InMemorySequenceModellStore.getTrackById(trackId);
     }
 
     @Override
