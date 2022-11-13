@@ -2,6 +2,7 @@ package hu.boga.musaic.gui.trackeditor;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import hu.boga.musaic.core.note.NoteBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
@@ -45,13 +46,15 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
     public AnchorPane topAnchorPane;
 
     private TrackBoundaryIn trackBoundaryIn;
+    private NoteBoundaryIn noteBoundaryIn;
 
     private TrackDto trackDto;
     private int resolution;
 
     @Inject
-    public TrackEditor(TrackBoundaryIn trackBoundaryIn) {
+    public TrackEditor(TrackBoundaryIn trackBoundaryIn, NoteBoundaryIn noteBoundaryIn) {
         this.trackBoundaryIn = trackBoundaryIn;
+        this.noteBoundaryIn = noteBoundaryIn;
     }
 
     public void initialize() {
@@ -123,6 +126,11 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
         trackBoundaryIn.showTrack(trackDto.id);
     }
 
+    @Override
+    public void onNotePlay(NotePlayEvent event) {
+        this.noteBoundaryIn.play(trackDto.id, event.midiCode, event.lengthInTicks);
+    }
+
 
     private NoteDto convertDeleteEventToNoteDto(DeleteNoteEvent event){
         NoteDto dto = new NoteDto();
@@ -132,5 +140,13 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
     public void setResolution(int resolution) {
         this.resolution = resolution;
+    }
+
+    public int getLoopStart(){
+        return trackEditorPanel.getLoopStartTick();
+    }
+
+    public int getLoopEnd(){
+        return trackEditorPanel.getLoopEndTick();
     }
 }

@@ -33,12 +33,12 @@ public class SequenceGatewayImpl implements SequenceGateway {
     }
 
     @Override
-    public void play(SequenceModell modell) {
+    public void play(SequenceModell modell, long fromTick, long toTick) {
         LOG.debug("start playback");
         Sequence sequence = null;
         try {
             sequence = new SequenceModellToSequenceConverter(modell).convert();
-            Player.playSequence(sequence);
+            Player.playSequence(sequence, fromTick, toTick);
         } catch (InvalidMidiDataException e) {
             throw new MusaicException("unable to play modell: " + e.getMessage(), e);
         }

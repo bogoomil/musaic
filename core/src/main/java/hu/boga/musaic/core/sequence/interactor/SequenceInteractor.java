@@ -48,8 +48,8 @@ public class SequenceInteractor implements SequenceBoundaryIn {
     }
 
     @Override
-    public void play(String sequenceId) {
-        gateway.play(InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId));
+    public void play(String sequenceId, long fromTick, long toTick) {
+        gateway.play(InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId), fromTick, toTick);
     }
 
     @Override

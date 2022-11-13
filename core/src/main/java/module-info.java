@@ -11,6 +11,8 @@ module core {
     exports hu.boga.musaic.core.track.boundary.dtos;
     exports hu.boga.musaic.core.gateway.sequence;
     exports hu.boga.musaic.core.modell.events;
+    exports hu.boga.musaic.core.gateway.synth;
+    exports hu.boga.musaic.core.note;
 
     requires com.google.guice;
     requires javax.inject;

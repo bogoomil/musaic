@@ -7,7 +7,7 @@ public interface SequenceGateway {
 
     void save(SequenceModell modell, String path);
 
-    void play(SequenceModell modell);
+    void play(SequenceModell modell, long fromTick, long toTick);
 
     void stop();
 }

@@ -49,6 +49,8 @@ public class SequenceEditor implements SequenceBoundaryOut {
 
     private SequenceDto sequenceDto;
     private TrackEditor trackEditor;
+    private long fromTick = 0;
+    private long toTick = 512;
 
     @Inject
     public SequenceEditor(SequenceBoundaryIn boundaryInProvider) {
@@ -106,7 +108,7 @@ public class SequenceEditor implements SequenceBoundaryOut {
     }
 
     public void onPlayCurrentSec(ActionEvent actionEvent) {
-        boundaryIn.play(sequenceDto.id);
+        boundaryIn.play(sequenceDto.id, trackEditor.getLoopStart(), trackEditor.getLoopEnd());
     }
 
     public void stopPlayback(ActionEvent actionEvent) {
@@ -142,6 +144,10 @@ public class SequenceEditor implements SequenceBoundaryOut {
     private void createChannelMappingPanel() {
         for (int i = 0; i < 16; i++) {
             HBox hBox = new HBox();
+
+            Label l = new Label("" + i);
+            hBox.getChildren().add(l);
+
             InstrumentCombo instrCombo = new InstrumentCombo();
             instrCombo.selectInstrument(sequenceDto.channelToProgramMappings[i]);
 

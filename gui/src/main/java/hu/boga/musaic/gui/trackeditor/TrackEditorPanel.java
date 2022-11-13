@@ -26,7 +26,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     public static final Color DEFAULT_HORIZONTAL_LINE_COLOR = Color.LIME;
     public static final Paint TEXT_COLOR = Color.WHITE;
     private List<NoteDto> notes;
-    private ContextMenu contextMenu;
+    private SettingsContextMenu contextMenu;
     private ChordType currentChordType = null;
     private List<String> selectedNoteIds = new ArrayList<>(0);
     private NoteChangeListener noteChangeListener;
@@ -35,6 +35,10 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     private List<String> movedNoteIds = new ArrayList<>();
 
     private Rectangle selectionRect = new Rectangle();
+    private Rectangle loopRectangle = new Rectangle();
+    private int loopStartTick;
+    private int loopEndTick;
+
 
     public TrackEditorPanel() {
         super();
@@ -53,13 +57,15 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
             selectionRect.setHeight(height);
 
         });
-
         this.setOnMouseReleased(this::handleMousReleased);
 
         eventBus.register(this);
         contextMenu = new SettingsContextMenu(eventBus);
 
         selectionRect.setStroke(Color.RED);
+
+        loopRectangle.setStroke(Color.WHITE);
+        loopRectangle.setFill(Color.color(Color.WHITE.getRed(), Color.WHITE.getGreen(), Color.WHEAT.getBlue(), 0.3));
     }
 
     private void handleMousReleased(MouseEvent event) {
@@ -87,9 +93,17 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     @Override
     public void paintNotes() {
         getChildren().clear();
+        this.initializeCanvas();
+
         getChildren().add(selectionRect);
         selectionRect.setVisible(false);
-        this.initializeCanvas();
+
+        getChildren().add(loopRectangle);
+        loopRectangle.setVisible(loopEndTick != 0);
+        loopRectangle.setHeight(getHeight());
+        loopRectangle.setY(0);
+        showLoopRect();
+
         this.getChildren().add(cursor);
         this.notes.forEach(noteDto -> {
             this.paintNote(noteDto);
@@ -168,6 +182,38 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         }
     }
 
+    @Subscribe
+    private void handleLoopStartEvent(SettingsContextMenu.LoopStartEvent event){
+        loopStartTick = (int) event.tick;
+        if(loopEndTick == 0){
+            loopEndTick = loopStartTick + 1;
+        }
+        showLoopRect();
+
+    }
+
+    private void showLoopRect() {
+        LOG.debug("setting loop start: {}, to: {}", loopStartTick, loopEndTick );
+        loopRectangle.setX(getTickWidth() * loopStartTick);
+        int width = (int) ((loopEndTick - loopStartTick) * getTickWidth());
+        loopRectangle.setWidth(width);
+        loopRectangle.setVisible(true);
+    }
+
+    @Subscribe
+    private void handleLoopEndEvent(SettingsContextMenu.LoopEndEvent event){
+        loopEndTick = (int) event.tick;
+        showLoopRect();
+    }
+
+    @Subscribe
+    private void handleClearLoopEvent(SettingsContextMenu.ClearLoopEvent event){
+        LOG.debug("clearing loop");
+        loopRectangle.setVisible(false);
+        loopStartTick = 0;
+        loopEndTick = 0;
+    }
+
     private List<NoteRectangle> getAllNoteRectangles() {
         List<NoteRectangle> l = getChildren().stream().filter(node -> node instanceof NoteRectangle).map(node -> (NoteRectangle) node).collect(Collectors.toList());
         return l;
@@ -185,6 +231,11 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     private void handleMouseClick(final MouseEvent event) {
         if (event.getButton() == MouseButton.SECONDARY) {
             this.contextMenu.show(this, event.getScreenX(), event.getScreenY());
+            this.contextMenu.currentTick = this.getTickByX((int) getCaculatedX(event.getX()));
+        } else if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1){
+            NotePlayEvent notePlayEvent = new NotePlayEvent(getPitchByY((int) event.getY()).getMidiCode(), currentNoteLength.getErtek());
+            this.noteChangeListener.onNotePlay(notePlayEvent);
+
         } else if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             final AddChordEvent addChordEvent = new AddChordEvent(this.getTickByX((int) getCaculatedX(event.getX())), this.getPitchByY((int) event.getY()).getMidiCode(), currentNoteLength.getErtek(), currentChordType);
             this.noteChangeListener.onAddChordEvent(addChordEvent);
@@ -254,5 +305,13 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         });
         noteChangeListener.onNoteMoved(events.toArray(new NoteMovedEvent[0]));
         movedNoteIds.clear();
+    }
+
+    public int getLoopStartTick() {
+        return loopStartTick;
+    }
+
+    public int getLoopEndTick() {
+        return loopEndTick;
     }
 }

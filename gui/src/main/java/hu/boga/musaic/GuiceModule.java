@@ -4,6 +4,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import hu.boga.musaic.core.gateway.sequence.SequenceGateway;
+import hu.boga.musaic.core.gateway.synth.SynthGateway;
+import hu.boga.musaic.core.note.NoteBoundaryIn;
+import hu.boga.musaic.core.note.NoteInteractor;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.interactor.SequenceInteractor;
@@ -17,6 +20,7 @@ import hu.boga.musaic.gui.trackeditor.TrackEditor;
 import hu.boga.musaic.gui.sequenceeditor.SequenceEditor;
 import hu.boga.musaic.gui.trackeditor.TrackProperties;
 import hu.boga.musaic.midigateway.sequence.SequenceGatewayImpl;
+import hu.boga.musaic.midigateway.synth.SynthGatewayImpl;
 
 import javax.inject.Singleton;
 
@@ -34,6 +38,9 @@ public class GuiceModule extends AbstractModule {
 
         bind(TrackPropertiesBoundaryIn.class).to(TrackPropertiesInteractor.class);
         bind(TrackPropertiesBoundaryOut.class).to(TrackProperties.class);
+
+        bind(NoteBoundaryIn.class).to(NoteInteractor.class);
+        bind(SynthGateway.class).to(SynthGatewayImpl.class);
 
         bind(SequenceGateway.class).to(SequenceGatewayImpl.class).in(Singleton.class);
 

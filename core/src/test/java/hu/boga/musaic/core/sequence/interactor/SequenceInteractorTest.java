@@ -17,6 +17,7 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 
 class SequenceInteractorTest {
@@ -62,8 +63,8 @@ class SequenceInteractorTest {
 
     @Test
     void play(){
-        interactor.play(SEQUENCE_ID);
-        Mockito.verify(gateway).play(Mockito.any());
+        interactor.play(SEQUENCE_ID, 0, 1);
+        Mockito.verify(gateway).play(Mockito.any(), eq(0), eq(1));
 
     }
 

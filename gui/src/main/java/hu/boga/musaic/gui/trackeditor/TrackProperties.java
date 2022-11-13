@@ -39,13 +39,9 @@ public class TrackProperties implements TrackPropertiesBoundaryOut {
 
     private TrackPropertiesBoundaryIn boundaryIn;
     private TrackDto trackDto;
-    private int resolution;
-    private int currentChannel;
     private EventBus eventBus;
-    private TrackEditorPanel trackEditorPanel;
 
     private ChangeListener<? super Integer> channelComboListener = (observable, oldValue, newValue) -> channelChanged(trackDto.id, cbChannel.getSelectionModel().getSelectedIndex());
-    private ChangeListener<? super Instrument> instrumentComboListener = (observable, oldValue, newValue) -> channelChanged(trackDto.id, cbChannel.getSelectionModel().getSelectedIndex());
     private ChangeListener<? super Boolean> mutedListener = (observable, oldValue, newValue) -> boundaryIn.setMuted(trackDto.id, chxbMute.isSelected());
     private TrackEditor trackEditor;
     private String[] channelToColorMapping;
@@ -72,32 +68,39 @@ public class TrackProperties implements TrackPropertiesBoundaryOut {
     }
 
     void updateGui(){
+        removeListeners();
+        setProperties();
+        updateMainPanelColor();
+        trackEditor.setTrack(trackDto.id, channelToColorMapping[trackDto.channel]);
+        initListeners();
+    }
 
-        trackName.textProperty().removeListener(trackNameListener);
-
-        cbChannel.valueProperty().removeListener(channelComboListener);
-        chxbMute.selectedProperty().removeListener(mutedListener);
-        this.trackDto = trackDto;
-
+    private void setProperties() {
         cbChannel.getSelectionModel().select(trackDto.channel);
         trackName.setText(trackDto.name);
         chxbMute.setSelected(trackDto.muted);
+    }
 
+    private void initListeners() {
         cbChannel.valueProperty().addListener(channelComboListener);
         chxbMute.selectedProperty().addListener(mutedListener);
+        trackName.textProperty().addListener(trackNameListener);
+        btnDelTrack.setOnAction(delAction);
+        btnNotes.setOnAction(btnNotesOnAction);
+    }
 
-
+    private void updateMainPanelColor() {
         try{
             setMainPanelColor(Color.web(channelToColorMapping[trackDto.channel]));
         }catch (Exception e){
             setMainPanelColor(Color.GRAY);
         }
-        trackEditor.setTrack(trackDto.id, channelToColorMapping[trackDto.channel]);
+    }
 
-        trackName.textProperty().addListener(trackNameListener);
-        btnDelTrack.setOnAction(delAction);
-        btnNotes.setOnAction(btnNotesOnAction);
-
+    private void removeListeners() {
+        trackName.textProperty().removeListener(trackNameListener);
+        cbChannel.valueProperty().removeListener(channelComboListener);
+        chxbMute.selectedProperty().removeListener(mutedListener);
     }
 
     private void setMainPanelColor(Color color) {
@@ -113,7 +116,6 @@ public class TrackProperties implements TrackPropertiesBoundaryOut {
     }
 
     private void channelChanged(final String trackId, final int channel){
-        currentChannel = channel;
         boundaryIn.updateTrackChannel(trackId, channel);
     }
 

@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 
 public class SettingsContextMenu extends ContextMenu {
     EventBus eventBus;
+    public int currentTick;
 
     public SettingsContextMenu(EventBus eventBus) {
         this.eventBus = eventBus;
@@ -15,6 +16,14 @@ public class SettingsContextMenu extends ContextMenu {
     }
 
     private void buildGui() {
+        MenuItem addLoopStartPoint = new MenuItem("Set loop start");
+        addLoopStartPoint.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new LoopStartEvent(currentTick)));
+        MenuItem addLoopEndPoint = new MenuItem("Set loop end");
+        addLoopEndPoint.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new LoopEndEvent(currentTick)));
+        MenuItem clearLoop = new MenuItem("Clear loop");
+
+        clearLoop.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new ClearLoopEvent()));
+
         Menu creationMenu = new Menu("Creation", null,
                 new Menu("Length", null, createNoteLengthMenuItem()),
                 new Menu("Chords", null, createChordMenuItems())
@@ -40,6 +49,9 @@ public class SettingsContextMenu extends ContextMenu {
                 deleteSelectedNotesMenu,
                 deleteAllNotesMenu
         );
+        getItems().add(addLoopStartPoint);
+        getItems().add(addLoopEndPoint);
+        getItems().add(clearLoop);
         getItems().add(creationMenu);
         getItems().add(selectionMenu);
         getItems().add(deletionMenu);
@@ -120,4 +132,22 @@ public class SettingsContextMenu extends ContextMenu {
     public static class SelectAllEvent{}
 
     public static class DeSelectAllEvent{}
+
+    public static class LoopStartEvent{
+        public double tick;
+
+        public LoopStartEvent(double tick) {
+            this.tick = tick;
+        }
+    }
+
+    public static class LoopEndEvent{
+        public double tick;
+
+        public LoopEndEvent(double tick) {
+            this.tick = tick;
+        }
+    }
+
+    public static class ClearLoopEvent{}
 }
