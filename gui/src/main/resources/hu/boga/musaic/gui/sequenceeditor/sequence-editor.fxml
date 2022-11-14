@@ -17,39 +17,42 @@
             <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="2.0"/>
         </HBox>
     </top>
-    <left>
-        <Accordion>
-            <panes>
-                <TitledPane text="Properties" textFill="#028d00">
-                    <VBox>
-                        <Label fx:id="division"/>
-                        <Label fx:id="resolution"/>
-                        <Label fx:id="tickLength"/>
-                        <Label fx:id="ticksPerMeasure"/>
-                        <Label fx:id="ticksIn32nds"/>
-                        <Label fx:id="ticksPerSecond"/>
-                        <Label fx:id="tickSize"/>
-                    </VBox>
-                </TitledPane>
-                <TitledPane text="Settings" textFill="#028d00">
-                    <ScrollPane>
-                        <VBox>
-                            <Label fx:id="tempoLabel" text="Tempo"/>
-                            <TempoSlider fx:id="tempoSlider" prefHeight="16.0" prefWidth="293.0"/>
-                            <VBox fx:id="propertiesVBox"/>
-                        </VBox>
-                    </ScrollPane>
-                </TitledPane>
-                <TitledPane text="Tracks">
-                    <ScrollPane>
-                        <VBox fx:id="tracksVBox"/>
-                    </ScrollPane>
-                </TitledPane>
-            </panes>
-        </Accordion>
-    </left>
+
+
     <center>
-        <HBox fx:id="centerPane" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-style: dotted;"
-              BorderPane.alignment="CENTER"/>
+        <SplitPane>
+            <Accordion>
+                <panes>
+                    <TitledPane text="Properties" textFill="#028d00">
+                        <VBox>
+                            <Label fx:id="division"/>
+                            <Label fx:id="resolution"/>
+                            <Label fx:id="tickLength"/>
+                            <Label fx:id="ticksPerMeasure"/>
+                            <Label fx:id="ticksIn32nds"/>
+                            <Label fx:id="ticksPerSecond"/>
+                            <Label fx:id="tickSize"/>
+                        </VBox>
+                    </TitledPane>
+                    <TitledPane text="Settings" textFill="#028d00">
+                        <ScrollPane>
+                            <VBox>
+                                <Label fx:id="tempoLabel" text="Tempo"/>
+                                <TempoSlider fx:id="tempoSlider" prefHeight="16.0" prefWidth="293.0"/>
+                                <VBox fx:id="propertiesVBox"/>
+                            </VBox>
+                        </ScrollPane>
+                    </TitledPane>
+                    <TitledPane text="Tracks">
+                        <ScrollPane>
+                            <VBox fx:id="tracksVBox"/>
+                        </ScrollPane>
+                    </TitledPane>
+                </panes>
+            </Accordion>
+            <HBox fx:id="centerPane" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-style: dotted;"
+                  BorderPane.alignment="CENTER"/>
+
+        </SplitPane>
     </center>
 </BorderPane>
