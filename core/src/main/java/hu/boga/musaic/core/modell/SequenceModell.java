@@ -46,21 +46,8 @@ public class SequenceModell extends BaseModell{
         return tracks.stream().filter(trackModell -> trackModell.getId().equals(trackId)).findFirst();
     }
 
-    @Override
-    public String toString() {
-        return "\n--------------------------------------------------------" +
-                "\nSequenceModell" +
-                "\nid: " + getId() +
-                ", res: " + resolution +
-                ", div: " + division +
-                ", tempo: " + tempo +
-                "\n" + tracks;
-
-    }
-
     public int[] getChannelToProgramMappings(){
         int[] channelToProgram = new int[16];
-        IntStream.range(0, 16).forEach(i -> channelToProgram[i] = 0);
         tracks.forEach(trackModell -> {
             trackModell.getShortMessageEventsByCommand(CommandEnum.PROGRAM_CHANGE).forEach(shortMessageEventModell -> {
                 channelToProgram[shortMessageEventModell.channel] = shortMessageEventModell.data1;

@@ -1,6 +1,8 @@
 package hu.boga.musaic.core.modell;
 
+import hu.boga.musaic.core.modell.events.CommandEnum;
 import hu.boga.musaic.core.modell.events.NoteModell;
+import hu.boga.musaic.core.modell.events.ShortMessageEventModell;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SequenceModellTest {
 
-    public static final String TO_STRING = "tracks=[TrackModell{channel=0, program=0, name='null', notes=[[C(0), tick:1, length: 1]]}], resolution=128, division=0.0, tickLength=2, tempo=120.0}";
     public static final String NON_EXISTING_TRACKID = "NON_EXISTING_TRACKID";
     SequenceModell modell;
     private TrackModell trackModell;
@@ -18,6 +19,7 @@ class SequenceModellTest {
         trackModell = new TrackModell();
         NoteModell noteModell = new NoteModell(0,1,1,100, 0);
         trackModell.eventModells.add(noteModell);
+        trackModell.eventModells.add(new ShortMessageEventModell(0, 1, CommandEnum.PROGRAM_CHANGE, 100, 0));
 
         modell = new SequenceModell();
         modell.tracks.add(trackModell);
@@ -52,5 +54,19 @@ class SequenceModellTest {
     void getTrackById(){
         assertEquals(trackModell, modell.getTrackById(trackModell.getId()).get());
         assertTrue(modell.getTrackById(NON_EXISTING_TRACKID).isEmpty());
+    }
+
+    @Test
+    void getChannelToProgramMappings(){
+        assertEquals(100, modell.getChannelToProgramMappings()[1]);
+        assertEquals(0, modell.getChannelToProgramMappings()[2]);
+    }
+
+    @Test
+    void updateChannelToProgramMapping(){
+        modell.updateChannelToProgramMapping(3, 100);
+        modell.updateChannelToProgramMapping(3, 101);
+        assertEquals(101, modell.getChannelToProgramMappings()[3]);
+        assertEquals(1, modell.tracks.get(0).getShortMessageEventsByCommand(CommandEnum.PROGRAM_CHANGE).size());
     }
 }

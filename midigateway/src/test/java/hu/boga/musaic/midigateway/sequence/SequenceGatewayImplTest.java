@@ -60,7 +60,7 @@ class SequenceGatewayImplTest {
     void play() {
         try (MockedStatic<Player> mockedStatic = Mockito.mockStatic(Player.class)) {
             gateway.play(sequenceModell, 0, 1);
-            mockedStatic.verify(() -> Player.playSequence(Mockito.any(), eq(0), eq(1)), times(1));
+            mockedStatic.verify(() -> Player.playSequence(Mockito.any(), eq(0L), eq(1L)), times(1));
         }
     }
 

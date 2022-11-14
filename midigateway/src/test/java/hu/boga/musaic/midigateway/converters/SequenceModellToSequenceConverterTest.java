@@ -1,11 +1,11 @@
 package hu.boga.musaic.midigateway.converters;
 
+import hu.boga.musaic.core.modell.SequenceModell;
+import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.modell.events.CommandEnum;
 import hu.boga.musaic.core.modell.events.MetaMessageEventModell;
 import hu.boga.musaic.core.modell.events.NoteModell;
-import hu.boga.musaic.core.modell.SequenceModell;
-import hu.boga.musaic.core.modell.TrackModell;
-import hu.boga.musaic.core.modell.events.ShortMessageEventModell;
+import hu.boga.musaic.midigateway.utils.MidiUtil;
 import hu.boga.musaic.midigateway.utils.NoteUtil;
 import hu.boga.musaic.midigateway.utils.TempoUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,10 +13,10 @@ import org.junit.jupiter.api.Test;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.Sequence;
-
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class SequenceModellToSequenceConverterTest {
 
@@ -31,6 +31,7 @@ class SequenceModellToSequenceConverterTest {
         trackModell = new TrackModell();
         trackModell.channel = 3;
         trackModell.setName("teszt");
+
         sequenceModell.tracks.add(trackModell);
 
         NoteModell noteModell = new NoteModell(12,1,512,100,3);
@@ -48,6 +49,8 @@ class SequenceModellToSequenceConverterTest {
         assertEquals(128, sequence.getResolution());
         assertEquals(120, TempoUtil.getTempo(sequence));
         assertEquals(2, sequence.getTracks()[0].size());
-//        assertFalse(NoteUtil.getNoteOnEvents(sequence.getTracks()[0]).isEmpty());
+
+        assertFalse(NoteUtil.getNoteOnEvents(sequence.getTracks()[1]).isEmpty());
+        assertFalse(MidiUtil.getMidiEventsMetaMessage(sequence.getTracks()[1]).isEmpty());
     }
 }

@@ -45,13 +45,9 @@ public class TrackInteractor implements TrackBoundaryIn {
 
     @Override
     public void deleteNotes(String trackId, NoteDto[] notes) {
-        LOG.debug("deleting notes: {}, trackid: {}", Arrays.asList(notes), trackId);
         InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
-            LOG.debug("sequence: {}", sequenceModell.getId());
             sequenceModell.getTrackById(trackId).ifPresent(trackModell -> {
-                LOG.debug("track: {}", trackModell.getId());
                 Arrays.stream(notes).forEach(noteDto -> {
-                    LOG.debug("deleting note: {}", noteDto.id);
                     trackModell.eventModells.removeIf(noteModell -> noteModell.getId().equals(noteDto.id));
                 });
             });
@@ -73,24 +69,15 @@ public class TrackInteractor implements TrackBoundaryIn {
     public void duplicate(String trackId, int fromTick, int toTick) {
         InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
             sequenceModell.getTrackById(trackId).ifPresent(trackModell -> {
-
-                trackModell.getNotes().stream()
-                        .filter(noteModell -> noteModell.tick >= fromTick && noteModell.tick < toTick)
-                        .forEach(noteModell -> {
-                            NoteModell modellToAdd = noteModell.clone();
-                            modellToAdd.tick = modellToAdd.tick + (toTick - fromTick);
-                            trackModell.eventModells.add(modellToAdd);
-                        });
-
-                TrackModelltoDtoConverter converter = new TrackModelltoDtoConverter(trackModell);
-                TrackDto dto = converter.convert();
-                boundaryOut.displayTrack(dto);
+                List<NoteModell> notesToCopy = trackModell.getNotesBetween(fromTick, toTick);
+                notesToCopy.forEach(noteModell -> {
+                    NoteModell modellToAdd = noteModell.clone();
+                    modellToAdd.tick = modellToAdd.tick + (toTick - fromTick);
+                    trackModell.eventModells.add(modellToAdd);
+                });
+                boundaryOut.displayTrack(new TrackModelltoDtoConverter(trackModell).convert());
             });
         });
-    }
-
-    private Optional<TrackModell> getTrackByTrackId(String trackId) {
-        return InMemorySequenceModellStore.getTrackById(trackId);
     }
 
     @Override

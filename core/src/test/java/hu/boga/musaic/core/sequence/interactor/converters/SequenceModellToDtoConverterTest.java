@@ -20,11 +20,11 @@ class SequenceModellToDtoConverterTest {
 
     @BeforeEach
     void setUp() {
-        trackModell = easyRandom.nextObject(TrackModell.class);
-        noteModell = easyRandom.nextObject(NoteModell.class);
+        trackModell = new TrackModell();
+        noteModell = new NoteModell(12, 0, 128, 100, 0);
         trackModell.eventModells.add(noteModell);
 
-        modell = easyRandom.nextObject(SequenceModell.class);
+        modell = new SequenceModell();
         modell.tracks.add(trackModell);
 
         converter = new SequenceModellToDtoConverter(modell);
@@ -40,6 +40,8 @@ class SequenceModellToDtoConverterTest {
         assertEquals(dto.tickLength, modell.getTickLength());
         assertEquals(dto.ticksIn32nds, modell.getTicksIn32nds());
         assertEquals(dto.tickSize, modell.getTickSize());
+        assertEquals(2, dto.tracks.size());
+        assertEquals(12, dto.tracks.get(1).notes.get(0).midiCode);
 
     }
 }

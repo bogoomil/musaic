@@ -64,7 +64,7 @@ class SequenceInteractorTest {
     @Test
     void play(){
         interactor.play(SEQUENCE_ID, 0, 1);
-        Mockito.verify(gateway).play(Mockito.any(), eq(0), eq(1));
+        Mockito.verify(gateway).play(Mockito.any(), eq(0L), eq(1L));
 
     }
 
@@ -123,6 +123,20 @@ class SequenceInteractorTest {
         Mockito.verify(boundaryOut, times(2)).displaySequence(sequenceDtoArgumentCaptor.capture());
 
         assertEquals(modell.getId(), sequenceDtoArgumentCaptor.getValue().id);
+    }
+
+    @Test
+    void updateChannelColorMapping(){
+        interactor.updateChannelColorMapping(modell.getId(), 10, "LOFOS");
+        assertEquals("LOFOS", modell.channelToColorMapping[10]);
+        Mockito.verify(boundaryOut).displaySequence(Mockito.any());
+    }
+
+    @Test
+    void updateChannelToProgramMappings(){
+        interactor.updateChannelToProgramMappings(modell.getId(), 10, 100);
+        assertEquals(100, modell.getChannelToProgramMappings()[10]);
+        Mockito.verify(boundaryOut).displaySequence(Mockito.any());
     }
 
 }

@@ -61,4 +61,16 @@ public class TrackModell extends BaseModell {
                 .collect(Collectors.toList());
 
     }
+
+    public List<NoteModell> getNotesBetween(int fromTickInclusive, int toTickExclusive){
+        return this.eventModells.stream()
+                .filter(eventModell -> eventModell instanceof NoteModell && isTickBetween((NoteModell) eventModell, fromTickInclusive, toTickExclusive))
+                .map(eventModell -> (NoteModell)eventModell )
+                .collect(Collectors.toList());
+
+    }
+
+    private boolean isTickBetween(NoteModell noteModell, int fromTickInclusive, int toTickExclusive) {
+        return noteModell.tick >= fromTickInclusive && noteModell.tick < toTickExclusive;
+    }
 }

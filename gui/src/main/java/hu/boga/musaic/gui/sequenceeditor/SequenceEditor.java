@@ -51,6 +51,8 @@ public class SequenceEditor implements SequenceBoundaryOut {
     private TrackEditor trackEditor;
     private long fromTick = 0;
     private long toTick = 512;
+    private boolean isPlaying;
+
 
     @Inject
     public SequenceEditor(SequenceBoundaryIn boundaryInProvider) {
@@ -76,6 +78,7 @@ public class SequenceEditor implements SequenceBoundaryOut {
             e.printStackTrace();
         }
         trackEditor = loader.getController();
+        trackEditor.setEventBus(eventBus);
         centerPane.getChildren().add(borderPane);
     }
 
@@ -108,10 +111,12 @@ public class SequenceEditor implements SequenceBoundaryOut {
     }
 
     public void onPlayCurrentSec(ActionEvent actionEvent) {
+        isPlaying = true;
         boundaryIn.play(sequenceDto.id, trackEditor.getLoopStart(), trackEditor.getLoopEnd());
     }
 
     public void stopPlayback(ActionEvent actionEvent) {
+        isPlaying = false;
         this.boundaryIn.stop();
     }
 
@@ -194,6 +199,14 @@ public class SequenceEditor implements SequenceBoundaryOut {
     @Subscribe
     public void onTrackDeletedEvent(TrackDeletedEvent event) {
         boundaryIn.reloadSequence(sequenceDto.id);
+    }
+
+    @Subscribe
+    private void onTrackChangedEvent(TrackEditor.TrackChangedEvent event){
+        if(isPlaying){
+            boundaryIn.stop();
+            boundaryIn.play(sequenceDto.id, trackEditor.getLoopStart(), trackEditor.getLoopEnd());
+        }
     }
 
 }

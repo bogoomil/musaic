@@ -51,6 +51,7 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
     private TrackDto trackDto;
     private int resolution;
+    private EventBus eventBus;
 
     @Inject
     public TrackEditor(TrackBoundaryIn trackBoundaryIn, NoteBoundaryIn noteBoundaryIn) {
@@ -107,6 +108,8 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
         trackEditorPanel.setResolution(resolution);
         trackEditorPanel.setNotes(trackDto.notes);
         trackEditorPanel.paintNotes();
+
+        eventBus.post(new TrackChangedEvent());
     }
 
     @Override
@@ -154,5 +157,12 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
     public void duplicate(ActionEvent actionEvent) {
         this.trackBoundaryIn.duplicate(trackDto.id, getLoopStart(), getLoopEnd());
+    }
+
+    public void setEventBus(EventBus eventBus) {
+        this.eventBus = eventBus;
+    }
+
+    public static class TrackChangedEvent {
     }
 }

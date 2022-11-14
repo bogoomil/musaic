@@ -4,40 +4,52 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.sequenceeditor.SequenceEditor">
+<BorderPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="hu.boga.musaic.gui.sequenceeditor.SequenceEditor">
     <top>
         <HBox BorderPane.alignment="CENTER">
-            <Button mnemonicParsing="false" onAction="#saveSequence" text="Save" />
-            <Separator minWidth="18.0" orientation="VERTICAL" prefWidth="10.0" />
-            <Button mnemonicParsing="false" onAction="#onNewTrackButtonClicked" text="Track+" />
-            <Separator minWidth="18.0" orientation="VERTICAL" prefWidth="10.0" />
-            <Button mnemonicParsing="false" onAction="#onPlayCurrentSec" text="Play" />
-            <Button mnemonicParsing="false" onAction="#stopPlayback" text="Stop" />
-            <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="2.0" />
+            <Button mnemonicParsing="false" onAction="#saveSequence" text="Save"/>
+            <Separator minWidth="18.0" orientation="VERTICAL" prefWidth="10.0"/>
+            <Button mnemonicParsing="false" onAction="#onNewTrackButtonClicked" text="Track+"/>
+            <Separator minWidth="18.0" orientation="VERTICAL" prefWidth="10.0"/>
+            <Button mnemonicParsing="false" onAction="#onPlayCurrentSec" text="Play"/>
+            <Button mnemonicParsing="false" onAction="#stopPlayback" text="Stop"/>
+            <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="2.0"/>
         </HBox>
     </top>
     <left>
-        <VBox>
-            <TitledPane text="Properties" textFill="#028d00">
-                <VBox>
-                    <Label fx:id="division" />
-                    <Label fx:id="resolution" />
-                    <Label fx:id="tickLength" />
-                    <Label fx:id="ticksPerMeasure" />
-                    <Label fx:id="ticksIn32nds" />
-                    <Label fx:id="ticksPerSecond" />
-                    <Label fx:id="tickSize" />
-                    <Label fx:id="tempoLabel" text="Tempo" />
-                    <TempoSlider fx:id="tempoSlider" prefHeight="16.0" prefWidth="293.0" />
-                    <VBox fx:id="propertiesVBox" />
-                </VBox>
-            </TitledPane>
-            <TitledPane text="Tracks">
-                <VBox fx:id="tracksVBox" />
-            </TitledPane>
-        </VBox>
+        <Accordion>
+            <panes>
+                <TitledPane text="Properties" textFill="#028d00">
+                    <VBox>
+                        <Label fx:id="division"/>
+                        <Label fx:id="resolution"/>
+                        <Label fx:id="tickLength"/>
+                        <Label fx:id="ticksPerMeasure"/>
+                        <Label fx:id="ticksIn32nds"/>
+                        <Label fx:id="ticksPerSecond"/>
+                        <Label fx:id="tickSize"/>
+                    </VBox>
+                </TitledPane>
+                <TitledPane text="Settings" textFill="#028d00">
+                    <ScrollPane>
+                        <VBox>
+                            <Label fx:id="tempoLabel" text="Tempo"/>
+                            <TempoSlider fx:id="tempoSlider" prefHeight="16.0" prefWidth="293.0"/>
+                            <VBox fx:id="propertiesVBox"/>
+                        </VBox>
+                    </ScrollPane>
+                </TitledPane>
+                <TitledPane text="Tracks">
+                    <ScrollPane>
+                        <VBox fx:id="tracksVBox"/>
+                    </ScrollPane>
+                </TitledPane>
+            </panes>
+        </Accordion>
     </left>
     <center>
-        <HBox fx:id="centerPane" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-style: dotted;" BorderPane.alignment="CENTER" />
+        <HBox fx:id="centerPane" style="-fx-border-color: black; -fx-border-width: 3; -fx-border-style: dotted;"
+              BorderPane.alignment="CENTER"/>
     </center>
 </BorderPane>
