@@ -38,6 +38,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     private Rectangle loopRectangle = new Rectangle();
     private int loopStartTick;
     private int loopEndTick;
+    private Color noteColor;
 
 
     public TrackEditorPanel() {
@@ -63,6 +64,10 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         contextMenu = new SettingsContextMenu(eventBus);
 
         selectionRect.setStroke(Color.RED);
+        selectionRect.setFill(Color.color(
+                Color.WHITE.getRed(),
+                Color.WHITE.getGreen(),
+                Color.WHEAT.getBlue(), 0.3));
 
         loopRectangle.setStroke(Color.WHITE);
         loopRectangle.setFill(Color.color(Color.WHITE.getRed(), Color.WHITE.getGreen(), Color.WHEAT.getBlue(), 0.3));
@@ -258,7 +263,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     private NoteRectangle addNoteRectangle(final NoteDto noteDto) {
 
         final int x = (int) (noteDto.tick * getTickWidth());
-        final NoteRectangle noteRectangle = new NoteRectangle(noteDto, eventBus);
+        final NoteRectangle noteRectangle = new NoteRectangle(noteDto, eventBus, noteColor);
         noteRectangle.setX(x);
         noteRectangle.setY(this.getYByPitch((int) noteDto.midiCode));
         noteRectangle.setWidth(getTickWidth() * noteDto.length);
@@ -313,5 +318,9 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
 
     public int getLoopEndTick() {
         return loopEndTick;
+    }
+
+    public void setNoteColor(Color color) {
+        this.noteColor = color;
     }
 }

@@ -84,6 +84,7 @@ public class SequenceInteractor implements SequenceBoundaryIn {
 
     @Override
     public void updateChannelColorMapping(String sequenceId, int channel, String color) {
+        LOG.debug("new color: " + color);
         SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId);
         modell.channelToColorMapping[channel] = color;
         boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());

@@ -14,7 +14,7 @@ public class NoteRectangle extends Rectangle {
     private static final Logger LOG = LoggerFactory.getLogger(NoteRectangle.class);
     public static final Color SELECTED_COLOR = Color.color(Color.LAWNGREEN.getRed(), Color.LAWNGREEN.getGreen(), Color.LAWNGREEN.getBlue(), 0.7);
     ;
-    public static final Color DEFAULT_COLOR = Color.color(Color.DEEPSKYBLUE.getRed(), Color.DEEPSKYBLUE.getGreen(), Color.DEEPSKYBLUE.getBlue(), 0.7);
+    public final Color DEFAULT_COLOR;// = Color.color(Color.DEEPSKYBLUE.getRed(), Color.DEEPSKYBLUE.getGreen(), Color.DEEPSKYBLUE.getBlue(), 0.7);
     private int length;
     private boolean selected;
 
@@ -22,9 +22,10 @@ public class NoteRectangle extends Rectangle {
     private double offset;
     private NoteDto noteDto;
 
-    public NoteRectangle(NoteDto noteDto, EventBus eventBus) {
+    public NoteRectangle(NoteDto noteDto, EventBus eventBus, Color color) {
         this.noteDto = noteDto;
         this.eventBus = eventBus;
+        this.DEFAULT_COLOR = color;
         eventBus.register(this);
         this.setFill(DEFAULT_COLOR);
         setUpEventHandlers();

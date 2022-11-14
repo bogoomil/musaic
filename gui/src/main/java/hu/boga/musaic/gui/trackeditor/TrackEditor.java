@@ -93,6 +93,7 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
     }
 
     private void setTopPaneColor(Color color) {
+        trackEditorPanel.setNoteColor(color);
         topAnchorPane.setBackground(new Background(
                 new BackgroundFill(
                         color,
