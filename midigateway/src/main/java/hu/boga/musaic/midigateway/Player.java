@@ -71,12 +71,14 @@ public class Player {
 
 
 
-    public static void playNote(int tempo, int channel, int resolution, int midiCode, int lengthInTicks) {
+    public static void playNote(int tempo, int channel, int resolution, int midiCode, int lengthInTicks, int instrument) {
         int length = (int) getNoteLenghtInMs(lengthInTicks, tempo, resolution);
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 MidiChannel midiChannel = synth.getChannels()[channel];
+                midiChannel.programChange(instrument);
+
                 midiChannel.noteOn(midiCode, 200);
                 sleep(length);
                 midiChannel.noteOff(midiCode);

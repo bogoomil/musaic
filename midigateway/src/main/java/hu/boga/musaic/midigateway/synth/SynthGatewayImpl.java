@@ -6,8 +6,8 @@ import hu.boga.musaic.midigateway.Player;
 public class SynthGatewayImpl implements SynthGateway {
 
     @Override
-    public void playOneNote(int tempo, int channel, int resolution, int midiCode, int lengthInTicks) {
-        Player.playNote(tempo, channel, resolution, midiCode, lengthInTicks);
+    public void playOneNote(int tempo, int channel, int resolution, int midiCode, int lengthInTicks, int instrument) {
+        Player.playNote(tempo, channel, resolution, midiCode, lengthInTicks, instrument);
     }
 
 }

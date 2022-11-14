@@ -21,7 +21,7 @@ public class NoteInteractor implements NoteBoundaryIn{
             int resolution = sequenceModell.resolution;
             TrackModell trackModell = sequenceModell.getTrackById(trackId).get();
             int channel = trackModell.channel;
-            this.synthGateway.playOneNote(tempo, channel, resolution, midiCode, lengthInTicks);
+            this.synthGateway.playOneNote(tempo, channel, resolution, midiCode, lengthInTicks, sequenceModell.getChannelToProgramMappings()[channel]);
         });
     }
 }

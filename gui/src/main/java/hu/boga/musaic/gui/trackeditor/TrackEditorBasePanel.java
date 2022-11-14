@@ -190,9 +190,11 @@ public abstract class TrackEditorBasePanel extends Pane {
     }
 
     private void paintRootMarker(int y) {
-        Line line = new Line(0, y + getPitchHeight() / 2, getPrefWidth(), y + getPitchHeight() / 2);
-        line.setStroke(Color.RED);
-        getChildren().add(line);
+        Color highLight = Color.CYAN;
+        Rectangle rectangle = new Rectangle(0, y + 2, getPrefWidth(), getPitchHeight() -2);
+        rectangle.setStroke(highLight);
+        rectangle.setFill(Color.color(highLight.getRed(), highLight.getGreen(), highLight.getBlue(), 0.4));
+        getChildren().add(rectangle);
     }
 
     private void paintDisabledRectangle(int y) {
