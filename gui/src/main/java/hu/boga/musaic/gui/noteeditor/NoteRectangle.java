@@ -5,10 +5,12 @@ import com.google.common.eventbus.Subscribe;
 import hu.boga.musaic.core.note.NoteBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -62,6 +64,11 @@ public class NoteRectangle extends Rectangle {
 
     private ContextMenu getContextMenu(){
         ContextMenu menu = new ContextMenu();
+
+        int currVelocity = (int) (noteDto.velocity * 100);
+
+        Label label = new Label("" + currVelocity);
+
         Slider volumeSlider = new Slider();
         volumeSlider.setMin(0);
         volumeSlider.setMax(1);
@@ -70,9 +77,15 @@ public class NoteRectangle extends Rectangle {
             noteDto.velocity = newValue.doubleValue();
             noteBoundaryIn.setNoteVolume(noteDto.id, noteDto.velocity);
             fill = Color.color(fill.getRed(), fill.getGreen(), fill.getBlue(), noteDto.velocity);
+            label.setText("" + ((int) (noteDto.velocity * 100)));
             setFill(fill);
         });
-        MenuItem volumeMenuItem = new MenuItem("Vol.", volumeSlider);
+
+        HBox hBox = new HBox();
+        hBox.getChildren().add(volumeSlider);
+        hBox.getChildren().add(label);
+
+        MenuItem volumeMenuItem = new MenuItem("% (vol.)", hBox);
         menu.getItems().add(volumeMenuItem);
         return menu;
     }
