@@ -36,6 +36,15 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </HBox>
+            <HBox prefHeight="11.0" prefWidth="254.0" spacing="5.0">
+               <children>
+                  <Button fx:id="volUp" mnemonicParsing="false" text="vol up 10%" />
+                  <Button fx:id="volDown" mnemonicParsing="false" text="vol down 10%" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
          </children>
       </VBox>
    </children>

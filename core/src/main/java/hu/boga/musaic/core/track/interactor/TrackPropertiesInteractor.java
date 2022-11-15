@@ -54,4 +54,20 @@ public class TrackPropertiesInteractor implements TrackPropertiesBoundaryIn {
             sequenceModell.tracks.removeIf(trackModell -> trackModell.getId().equals(trackId));
         });
     }
+
+    @Override
+    public void updateVolume(String trackId, double velocityPercent) {
+        InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
+            trackModell.getNotes().forEach(noteModell -> noteModell.velocity = calcNewVelocity(noteModell.velocity, velocityPercent));
+            boundaryOut.displayTrack(new TrackModelltoDtoConverter(trackModell).convert());
+        });
+    }
+
+    private double calcNewVelocity(double current, double percent){
+        double newValue = current + percent;
+        if(newValue > 1) newValue = 1;
+        if (newValue < 0) newValue = 0;
+
+        return newValue;
+    }
 }

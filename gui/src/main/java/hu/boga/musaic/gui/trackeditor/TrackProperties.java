@@ -33,6 +33,8 @@ public class TrackProperties implements TrackPropertiesBoundaryOut {
     public Button btnDelTrack;
     public CheckBox chxbMute;
     public AnchorPane mainPanel;
+    public Button volUp;
+    public Button volDown;
 
     private TrackPropertiesBoundaryIn boundaryIn;
     private TrackDto trackDto;
@@ -109,6 +111,8 @@ public class TrackProperties implements TrackPropertiesBoundaryOut {
     }
 
     public void initialize() {
+        volUp.setOnAction(event -> boundaryIn.updateVolume(trackDto.id, 0.1));
+        volDown.setOnAction(event -> boundaryIn.updateVolume(trackDto.id, -0.1));
         cbChannel.getItems().addAll(IntStream.rangeClosed(0, 15).boxed().collect(Collectors.toList()));
     }
 
