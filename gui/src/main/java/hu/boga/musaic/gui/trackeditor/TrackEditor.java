@@ -72,6 +72,7 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
         });
         trackEditorPanel.setNoteChangeListener(this);
+        trackEditorPanel.setNoteBoundaryIn(noteBoundaryIn);
         rootCombo.addEventHandler(ActionEvent.ACTION, event -> trackEditorPanel.setCurrentRoot(rootCombo.getSelectedNoteName()));
         modeCombo.addEventHandler(ActionEvent.ACTION, event -> trackEditorPanel.setCurrentTone(modeCombo.getSelectedTone()));
 
@@ -155,8 +156,11 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
         return trackEditorPanel.getLoopEndTick();
     }
 
+
     public void duplicate(ActionEvent actionEvent) {
         this.trackBoundaryIn.duplicate(trackDto.id, getLoopStart(), getLoopEnd());
+        int newLoopEnd = getLoopEnd() + (getLoopEnd() - getLoopStart());
+        this.trackEditorPanel.setLoopEnd(newLoopEnd);
     }
 
     public void setEventBus(EventBus eventBus) {

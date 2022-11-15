@@ -7,5 +7,4 @@ public interface TrackPropertiesBoundaryIn {
     void updateTrackName(TrackDto trackDto);
     void setMuted(String trackId, boolean muted);
     void removeTrack(String trackId);
-
 }

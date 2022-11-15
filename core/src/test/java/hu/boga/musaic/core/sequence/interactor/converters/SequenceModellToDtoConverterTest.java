@@ -21,7 +21,7 @@ class SequenceModellToDtoConverterTest {
     @BeforeEach
     void setUp() {
         trackModell = new TrackModell();
-        noteModell = new NoteModell(12, 0, 128, 100, 0);
+        noteModell = new NoteModell(12, 0, 128, 1, 0);
         trackModell.eventModells.add(noteModell);
 
         modell = new SequenceModell();

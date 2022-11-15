@@ -17,7 +17,7 @@ class SequenceModellTest {
     @BeforeEach
     void setUp() {
         trackModell = new TrackModell();
-        NoteModell noteModell = new NoteModell(0,1,1,100, 0);
+        NoteModell noteModell = new NoteModell(0,1,1,1, 0);
         trackModell.eventModells.add(noteModell);
         trackModell.eventModells.add(new ShortMessageEventModell(0, 1, CommandEnum.PROGRAM_CHANGE, 100, 0));
 

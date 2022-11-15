@@ -5,5 +5,5 @@ public class NoteDto {
     public int midiCode;
     public long tick;
     public long length;
-    public int velocity;
+    public double velocity;
 }

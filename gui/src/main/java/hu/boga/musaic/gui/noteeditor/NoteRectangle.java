@@ -1,45 +1,80 @@
-package hu.boga.musaic.gui.trackeditor;
+package hu.boga.musaic.gui.noteeditor;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import hu.boga.musaic.core.note.NoteBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
-import hu.boga.musaic.gui.trackeditor.events.NoteMovedEvent;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.Slider;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class NoteRectangle extends Rectangle {
     private static final Logger LOG = LoggerFactory.getLogger(NoteRectangle.class);
-    public static final Color SELECTED_COLOR = Color.color(Color.LAWNGREEN.getRed(), Color.LAWNGREEN.getGreen(), Color.LAWNGREEN.getBlue(), 0.7);
+    public static final Color SELECTED_COLOR = Color.color(Color.LAWNGREEN.getRed(), Color.LAWNGREEN.getGreen(), Color.LAWNGREEN.getBlue(), 0.8);
+    private Color fill;
     ;
-    public final Color DEFAULT_COLOR;// = Color.color(Color.DEEPSKYBLUE.getRed(), Color.DEEPSKYBLUE.getGreen(), Color.DEEPSKYBLUE.getBlue(), 0.7);
     private int length;
     private boolean selected;
 
     private EventBus eventBus;
     private double offset;
     private NoteDto noteDto;
+    private NoteBoundaryIn noteBoundaryIn;
 
-    public NoteRectangle(NoteDto noteDto, EventBus eventBus, Color color) {
+    public NoteRectangle(NoteDto noteDto, EventBus eventBus, Color color, NoteBoundaryIn noteBoundaryIn) {
         this.noteDto = noteDto;
         this.eventBus = eventBus;
-        this.DEFAULT_COLOR = color;
+        fill = Color.color(color.getRed(), color.getGreen(), color.getBlue(), noteDto.velocity);
+
+        this.noteBoundaryIn = noteBoundaryIn;
         eventBus.register(this);
-        this.setFill(DEFAULT_COLOR);
+        this.setStroke(color);
+        this.setStrokeWidth(3);
+        this.setFill(fill);
         setUpEventHandlers();
     }
 
     private void setUpEventHandlers() {
-        setOnMousePressed(this::handleousePressed);
+        setOnMousePressed(this::handleMousePressed);
         setOnMouseDragged(event -> handleMouseDragged(event));
         this.xProperty().addListener((observable, oldValue, newValue) -> xPropertyChanged());
     }
 
-    private void handleousePressed(MouseEvent event) {
+    private void handleMousePressed(MouseEvent event) {
+        if(event.getButton() == MouseButton.SECONDARY){
+            showContextMenu(event);
+        }
         offset = event.getX() - getX();
         event.consume();
+    }
+
+    private void showContextMenu(MouseEvent event) {
+        getContextMenu().show(this, event.getScreenX(), event.getScreenY());
+        event.consume();
+    }
+
+    private ContextMenu getContextMenu(){
+        ContextMenu menu = new ContextMenu();
+        Slider volumeSlider = new Slider();
+        volumeSlider.setMin(0);
+        volumeSlider.setMax(1);
+        volumeSlider.setValue(noteDto.velocity);
+        volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            noteDto.velocity = newValue.doubleValue();
+            noteBoundaryIn.setNoteVolume(noteDto.id, noteDto.velocity);
+            fill = Color.color(fill.getRed(), fill.getGreen(), fill.getBlue(), noteDto.velocity);
+            setFill(fill);
+        });
+        MenuItem volumeMenuItem = new MenuItem("Vol.", volumeSlider);
+        menu.getItems().add(volumeMenuItem);
+        return menu;
     }
 
     private void xPropertyChanged() {
@@ -64,7 +99,7 @@ public class NoteRectangle extends Rectangle {
 
     public void setSelected(final boolean selected) {
         this.selected = selected;
-        setFill(isSelected() ? SELECTED_COLOR : DEFAULT_COLOR);
+        setFill(isSelected() ? SELECTED_COLOR : fill);
     }
 
     public int getTick() {

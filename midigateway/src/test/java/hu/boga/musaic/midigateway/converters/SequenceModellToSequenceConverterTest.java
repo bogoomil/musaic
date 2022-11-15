@@ -34,7 +34,7 @@ class SequenceModellToSequenceConverterTest {
 
         sequenceModell.tracks.add(trackModell);
 
-        NoteModell noteModell = new NoteModell(12,1,512,100,3);
+        NoteModell noteModell = new NoteModell(12,1,512,1,3);
         trackModell.eventModells.add(noteModell);
 
         MetaMessageEventModell mm = new MetaMessageEventModell(0, "fing".getBytes(StandardCharsets.UTF_8), CommandEnum.TRACK_NAME);

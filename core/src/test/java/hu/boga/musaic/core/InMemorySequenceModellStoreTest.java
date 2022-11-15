@@ -50,7 +50,7 @@ class InMemorySequenceModellStoreTest {
 
     @Test
     void getTrackByNoteId(){
-        NoteModell note = new NoteModell(12, 1,512,100,0);
+        NoteModell note = new NoteModell(12, 1,512,1,0);
         trackModell.eventModells.add(note);
 
         assertEquals(trackModell, InMemorySequenceModellStore.getTrackByNoteId(note.getId()).get());

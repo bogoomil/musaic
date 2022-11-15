@@ -24,10 +24,9 @@ public class SettingsContextMenu extends ContextMenu {
 
         clearLoop.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new ClearLoopEvent()));
 
-        Menu creationMenu = new Menu("Creation", null,
-                new Menu("Length", null, createNoteLengthMenuItem()),
-                new Menu("Chords", null, createChordMenuItems())
-        );
+
+              Menu length =  new Menu("Length", null, createNoteLengthMenuItem());
+              Menu chords =   new Menu("Chords", null, createChordMenuItems());
 
         MenuItem selectAllMenu = new MenuItem("Select all");
         selectAllMenu.addEventHandler(ActionEvent.ACTION, event -> eventBus.post(new SelectAllEvent()));
@@ -52,7 +51,10 @@ public class SettingsContextMenu extends ContextMenu {
         getItems().add(addLoopStartPoint);
         getItems().add(addLoopEndPoint);
         getItems().add(clearLoop);
-        getItems().add(creationMenu);
+        getItems().add(new SeparatorMenuItem());
+        getItems().add(length);
+        getItems().add(chords);
+        getItems().add(new SeparatorMenuItem());
         getItems().add(selectionMenu);
         getItems().add(deletionMenu);
     }

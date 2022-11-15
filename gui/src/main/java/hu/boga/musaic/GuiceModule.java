@@ -39,7 +39,7 @@ public class GuiceModule extends AbstractModule {
         bind(TrackPropertiesBoundaryIn.class).to(TrackPropertiesInteractor.class);
         bind(TrackPropertiesBoundaryOut.class).to(TrackProperties.class);
 
-        bind(NoteBoundaryIn.class).to(NoteInteractor.class);
+        bind(NoteBoundaryIn.class).to(NoteInteractor.class).in(Singleton.class);
         bind(SynthGateway.class).to(SynthGatewayImpl.class);
 
         bind(SequenceGateway.class).to(SequenceGatewayImpl.class).in(Singleton.class);

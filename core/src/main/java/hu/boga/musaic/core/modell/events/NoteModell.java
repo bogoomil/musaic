@@ -5,10 +5,10 @@ import hu.boga.musaic.musictheory.enums.NoteName;
 public class NoteModell extends EventModell{
     public int midiCode;
     public long length;
-    public int velocity;
+    public double velocity = 1;
     public int channel;
 
-    public NoteModell(int midiCode, long tick, long length, int velocity, int channel) {
+    public NoteModell(int midiCode, long tick, long length, double velocity, int channel) {
         super(tick, CommandEnum.NOTE_ON);
         this.midiCode = midiCode;
         this.tick = tick;

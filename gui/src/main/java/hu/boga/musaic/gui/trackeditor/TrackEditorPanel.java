@@ -2,11 +2,12 @@ package hu.boga.musaic.gui.trackeditor;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import hu.boga.musaic.core.note.NoteBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
+import hu.boga.musaic.gui.noteeditor.NoteRectangle;
 import hu.boga.musaic.gui.trackeditor.events.*;
 import hu.boga.musaic.musictheory.enums.ChordType;
 import javafx.geometry.Point2D;
-import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -39,6 +40,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     private int loopStartTick;
     private int loopEndTick;
     private Color noteColor;
+    private NoteBoundaryIn noteBoundaryIn;
 
 
     public TrackEditorPanel() {
@@ -86,7 +88,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
 
     private void selectNotesDraggedOver() {
         this.getChildren().forEach(node -> {
-            if(node instanceof  NoteRectangle){
+            if(node instanceof NoteRectangle){
                 NoteRectangle nr = (NoteRectangle) node;
                 if(nr.intersects(selectionRect.getBoundsInLocal())){
                     nr.toggleSlection();
@@ -263,7 +265,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     private NoteRectangle addNoteRectangle(final NoteDto noteDto) {
 
         final int x = (int) (noteDto.tick * getTickWidth());
-        final NoteRectangle noteRectangle = new NoteRectangle(noteDto, eventBus, noteColor);
+        final NoteRectangle noteRectangle = new NoteRectangle(noteDto, eventBus, noteColor, noteBoundaryIn);
         noteRectangle.setX(x);
         noteRectangle.setY(this.getYByPitch((int) noteDto.midiCode));
         noteRectangle.setWidth(getTickWidth() * noteDto.length);
@@ -322,5 +324,13 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
 
     public void setNoteColor(Color color) {
         this.noteColor = color;
+    }
+
+    public void setNoteBoundaryIn(NoteBoundaryIn noteBoundaryIn) {
+        this.noteBoundaryIn = noteBoundaryIn;
+    }
+
+    public void setLoopEnd(int loopEnd) {
+        this.loopEndTick = loopEnd;
     }
 }

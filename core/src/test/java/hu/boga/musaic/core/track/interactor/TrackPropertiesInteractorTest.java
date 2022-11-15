@@ -42,7 +42,7 @@ class TrackPropertiesInteractorTest {
         trackModell = new TrackModell();
         modell.tracks.add(trackModell);
 
-        noteModell = new NoteModell(12, 0, 32, 100, 0);
+        noteModell = new NoteModell(12, 0, 32, 1, 0);
         trackModell.eventModells.add(noteModell);
 
         InMemorySequenceModellStore.SEQUENCE_MODELS.put(modell.getId(), modell);

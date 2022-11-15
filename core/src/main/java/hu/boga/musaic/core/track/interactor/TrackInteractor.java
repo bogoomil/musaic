@@ -99,12 +99,12 @@ public class TrackInteractor implements TrackBoundaryIn {
     private List<NoteModell> prepareNotesToAdd(int tick, int pitch, ChordType chordType, int computedLength, int channel) {
         List<NoteModell> notes = new ArrayList<>();
         if(chordType == null){
-            NoteModell note = new NoteModell(pitch, tick, computedLength, 100, channel);
+            NoteModell note = new NoteModell(pitch, tick, computedLength, 1, channel);
             notes.add(note);
         } else {
             Chord chord = Chord.getChord(new Pitch(pitch), chordType);
             Arrays.stream(chord.getPitches()).forEach(midiCode -> {
-                NoteModell note = new NoteModell(midiCode.getMidiCode(), tick, computedLength, 100, channel);
+                NoteModell note = new NoteModell(midiCode.getMidiCode(), tick, computedLength, 1, channel);
                 notes.add(note);
             });
         }

@@ -23,5 +23,7 @@ module gui {
     opens hu.boga.musaic.gui.controls to javafx.fxml, com.google.common;
     exports hu.boga.musaic.gui;
     opens hu.boga.musaic.gui to com.google.common, javafx.fxml;
+    exports hu.boga.musaic.gui.noteeditor;
+    opens hu.boga.musaic.gui.noteeditor to com.google.common, com.google.guice, javafx.fxml;
 
 }

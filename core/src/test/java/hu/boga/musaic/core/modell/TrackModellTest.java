@@ -16,7 +16,7 @@ class TrackModellTest {
     @BeforeEach
     void setUp() {
         trackModell = new TrackModell();
-        noteModell = new NoteModell(0,1,1,100, 0);
+        noteModell = new NoteModell(0,1,1,1, 0);
         trackModell.eventModells.add(noteModell);
     }
 
