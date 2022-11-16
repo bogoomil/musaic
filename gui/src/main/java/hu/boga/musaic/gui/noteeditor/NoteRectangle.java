@@ -4,6 +4,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import hu.boga.musaic.core.note.NoteBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
+import javafx.geometry.Orientation;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -11,6 +12,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -70,22 +72,28 @@ public class NoteRectangle extends Rectangle {
         Label label = new Label("" + currVelocity);
 
         Slider volumeSlider = new Slider();
+        volumeSlider.orientationProperty().setValue(Orientation.VERTICAL);
         volumeSlider.setMin(0);
         volumeSlider.setMax(1);
         volumeSlider.setValue(noteDto.velocity);
+        volumeSlider.setMajorTickUnit(0.1);
+        volumeSlider.setSnapToTicks(true);
+        volumeSlider.setShowTickMarks(true);
+        volumeSlider.blockIncrementProperty().setValue(0.1);
+        volumeSlider.setMinorTickCount(10);
         volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             noteDto.velocity = newValue.doubleValue();
             noteBoundaryIn.setNoteVolume(noteDto.id, noteDto.velocity);
             fill = Color.color(fill.getRed(), fill.getGreen(), fill.getBlue(), noteDto.velocity);
-            label.setText("" + ((int) (noteDto.velocity * 100)));
+            label.setText(((int) (noteDto.velocity * 100)) + "%");
             setFill(fill);
         });
 
-        HBox hBox = new HBox();
+        VBox hBox = new VBox();
         hBox.getChildren().add(volumeSlider);
         hBox.getChildren().add(label);
 
-        MenuItem volumeMenuItem = new MenuItem("% (vol.)", hBox);
+        MenuItem volumeMenuItem = new MenuItem("", hBox);
         menu.getItems().add(volumeMenuItem);
         return menu;
     }
