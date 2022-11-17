@@ -45,6 +45,8 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
     public Label xLabel;
     public AnchorPane topAnchorPane;
     public Button btnDuplicateLoop;
+    public Button btnMoveUp;
+    public Button btnMoveDown;
 
     private TrackBoundaryIn trackBoundaryIn;
     private NoteBoundaryIn noteBoundaryIn;
@@ -82,6 +84,20 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
             trackEditorPanel.setCurrentRoot(null);
             trackEditorPanel.setCurrentTone(null);
         });
+
+        btnMoveUp.setOnAction(event -> {
+            moveSelectedNotes(1);
+        });
+        btnMoveDown.setOnAction(event -> {
+            moveSelectedNotes(-1);
+        });
+    }
+
+    private void moveSelectedNotes(int i) {
+        List<String> ids = trackEditorPanel.getSelectedNoteRectangles().stream()
+                .map(noteRectangle -> noteRectangle.getNoteId())
+                .collect(Collectors.toList());
+        trackBoundaryIn.moveUpAndDownNotes(trackDto.id, ids.toArray(new String[0]), i);
     }
 
     public void setTrack(String trackId, String currentColor){

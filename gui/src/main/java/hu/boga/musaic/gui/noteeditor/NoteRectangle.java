@@ -4,6 +4,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import hu.boga.musaic.core.note.NoteBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
+import hu.boga.musaic.gui.trackeditor.events.DeleteNoteEvent;
 import javafx.geometry.Orientation;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -19,11 +20,14 @@ import javafx.scene.shape.Rectangle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class NoteRectangle extends Rectangle {
     private static final Logger LOG = LoggerFactory.getLogger(NoteRectangle.class);
     public static final Color SELECTED_COLOR = Color.color(Color.LAWNGREEN.getRed(), Color.LAWNGREEN.getGreen(), Color.LAWNGREEN.getBlue(), 0.8);
     private Color fill;
-    ;
+
     private int length;
     private boolean selected;
 
@@ -32,10 +36,14 @@ public class NoteRectangle extends Rectangle {
     private NoteDto noteDto;
     private NoteBoundaryIn noteBoundaryIn;
 
+    private static final List<String> selectedIds = new ArrayList<>();
+
     public NoteRectangle(NoteDto noteDto, EventBus eventBus, Color color, NoteBoundaryIn noteBoundaryIn) {
         this.noteDto = noteDto;
         this.eventBus = eventBus;
-        fill = Color.color(color.getRed(), color.getGreen(), color.getBlue(), noteDto.velocity);
+
+        this.selected = selectedIds.contains(noteDto.id);
+        fill = selected ? SELECTED_COLOR :Color.color(color.getRed(), color.getGreen(), color.getBlue(), noteDto.velocity);
 
         this.noteBoundaryIn = noteBoundaryIn;
         eventBus.register(this);
@@ -43,12 +51,30 @@ public class NoteRectangle extends Rectangle {
         this.setStrokeWidth(3);
         this.setFill(fill);
         setUpEventHandlers();
+        LOG.debug("nr created: {}, sel: {}, color: {}, selected color {}", noteDto.id, selected, color, SELECTED_COLOR);
     }
 
     private void setUpEventHandlers() {
         setOnMousePressed(this::handleMousePressed);
-        setOnMouseDragged(event -> handleMouseDragged(event));
+        setOnMouseReleased(this::handleMouseReleased);
+        setOnMouseDragged(this::handleMouseDragged);
         this.xProperty().addListener((observable, oldValue, newValue) -> xPropertyChanged());
+        setOnMouseClicked(this::handleMouseClicked);
+    }
+
+    private void handleMouseReleased(MouseEvent event) {
+        eventBus.post(new MouseReleasedEvent());
+        event.consume();
+    }
+
+    private void handleMouseClicked(MouseEvent event) {
+        if (event.getClickCount() == 2) {
+            eventBus.unregister(this);
+            eventBus.post(new DeleteNoteEvent(noteDto.id));
+        } else if (event.getClickCount() == 1) {
+            toggleSlection();
+        }
+        event.consume();
     }
 
     private void handleMousePressed(MouseEvent event) {
@@ -118,11 +144,6 @@ public class NoteRectangle extends Rectangle {
         return this.selected;
     }
 
-    public void setSelected(final boolean selected) {
-        this.selected = selected;
-        setFill(isSelected() ? SELECTED_COLOR : fill);
-    }
-
     public int getTick() {
         return (int) this.noteDto.tick;
     }
@@ -132,7 +153,15 @@ public class NoteRectangle extends Rectangle {
     }
 
     public void toggleSlection() {
-        setSelected(!isSelected());
+        this.selected = !selected;
+        if(selected){
+            selectedIds.add(noteDto.id);
+            setFill(SELECTED_COLOR);
+        }else{
+            selectedIds.remove(noteDto.id);
+            Color origColor = (Color) getStroke();
+            setFill(Color.color(origColor.getRed(), origColor.getGreen(), origColor.getBlue(), noteDto.velocity));
+        }
     }
 
     public String getNoteId(){
@@ -151,11 +180,9 @@ public class NoteRectangle extends Rectangle {
         public NoteMovedEvent(String id) {
             this.id = id;
         }
-
         public String getId() {
             return id;
         }
-
     }
 
     private static class NoteRectangleMovedEvent {
@@ -166,4 +193,6 @@ public class NoteRectangle extends Rectangle {
             this.delta = delta;
         }
     }
+
+    public static  class MouseReleasedEvent{}
 }

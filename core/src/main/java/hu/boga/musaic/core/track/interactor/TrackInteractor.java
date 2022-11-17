@@ -81,6 +81,18 @@ public class TrackInteractor implements TrackBoundaryIn {
     }
 
     @Override
+    public void moveUpAndDownNotes(String trackId, String[] ids, int move) {
+        InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
+            sequenceModell.getTrackById(trackId).ifPresent(trackModell -> {
+                Arrays.stream(ids).forEach(id -> {
+                    trackModell.getNoteModellById(id).ifPresent(noteModell -> noteModell.midiCode += move);
+                });
+                boundaryOut.displayTrack(new TrackModelltoDtoConverter(trackModell).convert());
+            });
+        });
+    }
+
+    @Override
     public void showTrack(String id) {
         InMemorySequenceModellStore.getSequenceByTrackId(id).ifPresent(sequenceModell -> {
             sequenceModell.getTrackById(id).ifPresent(trackModell -> {

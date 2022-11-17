@@ -29,7 +29,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     private List<NoteDto> notes;
     private SettingsContextMenu contextMenu;
     private ChordType currentChordType = null;
-    private List<String> selectedNoteIds = new ArrayList<>(0);
+//    private List<String> selectedNoteIds = new ArrayList<>(0);
     private NoteChangeListener noteChangeListener;
     private EventBus eventBus = new EventBus("TRACK_EDITOR_PANEL_EVENT_BUS");
 
@@ -60,7 +60,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
             selectionRect.setHeight(height);
 
         });
-        this.setOnMouseReleased(this::handleMousReleased);
+        this.setOnMouseReleased(this::handleMouseReleased);
 
         eventBus.register(this);
         contextMenu = new SettingsContextMenu(eventBus);
@@ -75,7 +75,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         loopRectangle.setFill(Color.color(Color.WHITE.getRed(), Color.WHITE.getGreen(), Color.WHEAT.getBlue(), 0.3));
     }
 
-    private void handleMousReleased(MouseEvent event) {
+    private void handleMouseReleased(MouseEvent event) {
         selectNotesDraggedOver();
         resetSelectionRect();
     }
@@ -126,13 +126,17 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     }
 
     @Subscribe
+    private void handleDeleteNoteEvent(DeleteNoteEvent event){
+        this.noteChangeListener.onDeleteNoteEvent(event);
+    }
+
+    @Subscribe
     private void handleDeleteAllNotesEvent(SettingsContextMenu.DeleteAllNotesEvent event) {
         List<DeleteNoteEvent> events = getAllNoteRectangles().stream()
                 .map(noteRectangle -> new DeleteNoteEvent(noteRectangle.getNoteId()))
                 .collect(Collectors.toList());
         LOG.debug("deleting notes " + events);
         this.noteChangeListener.onDeleteNoteEvent(events.toArray(DeleteNoteEvent[]::new));
-        selectedNoteIds.clear();
     }
 
     @Subscribe
@@ -144,30 +148,26 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
             LOG.debug("deleting notes " + ev.getNoteId());
         });
         this.noteChangeListener.onDeleteNoteEvent(events.toArray(DeleteNoteEvent[]::new));
-        selectedNoteIds.clear();
     }
 
     @Subscribe
     private void handleInvertSelectionEvent(SettingsContextMenu.InvertSelectionEvent event) {
-        selectedNoteIds.clear();
         getAllNoteRectangles().forEach(noteRectangle -> {
             noteRectangle.toggleSlection();
-            if (noteRectangle.isSelected()) {
-                selectedNoteIds.add(noteRectangle.getNoteId());
-            }
         });
     }
 
     @Subscribe
     private void handleDeSeletAllEventEvent(SettingsContextMenu.DeSelectAllEvent event) {
-        this.selectedNoteIds.clear();
+        getSelectedNoteRectangles().forEach(noteRectangle -> noteRectangle.toggleSlection());
         paintNotes();
     }
 
     @Subscribe
     private void handleSelectAllEvent(SettingsContextMenu.SelectAllEvent event) {
-        List<String> allPoints = getAllNoteRectangles().stream().map(noteRectangle -> noteRectangle.getNoteId()).collect(Collectors.toList());
-        this.selectedNoteIds.addAll(allPoints);
+        getAllNoteRectangles().stream()
+                .filter(noteRectangle -> !noteRectangle.isSelected())
+                .forEach(noteRectangle -> noteRectangle.toggleSlection());
         paintNotes();
     }
 
@@ -187,6 +187,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         if(!movedNoteIds.contains(even.getId())){
             movedNoteIds.add(even.getId());
         }
+        LOG.debug("note moved ids: {}", movedNoteIds);
     }
 
     @Subscribe
@@ -226,8 +227,9 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         return l;
     }
 
-    private List<NoteRectangle> getSelectedNoteRectangles() {
-        return getAllNoteRectangles().stream().filter(noteRectangle -> noteRectangle.isSelected()).collect(Collectors.toList());
+    protected List<NoteRectangle> getSelectedNoteRectangles() {
+        List<NoteRectangle> l = getAllNoteRectangles().stream().filter(noteRectangle -> noteRectangle.isSelected()).collect(Collectors.toList());
+        return l;
     }
 
     private Optional<NoteRectangle> getNoteRectangleByNoteId(String noteId){
@@ -270,32 +272,13 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         noteRectangle.setY(this.getYByPitch((int) noteDto.midiCode));
         noteRectangle.setWidth(getTickWidth() * noteDto.length);
         noteRectangle.setHeight(this.getPitchHeight());
-
-        noteRectangle.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                eventBus.unregister(noteRectangle);
-                this.noteChangeListener.onDeleteNoteEvent(new DeleteNoteEvent(noteDto.id));
-            } else if (event.getClickCount() == 1) {
-                noteRectangle.setSelected(!noteRectangle.isSelected());
-                if (noteRectangle.isSelected()) {
-                    selectedNoteIds.add(noteRectangle.getNoteId());
-                } else {
-                    selectedNoteIds.remove(noteRectangle.getNoteId());
-                }
-            }
-            event.consume();
-        });
-
-        noteRectangle.setOnMouseReleased(event -> handleMouseReleasedOnNoteEvent());
-
-        if (selectedNoteIds.contains(noteRectangle.getNoteId())) {
-            noteRectangle.setSelected(true);
-        }
+//        noteRectangle.setOnMouseReleased(event -> handleMouseReleasedOnNoteEvent(event));
         movedNoteIds.clear();
         return noteRectangle;
     }
 
-    private void handleMouseReleasedOnNoteEvent() {
+    @Subscribe
+    private void handleMouseReleasedOnNoteEvent(NoteRectangle.MouseReleasedEvent event) {
         if(movedNoteIds.size() > 0){
             performNotesMove();
         }

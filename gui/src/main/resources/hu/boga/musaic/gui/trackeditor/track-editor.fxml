@@ -29,6 +29,15 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                     </padding>
                 </HBox>
+            <HBox spacing="5.0">
+               <children>
+                  <Button fx:id="btnMoveUp" mnemonicParsing="false" text="Move up" />
+                  <Button fx:id="btnMoveDown" mnemonicParsing="false" text="Move down" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
             </VBox>
         </AnchorPane>
     </top>

@@ -9,4 +9,5 @@ public interface TrackBoundaryIn {
     void deleteNotes(String trackId, NoteDto[] notes);
     void moveNote(String noteId, int newTick);
     void duplicate(String trackId, int fromTick, int toTick);
+    void moveUpAndDownNotes(String trackId, String[] ids, int move);
 }
