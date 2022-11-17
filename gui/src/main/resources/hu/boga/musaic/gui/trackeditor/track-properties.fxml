@@ -30,6 +30,7 @@
                <children>
                   <Button fx:id="btnNotes" mnemonicParsing="false" text="NOTES" />
                   <Button fx:id="btnDelTrack" mnemonicParsing="false" text="Del track" />
+                  <Button mnemonicParsing="false" text="Duplicate" onAction="#onDuplicateTrackClicked"/>
                   <CheckBox fx:id="chxbMute" mnemonicParsing="false" text="Mute track" />
                </children>
                <padding>

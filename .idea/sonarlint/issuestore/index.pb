@@ -1,8 +1,6 @@
 
 x
 Hmidigateway/src/main/java/hu/boga/musaic/midigateway/utils/NoteUtil.java,1/9/197ac17d786881079ca61e38bbd5c1622f4e93df
-€
-Pcore/src/main/java/hu/boga/musaic/core/modell/events/MetaMessageEventModell.java,4/2/42c47a51a4cff6879e48fe80b974c0bac9a3955d
 y
 Icore/src/test/java/hu/boga/musaic/core/modell/events/CommandEnumTest.java,1/b/1b477135bfd3ec43cc4187389eadf7f4a74f01bd
 –
@@ -27,18 +25,12 @@ z
 Jgui/src/main/java/hu/boga/musaic/gui/trackeditor/events/NotePlayEvent.java,8/d/8d8f043e01156d4407006a2c5c065017ba9e1edd
 r
 Bgui/src/main/java/hu/boga/musaic/gui/controls/InstrumentCombo.java,0/9/095d6ff60ba22aafb5c6f9a2b54e36c1155aec57
-
-Qcore/src/main/java/hu/boga/musaic/core/modell/events/ShortMessageEventModell.java,7/7/77fa37106cf96aaf45d086b5465cd75c447e1caf
 u
 Ecore/src/main/java/hu/boga/musaic/core/modell/events/CommandEnum.java,5/6/56c3ec77c4b5e9d8907a6bf4d6d53946d7661405
-u
-Ecore/src/main/java/hu/boga/musaic/core/modell/events/EventModell.java,a/9/a9fc534cf707e10af98cc93b15df6c7659bbc85b
 m
 =core/src/main/java/hu/boga/musaic/core/modell/BaseModell.java,3/e/3eef909b257a55550255c787304c93fffabee438
 {
 Kcore/src/main/java/hu/boga/musaic/core/track/boundary/TrackBoundaryOut.java,a/0/a05fb9c04ecc3a2923ce3ed2cf963f77fba492f4
-€
-Pcore/src/main/java/hu/boga/musaic/core/sequence/boundary/SequenceBoundaryIn.java,a/9/a9db255afb05f24c794a86a8cfb5db1a351eaf0d
 p
 @midigateway/src/main/java/hu/boga/musaic/midigateway/Player.java,4/c/4c55d8b35ec4b88a7d86660d4e4ca466b26758bc
 v
@@ -47,10 +39,6 @@ s
 Ccore/src/test/java/hu/boga/musaic/core/note/NoteInteractorTest.java,7/9/792ebd9839e37144db2a908f828e6a439f03aba2
 †
 Vcore/src/test/java/hu/boga/musaic/core/sequence/interactor/SequenceInteractorTest.java,6/9/6973877b063b571f28f4fcdaff883d87c46065d2
-‚
-Rcore/src/main/java/hu/boga/musaic/core/sequence/interactor/SequenceInteractor.java,c/e/ce7b341cf54f57526774b94f6dc41dbe54562b1f
-q
-Acore/src/main/java/hu/boga/musaic/core/modell/SequenceModell.java,e/8/e8d3419464c99b2db41ead1cdc09013bd15e5319
 Š
 Zmidigateway/src/test/java/hu/boga/musaic/midigateway/sequence/SequenceGatewayImplTest.java,7/3/737db9f85c48d855555185175b2ecb9f4130622c
 €
@@ -61,16 +49,12 @@ Tmidigateway/src/test/java/hu/boga/musaic/midigateway/synth/SynthGatewayImplTest
 pom.xml,4/4/442292b8a7efeabbe4cc176709b833b1792140ec
 _
 /gui/src/main/java/hu/boga/musaic/MusaicApp.java,c/4/c44cd36ef418bbdcea2521422bc6463b3494de26
-w
-Ggui/src/main/java/hu/boga/musaic/gui/sequenceeditor/SequenceEditor.java,1/e/1e99096c61b5c7a916ccc40453a060c13e4b82eb
 x
 Hgui/src/main/java/hu/boga/musaic/gui/trackeditor/NoteChangeListener.java,c/0/c04df07ce6950f4e53cc48f0f5981154b0d17792
 y
 Igui/src/main/java/hu/boga/musaic/gui/trackeditor/SettingsContextMenu.java,2/1/21371a6303f0513169dcaf1dc46e9095042b1a02
 a
 1gui/src/main/java/hu/boga/musaic/GuiceModule.java,4/8/487c0469ec9fac68ad4ccb048dd9811bdf594c2e
-n
->core/src/main/java/hu/boga/musaic/core/modell/TrackModell.java,c/3/c31db9db2419726b0c6bc03516e486efbdde7e26
 x
 Hcore/src/main/java/hu/boga/musaic/core/track/boundary/dtos/TrackDto.java,d/7/d7959d6d5d59e2e9ec96fde38191da06b1b5b3ca
 ‘
@@ -93,8 +77,6 @@ u
 Ecore/src/test/java/hu/boga/musaic/core/modell/SequenceModellTest.java,f/2/f2c5091bb344511bf5c489a2878a9db09b36dd05
 r
 Bcore/src/test/java/hu/boga/musaic/core/modell/TrackModellTest.java,9/a/9a0fa76ae0f0216016d7410bd2f7f7c7e6efbae5
-t
-Dcore/src/main/java/hu/boga/musaic/core/modell/events/NoteModell.java,8/d/8d6e60cdf27b79869247dce56cba1b09591cf7e0
 x
 Hcore/src/test/java/hu/boga/musaic/core/modell/events/NoteModellTest.java,1/7/17ef4259761fb325f79b39d6930ce68d06babd27
 ›
@@ -115,7 +97,3 @@ Vmidigateway/src/main/java/hu/boga/musaic/midigateway/sequence/SequenceGatewayIm
 Qmidigateway/src/main/java/hu/boga/musaic/midigateway/sequence/SequenceReader.java,5/a/5a7c640806dd87f4a0763174edd7417229bc5419
 Š
 Zmidigateway/src/main/java/hu/boga/musaic/midigateway/converters/NoteToModellConverter.java,a/1/a18c1df1c28364f273eb9ac9670e38f3e878422d
-u
-Egui/src/main/java/hu/boga/musaic/gui/trackeditor/TrackProperties.java,2/a/2aaabac7bc9a51b47374f9c67f9d5a95b8bba4b5
-†
-Vcore/src/main/java/hu/boga/musaic/core/track/interactor/TrackPropertiesInteractor.java,1/6/16c789cb5afa089db0aa9dca7b4b81139567626a

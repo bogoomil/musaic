@@ -209,4 +209,8 @@ public class SequenceEditor implements SequenceBoundaryOut {
         }
     }
 
+    @Subscribe
+    private void onDuplicateTrack(TrackProperties.DuplicateTrackEvent event) {
+        boundaryIn.duplicateTrack(event.getTrackId());
+    }
 }

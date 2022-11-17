@@ -101,7 +101,6 @@ public class TrackInteractor implements TrackBoundaryIn {
         });
     }
 
-
     private void addNotesToTrack(String trackId, int tick, int pitch, int length, ChordType chordType, SequenceModell sequenceModell, TrackModell trackModell) {
         final int computedLength = length * sequenceModell.getTicksIn32nds();
         List<NoteModell> notes = prepareNotesToAdd(tick, pitch, chordType, computedLength, trackModell.channel);

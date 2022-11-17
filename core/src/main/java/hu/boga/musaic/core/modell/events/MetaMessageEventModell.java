@@ -7,4 +7,9 @@ public class MetaMessageEventModell extends EventModell {
         super(tick, command);
         this.data = data;
     }
+
+    @Override
+    public EventModell clone() {
+        return new MetaMessageEventModell(tick, data, command);
+    }
 }

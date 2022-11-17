@@ -11,4 +11,6 @@ public abstract class EventModell extends BaseModell {
         this.tick = tick;
         this.command = command;
     }
+
+    public abstract EventModell clone();
 }

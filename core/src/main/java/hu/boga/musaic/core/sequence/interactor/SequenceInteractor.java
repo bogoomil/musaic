@@ -97,6 +97,17 @@ public class SequenceInteractor implements SequenceBoundaryIn {
         boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());
     }
 
+    @Override
+    public void duplicateTrack(String trackId) {
+        InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
+            sequenceModell.getTrackById(trackId).ifPresent(trackModell -> {
+                TrackModell clone = trackModell.clone();
+                sequenceModell.tracks.add(clone);
+            });
+            boundaryOut.displaySequence(new SequenceModellToDtoConverter(sequenceModell).convert());
+        });
+    }
+
     private SequenceModell createNewSequence(){
         SequenceModell modell = new SequenceModell();
         InMemorySequenceModellStore.SEQUENCE_MODELS.put(modell.getId(), modell);

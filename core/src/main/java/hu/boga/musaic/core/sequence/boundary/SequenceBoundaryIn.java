@@ -12,4 +12,5 @@ public interface SequenceBoundaryIn {
     void reloadSequence(String sequenceId);
     void updateChannelColorMapping(String sequenceId, int channel, String color);
     void updateChannelToProgramMappings(String sequenceId, int channel, int program);
+    void duplicateTrack(String trackId);
 }

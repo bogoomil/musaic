@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class TrackModell extends BaseModell {
+public class TrackModell extends BaseModell implements Cloneable{
 
     public int channel;
     public boolean muted;
@@ -72,5 +72,16 @@ public class TrackModell extends BaseModell {
 
     private boolean isTickBetween(NoteModell noteModell, int fromTickInclusive, int toTickExclusive) {
         return noteModell.tick >= fromTickInclusive && noteModell.tick < toTickExclusive;
+    }
+
+    public TrackModell clone(){
+        TrackModell tm = new TrackModell();
+        tm.channel = this.channel;
+        tm.muted = this.muted;
+        tm.solo = this.solo;
+
+        this.eventModells.forEach(eventModell -> tm.eventModells.add(eventModell.clone()));
+
+        return tm;
     }
 }

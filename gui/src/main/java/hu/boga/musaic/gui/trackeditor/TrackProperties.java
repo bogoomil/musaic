@@ -131,4 +131,20 @@ public class TrackProperties implements TrackPropertiesBoundaryOut {
         this.trackDto = dto;
         updateGui();
     }
+
+    public void onDuplicateTrackClicked(ActionEvent actionEvent) {
+        eventBus.post(new DuplicateTrackEvent(trackDto.id));
+    }
+
+    public static class DuplicateTrackEvent{
+        String trackId;
+
+        public DuplicateTrackEvent(String trackId) {
+            this.trackId = trackId;
+        }
+
+        public String getTrackId() {
+            return trackId;
+        }
+    }
 }
