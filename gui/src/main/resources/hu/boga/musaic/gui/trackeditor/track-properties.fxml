@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="mainPanel" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.trackeditor.TrackProperties">
+<AnchorPane fx:id="mainPanel" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.trackeditor.TrackProperties">
    <children>
       <VBox layoutX="4.0" layoutY="7.0">
          <children>
@@ -30,7 +30,7 @@
                <children>
                   <Button fx:id="btnNotes" mnemonicParsing="false" text="NOTES" />
                   <Button fx:id="btnDelTrack" mnemonicParsing="false" text="Del track" />
-                  <Button mnemonicParsing="false" text="Duplicate" onAction="#onDuplicateTrackClicked"/>
+                  <Button mnemonicParsing="false" onAction="#onDuplicateTrackClicked" text="Duplicate" />
                   <CheckBox fx:id="chxbMute" mnemonicParsing="false" text="Mute track" />
                </children>
                <padding>

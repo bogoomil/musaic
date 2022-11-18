@@ -41,8 +41,6 @@ Zmidigateway/src/test/java/hu/boga/musaic/midigateway/sequence/SequenceGatewayIm
 Pmidigateway/src/main/java/hu/boga/musaic/midigateway/synth/SynthGatewayImpl.java,b/1/b19445154926d3e7b5b76c3bd05d7f60be707aa4
 „
 Tmidigateway/src/test/java/hu/boga/musaic/midigateway/synth/SynthGatewayImplTest.java,8/1/818627a65fb6236f62d674ba23cb29bac698aca4
-_
-/gui/src/main/java/hu/boga/musaic/MusaicApp.java,c/4/c44cd36ef418bbdcea2521422bc6463b3494de26
 x
 Hgui/src/main/java/hu/boga/musaic/gui/trackeditor/NoteChangeListener.java,c/0/c04df07ce6950f4e53cc48f0f5981154b0d17792
 y
