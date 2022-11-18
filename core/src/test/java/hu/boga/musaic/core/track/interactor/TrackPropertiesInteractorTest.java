@@ -84,4 +84,31 @@ class TrackPropertiesInteractorTest {
             assertEquals(1, modell.tracks.size());
         }
     }
+
+    @Test
+    void updateVolume(){
+        trackInteractor.updateVolume(trackModell.getId(), -0.5);
+        assertEquals(0.5, noteModell.velocity);
+        Mockito.verify(boundaryOut).displayTrack(Mockito.any());
+
+        trackInteractor.updateVolume(trackModell.getId(), 100);
+        assertEquals(1, noteModell.velocity);
+
+        trackInteractor.updateVolume(trackModell.getId(), -0.5);
+        assertEquals(0.5, noteModell.velocity);
+
+        trackInteractor.updateVolume(trackModell.getId(), 0.5);
+        assertEquals(1, noteModell.velocity);
+
+        trackInteractor.updateVolume(trackModell.getId(), -100);
+        assertEquals(0, noteModell.velocity);
+
+        trackInteractor.updateVolume(trackModell.getId(), 0.5);
+        assertEquals(0.5, noteModell.velocity);
+
+        trackInteractor.updateVolume(trackModell.getId(), 0.5);
+        assertEquals(1, noteModell.velocity);
+
+
+    }
 }

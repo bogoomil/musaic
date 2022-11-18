@@ -116,4 +116,11 @@ class TrackInteractorTest {
         assertEquals(512, trackModell.getNotes().get(2).tick);
         Mockito.verify(boundaryOut).displayTrack(Mockito.any());
     }
+
+    @Test
+    void moveUpAndDownNotes(){
+        trackInteractor.moveUpAndDownNotes(trackModell.getId(), new String[]{noteModell.getId()}, 2);
+        assertEquals(14, noteModell.midiCode);
+        Mockito.verify(boundaryOut).displayTrack(Mockito.any());
+    }
 }

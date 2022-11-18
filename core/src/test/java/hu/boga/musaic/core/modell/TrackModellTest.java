@@ -24,4 +24,16 @@ class TrackModellTest {
     void getTickLength() {
         assertEquals(2, trackModell.getTickLength());
     }
+
+    @Test
+    void cloneTest(){
+        trackModell.solo = true;
+        trackModell.muted = true;
+        TrackModell cloned = trackModell.clone();
+        assertEquals(trackModell.channel, cloned.channel);
+        assertEquals(trackModell.eventModells.size(), cloned.eventModells.size());
+        assertEquals(trackModell.muted, cloned.muted);
+        assertEquals(trackModell.solo, cloned.solo);
+
+    }
 }

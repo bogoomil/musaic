@@ -18,7 +18,7 @@ class NoteToModellConverterTest extends ConverterBaseTest {
     @BeforeEach
     void setUp() throws InvalidMidiDataException {
         super.setUp();
-        NoteUtil.addNote(track, 10, 12, 32, 100, 0);
+        NoteUtil.addNote(track, 10, 12, 32, 127, 0);
     }
 
     @Test
@@ -28,6 +28,6 @@ class NoteToModellConverterTest extends ConverterBaseTest {
         assertEquals(10, notes.get(0).tick);
         assertEquals(12, notes.get(0).midiCode);
         assertEquals(32, notes.get(0).length);
-        assertEquals(100, notes.get(0).velocity);
+        assertEquals(1, notes.get(0).velocity);
     }
 }

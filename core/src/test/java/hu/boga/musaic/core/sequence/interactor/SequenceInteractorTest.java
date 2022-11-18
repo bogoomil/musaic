@@ -3,6 +3,8 @@ package hu.boga.musaic.core.sequence.interactor;
 import hu.boga.musaic.core.InMemorySequenceModellStore;
 import hu.boga.musaic.core.gateway.sequence.SequenceGateway;
 import hu.boga.musaic.core.modell.SequenceModell;
+import hu.boga.musaic.core.modell.TrackModell;
+import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 import hu.boga.musaic.core.sequence.interactor.converters.SequenceModellToDtoConverter;
@@ -136,6 +138,19 @@ class SequenceInteractorTest {
     void updateChannelToProgramMappings(){
         interactor.updateChannelToProgramMappings(modell.getId(), 10, 100);
         assertEquals(100, modell.getChannelToProgramMappings()[10]);
+        Mockito.verify(boundaryOut).displaySequence(Mockito.any());
+    }
+
+    @Test
+    void duplicateTrack(){
+        TrackModell trackModell = new TrackModell();
+        trackModell.eventModells.add(new NoteModell(12,512,100,1,0));
+
+        modell.tracks.add(trackModell);
+        interactor.duplicateTrack(trackModell.getId());
+
+        assertEquals(3, modell.tracks.size());
+        assertEquals(1, modell.tracks.get(2).eventModells.size());
         Mockito.verify(boundaryOut).displaySequence(Mockito.any());
     }
 

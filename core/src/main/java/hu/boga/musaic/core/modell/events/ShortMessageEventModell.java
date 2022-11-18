@@ -11,7 +11,7 @@ public class ShortMessageEventModell extends EventModell{
     }
 
     @Override
-    public EventModell clone() {
+    public ShortMessageEventModell clone() {
         return new ShortMessageEventModell(tick, channel, command, data1, data2);
     }
 }
