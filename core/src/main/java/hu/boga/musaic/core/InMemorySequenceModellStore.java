@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.Optional;
 
 public class InMemorySequenceModellStore {
+
+    private InMemorySequenceModellStore(){}
+
     public static final Map<String, SequenceModell> SEQUENCE_MODELS = new HashMap<>();
 
     public static void clear(){

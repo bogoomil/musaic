@@ -1,14 +1,12 @@
 package hu.boga.musaic.core.track.interactor;
 
 import hu.boga.musaic.core.InMemorySequenceModellStore;
-import hu.boga.musaic.core.modell.events.EventModell;
-import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
+import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
-import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.core.track.interactor.converters.TrackModelltoDtoConverter;
 import hu.boga.musaic.musictheory.Chord;
 import hu.boga.musaic.musictheory.Pitch;
@@ -20,11 +18,8 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 public class TrackInteractor implements TrackBoundaryIn {
-
-    private static final Logger LOG = LoggerFactory.getLogger(TrackInteractor.class);
 
     TrackBoundaryOut boundaryOut;
 
@@ -37,7 +32,7 @@ public class TrackInteractor implements TrackBoundaryIn {
     public void addChord(String trackId, int tick, int pitch, int length, ChordType chordType) {
         InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
             sequenceModell.getTrackById(trackId).ifPresent(trackModell -> {
-                addNotesToTrack(trackId, tick, pitch, length, chordType, sequenceModell, trackModell);
+                addNotesToTrack(tick, pitch, length, chordType, sequenceModell, trackModell);
             });
         });
         showTrack(trackId);
@@ -101,7 +96,7 @@ public class TrackInteractor implements TrackBoundaryIn {
         });
     }
 
-    private void addNotesToTrack(String trackId, int tick, int pitch, int length, ChordType chordType, SequenceModell sequenceModell, TrackModell trackModell) {
+    private void addNotesToTrack(int tick, int pitch, int length, ChordType chordType, SequenceModell sequenceModell, TrackModell trackModell) {
         final int computedLength = length * sequenceModell.getTicksIn32nds();
         List<NoteModell> notes = prepareNotesToAdd(tick, pitch, chordType, computedLength, trackModell.channel);
         trackModell.eventModells.addAll(notes);

@@ -1,37 +1,32 @@
 package hu.boga.musaic.gui.trackeditor;
 
 import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
 import hu.boga.musaic.core.note.NoteBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
-import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
-import hu.boga.musaic.gui.controls.InstrumentCombo;
+import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.gui.controls.ModeCombo;
 import hu.boga.musaic.gui.controls.NoteNameCombo;
-import hu.boga.musaic.gui.trackeditor.events.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import hu.boga.musaic.gui.trackeditor.events.AddChordEvent;
+import hu.boga.musaic.gui.trackeditor.events.DeleteNoteEvent;
+import hu.boga.musaic.gui.trackeditor.events.NoteMovedEvent;
+import hu.boga.musaic.gui.trackeditor.events.NotePlayEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.sound.midi.Instrument;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
-
-    private static final Logger LOG = LoggerFactory.getLogger(TrackEditor.class);
 
     @FXML
     public TrackEditorPanel trackEditorPanel;

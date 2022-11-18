@@ -28,7 +28,7 @@ public class TrackProperties implements TrackPropertiesBoundaryOut {
     private static final Logger LOG = LoggerFactory.getLogger(TrackProperties.class);
 
     public TextField trackName;
-    public ComboBox cbChannel;
+    public ComboBox<Integer> cbChannel;
     public Button btnNotes;
     public Button btnDelTrack;
     public CheckBox chxbMute;
@@ -127,12 +127,12 @@ public class TrackProperties implements TrackPropertiesBoundaryOut {
 
     @Override
     public void displayTrack(TrackDto dto) {
-        LOG.debug("display track: " + dto.channel);
+        LOG.debug("display track: {}", dto.channel);
         this.trackDto = dto;
         updateGui();
     }
 
-    public void onDuplicateTrackClicked(ActionEvent actionEvent) {
+    public void onDuplicateTrackClicked() {
         eventBus.post(new DuplicateTrackEvent(trackDto.id));
     }
 

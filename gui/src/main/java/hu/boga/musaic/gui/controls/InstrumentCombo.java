@@ -1,13 +1,11 @@
 package hu.boga.musaic.gui.controls;
 
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.util.Callback;
 
 import javax.sound.midi.Instrument;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.SoundbankResource;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +24,7 @@ public class InstrumentCombo extends ComboBox<String> {
 
     public InstrumentCombo() {
         super();
-        getItems().addAll(instruments.stream().map(instrument -> instrument.getName()).collect(Collectors.toList()));
+        getItems().addAll(instruments.stream().map(SoundbankResource::getName).collect(Collectors.toList()));
     }
 
     public int getSelectedProgram(){

@@ -454,15 +454,6 @@ public class Chord {
 
     private Pitch[] pitches;
 
-//    private Chord(String chordTypeName, Integer... midiCodes) {
-//        Pitch[] p = new Pitch[midiCodes.length];
-//        for (int i = 0; i < midiCodes.length; i++) {
-//            p[i] = new Pitch(midiCodes[i]);
-//        }
-//        this.pitches = p;
-//        this.chordType = ChordType.valueOf(chordTypeName);
-//    }
-
     private Chord(ChordType chordType, Pitch... pitches) {
         this.pitches = pitches;
         this.chordType = chordType;

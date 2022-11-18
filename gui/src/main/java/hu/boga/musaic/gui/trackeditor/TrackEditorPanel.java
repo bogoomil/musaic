@@ -29,7 +29,6 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     private List<NoteDto> notes;
     private SettingsContextMenu contextMenu;
     private ChordType currentChordType = null;
-//    private List<String> selectedNoteIds = new ArrayList<>(0);
     private NoteChangeListener noteChangeListener;
     private EventBus eventBus = new EventBus("TRACK_EDITOR_PANEL_EVENT_BUS");
 
@@ -135,7 +134,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         List<DeleteNoteEvent> events = getAllNoteRectangles().stream()
                 .map(noteRectangle -> new DeleteNoteEvent(noteRectangle.getNoteId()))
                 .collect(Collectors.toList());
-        LOG.debug("deleting notes " + events);
+        LOG.debug("deleting notes {}", events);
         this.noteChangeListener.onDeleteNoteEvent(events.toArray(DeleteNoteEvent[]::new));
     }
 
@@ -145,7 +144,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
                 .map(noteRectangle -> new DeleteNoteEvent(noteRectangle.getNoteId()))
                 .collect(Collectors.toList());
         events.forEach(ev -> {
-            LOG.debug("deleting notes " + ev.getNoteId());
+            LOG.debug("deleting notes {}", ev.getNoteId());
         });
         this.noteChangeListener.onDeleteNoteEvent(events.toArray(DeleteNoteEvent[]::new));
     }
@@ -251,10 +250,6 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         }
     }
 
-    private Optional<NoteRectangle> getChildAtPoint(final Point2D point) {
-        return getAllNoteRectangles().stream().filter(node -> node.contains(point)).findFirst();
-    }
-
     private void paintNote(final NoteDto noteDto) {
         try {
             final Rectangle rect = this.addNoteRectangle(noteDto);
@@ -272,7 +267,6 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         noteRectangle.setY(this.getYByPitch((int) noteDto.midiCode));
         noteRectangle.setWidth(getTickWidth() * noteDto.length);
         noteRectangle.setHeight(this.getPitchHeight());
-//        noteRectangle.setOnMouseReleased(event -> handleMouseReleasedOnNoteEvent(event));
         movedNoteIds.clear();
         return noteRectangle;
     }
@@ -286,7 +280,6 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
 
     private void performNotesMove() {
         List<NoteMovedEvent> events = new ArrayList<>();
-        AtomicInteger index = new AtomicInteger(0);
         movedNoteIds.forEach(id -> {
             getNoteRectangleByNoteId(id).ifPresent(noteRectangle -> {
                 int newTick = getTickByX((int) getCaculatedX(noteRectangle.getX()));

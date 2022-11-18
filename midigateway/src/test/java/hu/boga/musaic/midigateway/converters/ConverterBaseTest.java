@@ -9,7 +9,7 @@ import javax.sound.midi.Track;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ConverterBaseTest {
+class ConverterBaseTest {
     public static final float DIVISION_TYPE = 0.0f;
     public static final int RESOLUTION = 128;
     Sequence sequence;

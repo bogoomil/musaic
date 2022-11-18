@@ -23,11 +23,11 @@ public class MainController {
     public MainController() {
     }
 
-    public void newProject(ActionEvent actionEvent) throws IOException {
+    public void newProject() throws IOException {
         createNewTab();
     }
 
-    public void openFile(ActionEvent actionEvent) throws IOException {
+    public void openFile() throws IOException {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(null);
         if(file != null){
