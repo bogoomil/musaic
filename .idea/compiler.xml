@@ -15,4 +15,9 @@
       <module name="launcher" target="11" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="midigateway" options="--add-exports java.desktop/com.sun.media.sound=midigateway" />
+    </option>
+  </component>
 </project>

@@ -1,39 +1,59 @@
 package hu.boga.musaic.midigateway;
 
 import hu.boga.musaic.core.exceptions.MusaicException;
-import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.midigateway.utils.TempoUtil;
-import hu.boga.musaic.musictheory.enums.NoteLength;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sound.midi.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import com.sun.media.sound.*;
 
 public class Player {
     private static final Logger LOG = LoggerFactory.getLogger(Player.class);
     private static final Sequencer sequencer;
-    private static final Synthesizer synth;
+    public static final Synthesizer synth;
+
+    private static final String SF_PATH = "/home/kunb/Zenék/soundfonts/Viral_Massacre_Kit (JJ)/Instruments - SF2/StabBrass_JJ.sf2";
 
     static {
-        sequencer = initSequencer();
         synth = initSynth();
+        sequencer = initSequencer(synth);
     }
 
     private static Synthesizer initSynth() {
         Synthesizer synthesizer;
         try {
+
+            File file = new File(SF_PATH);
+            Soundbank soundbank = MidiSystem.getSoundbank(file);
+
+            Arrays.stream(soundbank.getInstruments()).forEach(instrument -> LOG.debug("custom sb instr, {}, prog: {}, bank: {}", instrument.getName(), instrument.getPatch().getProgram(), instrument.getPatch().getBank()));
+
             synthesizer = MidiSystem.getSynthesizer();
             synthesizer.open();
-        } catch (MidiUnavailableException e) {
+
+//            synthesizer.unloadAllInstruments(synthesizer.getDefaultSoundbank());
+            synthesizer.loadAllInstruments(soundbank);
+
+            LOG.debug("bla: {}", synthesizer.isSoundbankSupported(soundbank));
+
+            Arrays.stream(synthesizer.getAvailableInstruments()).forEach(instrument -> LOG.debug("loaded instr: {}", instrument.getName()));
+
+
+        } catch (MidiUnavailableException | InvalidMidiDataException | IOException e) {
             throw new MusaicException("unable to initialize synth: " + e.getMessage(), e);
         }
         return synthesizer;
     }
 
-    private static Sequencer initSequencer() {
+    private static Sequencer initSequencer(Synthesizer synth) {
         Sequencer sequencer1;
         try {
-            sequencer1 = MidiSystem.getSequencer();
+            sequencer1 = MidiSystem.getSequencer(false);
+            sequencer1.getTransmitter().setReceiver(synth.getReceiver());
             sequencer1.open();
         } catch (MidiUnavailableException e) {
             throw new MusaicException("unable to initialize sequencer: " + e.getMessage(), e);
@@ -100,7 +120,7 @@ public class Player {
         return getTickLengthInMillis(tempo, resolution) * tickCount;
     }
 
-    public static double getTickLengthInMillis(int tempo, int resolution) {
+    private static double getTickLengthInMillis(int tempo, int resolution) {
         double msInNegyed = 60000d / tempo; // 120-as tempo esetén 500 ms egy negyed hang hossza
         double measureLengthInMs = msInNegyed * 4; // ütem hossza 120-as temponál
         double tickLengthInMs = measureLengthInMs / resolution * 4;

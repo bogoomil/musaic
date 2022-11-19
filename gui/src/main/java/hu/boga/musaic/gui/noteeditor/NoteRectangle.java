@@ -51,7 +51,7 @@ public class NoteRectangle extends Rectangle {
         this.setStrokeWidth(3);
         this.setFill(fill);
         setUpEventHandlers();
-        LOG.debug("nr created: {}, sel: {}, color: {}, selected color {}", noteDto.id, selected, color, SELECTED_COLOR);
+//        LOG.debug("nr created: {}, sel: {}, color: {}, selected color {}", noteDto.id, selected, color, SELECTED_COLOR);
     }
 
     private void setUpEventHandlers() {
