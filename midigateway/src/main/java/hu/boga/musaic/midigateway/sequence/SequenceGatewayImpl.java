@@ -46,6 +46,7 @@ public class SequenceGatewayImpl implements SequenceGateway {
 
     @Override
     public void stop() {
+        LOG.debug("stop playback");
         Player.stopPlayback();
     }
 }

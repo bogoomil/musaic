@@ -34,13 +34,10 @@ public class Player {
 
             synthesizer = MidiSystem.getSynthesizer();
             synthesizer.open();
-
-//            synthesizer.unloadAllInstruments(synthesizer.getDefaultSoundbank());
+            synthesizer.unloadAllInstruments(synthesizer.getDefaultSoundbank());
             synthesizer.loadAllInstruments(soundbank);
-
-            LOG.debug("bla: {}", synthesizer.isSoundbankSupported(soundbank));
-
-            Arrays.stream(synthesizer.getAvailableInstruments()).forEach(instrument -> LOG.debug("loaded instr: {}", instrument.getName()));
+//            LOG.debug("bla: {}", synthesizer.isSoundbankSupported(soundbank));
+            Arrays.stream(synthesizer.getAvailableInstruments()).forEach(instrument -> LOG.debug("loaded instr: {}", instrument));
 
 
         } catch (MidiUnavailableException | InvalidMidiDataException | IOException e) {
@@ -92,13 +89,13 @@ public class Player {
 
 
     public static void playNote(int tempo, int channel, int resolution, int midiCode, int lengthInTicks, int instrument) {
+        LOG.debug("tempo: {}, channel: {}, instrument: {}", tempo, channel,instrument);
         int length = (int) getNoteLenghtInMs(lengthInTicks, tempo, resolution);
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 MidiChannel midiChannel = synth.getChannels()[channel];
                 midiChannel.programChange(instrument);
-
                 midiChannel.noteOn(midiCode, 200);
                 sleep(length);
                 midiChannel.noteOff(midiCode);
