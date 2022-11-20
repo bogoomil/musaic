@@ -226,7 +226,6 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         if(!movedNoteIds.contains(even.getId())){
             movedNoteIds.add(even.getId());
         }
-        LOG.debug("note moved ids: {}", movedNoteIds);
     }
 
     @Subscribe

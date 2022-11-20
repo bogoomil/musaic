@@ -1,5 +1,6 @@
 package hu.boga.musaic.gui.controls;
 
+import hu.boga.musaic.midigateway.Player;
 import javafx.scene.control.ComboBox;
 
 import javax.sound.midi.Instrument;
@@ -15,11 +16,7 @@ public class InstrumentCombo extends ComboBox<String> {
 
     static List<Instrument> instruments;
     static {
-        try {
-            instruments = Arrays.asList(MidiSystem.getSynthesizer().getAvailableInstruments());
-        } catch (MidiUnavailableException e) {
-            e.printStackTrace();
-        }
+        instruments = Arrays.asList(Player.synth.getLoadedInstruments());
     }
 
     public InstrumentCombo() {
