@@ -1,9 +1,7 @@
 package hu.boga.musaic.midigateway;
 
 import hu.boga.musaic.core.exceptions.MusaicException;
-import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.midigateway.utils.TempoUtil;
-import hu.boga.musaic.musictheory.enums.NoteLength;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,8 +9,8 @@ import javax.sound.midi.*;
 
 public class Player {
     private static final Logger LOG = LoggerFactory.getLogger(Player.class);
-    private static final Sequencer sequencer;
-    private static final Synthesizer synth;
+    public static final Sequencer sequencer;
+    public static final Synthesizer synth;
 
     static {
         sequencer = initSequencer();

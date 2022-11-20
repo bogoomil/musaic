@@ -2,22 +2,30 @@ package hu.boga.musaic.gui.trackeditor;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import hu.boga.musaic.core.modell.events.CommandEnum;
 import hu.boga.musaic.core.note.NoteBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 import hu.boga.musaic.gui.noteeditor.NoteRectangle;
-import hu.boga.musaic.gui.trackeditor.events.*;
+import hu.boga.musaic.gui.trackeditor.events.AddChordEvent;
+import hu.boga.musaic.gui.trackeditor.events.DeleteNoteEvent;
+import hu.boga.musaic.gui.trackeditor.events.NoteMovedEvent;
+import hu.boga.musaic.gui.trackeditor.events.NotePlayEvent;
+import hu.boga.musaic.midigateway.Player;
 import hu.boga.musaic.musictheory.enums.ChordType;
-import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import javax.sound.midi.MetaMessage;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TrackEditorPanel extends TrackEditorBasePanel {
@@ -36,6 +44,8 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
 
     private Rectangle selectionRect = new Rectangle();
     private Rectangle loopRectangle = new Rectangle();
+    private Line cursorLine = new Line();
+
     private int loopStartTick;
     private int loopEndTick;
     private Color noteColor;
@@ -72,6 +82,34 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
 
         loopRectangle.setStroke(Color.WHITE);
         loopRectangle.setFill(Color.color(Color.WHITE.getRed(), Color.WHITE.getGreen(), Color.WHEAT.getBlue(), 0.3));
+
+        initMetaEventListener();
+    }
+
+    private void initMetaEventListener() {
+        Player.sequencer.addMetaEventListener(metaMessage -> {
+            if(metaMessage.getType() == CommandEnum.CUE_MARKER.getIntValue()){
+                setCursorLinePosition(metaMessage);
+            }
+        });
+    }
+
+    private void setCursorLinePosition(MetaMessage metaMessage) {
+        int tick = Integer.parseInt(new String(metaMessage.getData(), StandardCharsets.UTF_8));
+        final int x = (int) (tick * getTickWidth());
+        cursorLine.setStartX(x);
+        cursorLine.setEndX(x);
+    }
+
+    private void initCursorLine() {
+        cursorLine.setStroke(Color.RED);
+        cursorLine.setStrokeWidth(3);
+        cursorLine.setStartY(0);
+        cursorLine.setEndY(this.getHeight());
+        cursorLine.setStartX(0);
+        cursorLine.setEndX(0);
+        this.getChildren().add(cursorLine);
+
     }
 
     private void handleMouseReleased(MouseEvent event) {
@@ -111,6 +149,8 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         showLoopRect();
 
         this.getChildren().add(cursor);
+        initCursorLine();
+
         this.notes.forEach(noteDto -> {
             this.paintNote(noteDto);
         });
