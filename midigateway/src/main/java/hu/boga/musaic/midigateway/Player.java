@@ -1,6 +1,9 @@
 package hu.boga.musaic.midigateway;
 
 import hu.boga.musaic.core.exceptions.MusaicException;
+import hu.boga.musaic.core.modell.events.CommandEnum;
+import hu.boga.musaic.core.modell.events.MetaMessageEventModell;
+import hu.boga.musaic.midigateway.utils.MidiUtil;
 import hu.boga.musaic.midigateway.utils.TempoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import javax.sound.midi.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
@@ -77,12 +81,25 @@ public class Player {
         if (sequence == null) {
             throw new MusaicException("sequence is null");
         }
+        addCues(sequence);
         try {
             tryingToPlaySequence(sequence, fromTick, toTick);
         } catch (InvalidMidiDataException e) {
             throw new MusaicException("unable to play sequence " + e.getMessage());
         }
     }
+
+    private static void addCues(Sequence sequence) {
+        long tickLength = sequence.getTickLength() + 10;
+
+        for(int i = 0; i < tickLength; i+= 10){
+            String tickString = Integer.toString(i);
+            MetaMessageEventModell mm = new MetaMessageEventModell(i, tickString.getBytes(StandardCharsets.UTF_8), CommandEnum.CUE_MARKER);
+            MidiEvent even = MidiUtil.createMidiEventMetaMessage(i,mm.command.getIntValue(), mm.data);
+            sequence.getTracks()[0].add(even);
+        }
+    }
+
 
     private static void tryingToPlaySequence(Sequence sequence, long fromTick, long toTick) throws InvalidMidiDataException {
         sequencer.stop();

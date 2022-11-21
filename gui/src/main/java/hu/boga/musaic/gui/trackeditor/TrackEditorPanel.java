@@ -78,7 +78,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         selectionRect.setFill(Color.color(
                 Color.WHITE.getRed(),
                 Color.WHITE.getGreen(),
-                Color.WHEAT.getBlue(), 0.3));
+                Color.WHITE.getBlue(), 0.3));
 
         loopRectangle.setStroke(Color.WHITE);
         loopRectangle.setFill(Color.color(Color.WHITE.getRed(), Color.WHITE.getGreen(), Color.WHEAT.getBlue(), 0.3));
@@ -148,12 +148,12 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         loopRectangle.setY(0);
         showLoopRect();
 
-        this.getChildren().add(cursor);
-        initCursorLine();
-
         this.notes.forEach(noteDto -> {
             this.paintNote(noteDto);
         });
+
+        this.getChildren().add(cursor);
+        initCursorLine();
     }
 
     public void setNotes(final List<NoteDto> notes) {
@@ -239,7 +239,6 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     }
 
     private void showLoopRect() {
-        LOG.debug("setting loop start: {}, to: {}", loopStartTick, loopEndTick );
         loopRectangle.setX(getTickWidth() * loopStartTick);
         int width = (int) ((loopEndTick - loopStartTick) * getTickWidth());
         loopRectangle.setWidth(width);

@@ -42,10 +42,6 @@ public class MidiUtil {
         track.add(event);
     }
 
-    protected static void addMidiEventMetaMessage(final Track track, int tick, int type, byte[] data){
-        final MidiEvent event = createMidiEventMetaMessage(tick, type, data);
-    }
-
     public static MidiEvent createMidiEventShortMessage(int tick, int command, int channel, int data1, int data2) {
         final ShortMessage shortMessage = new ShortMessage();
         try {
@@ -56,20 +52,6 @@ public class MidiUtil {
         final MidiEvent event = new MidiEvent(shortMessage, tick);
         return event;
     }
-
-//    public static void removeEvents(Track track, final List<MidiEvent> events) {
-//        events.forEach(track::remove);
-//    }
-
-//    protected static List<MidiMessage> getShortMessagesByCommand(final Track track, final int command) {
-//        return getMidiEventsByShortMessageCommand(track, command).stream().map(MidiEvent::getMessage).collect(Collectors.toList());
-//    }
-
-//    public static List<MidiEvent> getMidiEventsByShortMessageCommand(final Track track, final int command) {
-//        return getMidiEventsShortMessage(track)
-//                .stream().filter(midiEvent -> ((ShortMessage)midiEvent.getMessage()).getCommand() == command)
-//                .collect(Collectors.toList());
-//    }
 
     public static List<MidiEvent> getMidiEventsShortMessage(Track track){
         final List<MidiEvent> retVal = new ArrayList<>();

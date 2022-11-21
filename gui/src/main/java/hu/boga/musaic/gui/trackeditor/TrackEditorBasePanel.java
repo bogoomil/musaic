@@ -13,6 +13,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 import java.util.Arrays;
@@ -181,8 +183,9 @@ public abstract class TrackEditorBasePanel extends Pane {
             for (int j = 0; j < 12; j++) {
                 final Text text = new Text(noteNames.get(j) + " " + (GuiConstants.OCTAVES - i));
                 text.setX(5);
-                text.setY(y - 5);
+                text.setY(y - 3);
                 text.setStroke(TrackEditorPanel.TEXT_COLOR);
+                text.setFont(Font.font("arial", FontWeight.LIGHT, 8));
                 y += increment;
                 getChildren().add(text);
             }

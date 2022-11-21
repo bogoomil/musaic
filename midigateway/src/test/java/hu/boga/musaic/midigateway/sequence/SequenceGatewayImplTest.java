@@ -4,6 +4,7 @@ import hu.boga.musaic.core.exceptions.MusaicException;
 import hu.boga.musaic.core.gateway.sequence.SequenceGateway;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
+import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.midigateway.Player;
 import hu.boga.musaic.midigateway.Saver;
 import org.junit.jupiter.api.BeforeEach;
@@ -62,6 +63,18 @@ class SequenceGatewayImplTest {
             gateway.play(sequenceModell, 0, 1);
             mockedStatic.verify(() -> Player.playSequence(Mockito.any(), eq(0L), eq(1L)), times(1));
         }
+    }
+
+    @Test
+    void play_negative(){
+        sequenceModell.tracks.get(0).eventModells.add(new NoteModell(12, 0, 128, 1000, 123));
+        assertThrows(MusaicException.class, () -> gateway.play(sequenceModell, 0, 1));
+    }
+
+    @Test
+    void save_negative(){
+        sequenceModell.tracks.get(0).eventModells.add(new NoteModell(12, 0, 128, 1000, 123));
+        assertThrows(MusaicException.class, () -> gateway.save(sequenceModell, ""));
     }
 
     @Test

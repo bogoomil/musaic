@@ -50,6 +50,8 @@ public class NoteRectangle extends Rectangle {
         this.setStroke(color);
         this.setStrokeWidth(3);
         this.setFill(fill);
+        this.setArcHeight(15);
+        this.setArcWidth(15);
         setUpEventHandlers();
     }
 

@@ -12,6 +12,7 @@ import javax.sound.midi.MidiEvent;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Track;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.IntStream;
 
 public class SequenceModellToSequenceConverter {
     private SequenceModell modell;
@@ -26,19 +27,8 @@ public class SequenceModellToSequenceConverter {
                 convertTracks(sequence, trackModell);
             }
         });
-        addCues(sequence);
         TempoUtil.addTempoEvents(sequence, (int) modell.tempo);
         return sequence;
-    }
-
-    private void addCues(Sequence sequence) {
-        long tickLength = sequence.getTickLength() + 10;
-        for(int i = 0; i < tickLength; i+= 10){
-            String tickString = Integer.toString(i);
-            MetaMessageEventModell mm = new MetaMessageEventModell(i, tickString.getBytes(StandardCharsets.UTF_8), CommandEnum.CUE_MARKER);
-            MidiEvent even = MidiUtil.createMidiEventMetaMessage(i,mm.command.getIntValue(), mm.data);
-            sequence.getTracks()[0].add(even);
-        }
     }
 
     private void convertTracks(Sequence sequence, TrackModell trackModell) {

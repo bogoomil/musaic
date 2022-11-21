@@ -5,18 +5,18 @@ import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.modell.events.CommandEnum;
 import hu.boga.musaic.core.modell.events.MetaMessageEventModell;
 import hu.boga.musaic.core.modell.events.NoteModell;
+import hu.boga.musaic.core.modell.events.ShortMessageEventModell;
 import hu.boga.musaic.midigateway.utils.MidiUtil;
 import hu.boga.musaic.midigateway.utils.NoteUtil;
 import hu.boga.musaic.midigateway.utils.TempoUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.Sequence;
+import javax.sound.midi.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 class SequenceModellToSequenceConverterTest {
 
@@ -39,6 +39,9 @@ class SequenceModellToSequenceConverterTest {
 
         MetaMessageEventModell mm = new MetaMessageEventModell(0, "fing".getBytes(StandardCharsets.UTF_8), CommandEnum.TRACK_NAME);
         trackModell.eventModells.add(mm);
+
+        ShortMessageEventModell se = new ShortMessageEventModell(0,0,CommandEnum.PROGRAM_CHANGE, 12,12);
+        trackModell.eventModells.add(se);
     }
 
     @Test
@@ -52,5 +55,13 @@ class SequenceModellToSequenceConverterTest {
 
         assertFalse(NoteUtil.getNoteOnEvents(sequence.getTracks()[1]).isEmpty());
         assertFalse(MidiUtil.getMidiEventsMetaMessage(sequence.getTracks()[1]).isEmpty());
+
+        byte[] b = MidiUtil.getMidiEventsMetaMessage(sequence.getTracks()[1]).get(1).getMessage().getMessage();
+        String trackName = new String(b, StandardCharsets.UTF_8);
+
+        assertTrue(trackName.contains("fing"));
+
+        List<MidiEvent> l = MidiUtil.getMidiEventsShortMessage(sequence.getTracks()[1]);
+        assertEquals(3, l.size());
     }
 }
