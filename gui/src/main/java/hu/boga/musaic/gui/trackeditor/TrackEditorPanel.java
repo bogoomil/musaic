@@ -12,6 +12,7 @@ import hu.boga.musaic.gui.trackeditor.events.NoteMovedEvent;
 import hu.boga.musaic.gui.trackeditor.events.NotePlayEvent;
 import hu.boga.musaic.midigateway.Player;
 import hu.boga.musaic.musictheory.enums.ChordType;
+import javafx.concurrent.Task;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -26,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
 public class TrackEditorPanel extends TrackEditorBasePanel {
@@ -89,7 +91,16 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     private void initMetaEventListener() {
         Player.sequencer.addMetaEventListener(metaMessage -> {
             if(metaMessage.getType() == CommandEnum.CUE_MARKER.getIntValue()){
-                setCursorLinePosition(metaMessage);
+                Task<Void> cursorTask = new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        setCursorLinePosition(metaMessage);
+                        return null;
+                    }
+                };
+                Thread th = new Thread(cursorTask);
+                th.setDaemon(true);
+                th.start();
             }
         });
     }

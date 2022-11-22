@@ -32,30 +32,12 @@ public class Player {
 
             File file = new File(SF_PATH);
             Soundbank soundbank = MidiSystem.getSoundbank(file);
-
-//            Arrays.stream(soundbank.getInstruments()).forEach(instrument -> LOG.debug("custom sb instr, {}, prog: {}, bank: {}, patch: {}", instrument.getName(), instrument.getPatch().getProgram(), instrument.getPatch().getBank(), instrument.getPatch()));
-
             synthesizer = MidiSystem.getSynthesizer();
             synthesizer.open();
-
             Soundbank defaultSoundbank = synthesizer.getDefaultSoundbank();
             synthesizer.unloadAllInstruments(defaultSoundbank);
 
-
-//            int bank = 128;
-//            Patch[] patches = new Patch[128];
-//            IntStream.range(0,128).forEach(i -> {
-//                patches[i] = new Patch(bank, i);
-//            });
-//            synthesizer.loadInstruments(soundbank, patches);
-
             synthesizer.loadAllInstruments(soundbank);
-
-            Arrays.stream(synthesizer.getLoadedInstruments()).forEach(instrument -> {
-                LOG.debug("available bank, {}, prog: {}, instr: {}", instrument.getPatch().getBank(), instrument.getPatch().getProgram(), instrument.getName());
-            });
-
-
         } catch (MidiUnavailableException | InvalidMidiDataException | IOException e) {
             throw new MusaicException("unable to initialize synth: " + e.getMessage(), e);
         }
@@ -158,5 +140,17 @@ public class Player {
         double measureLengthInMs = msInNegyed * 4; // ütem hossza 120-as temponál
         double tickLengthInMs = measureLengthInMs / resolution * 4;
         return tickLengthInMs;
+    }
+
+    private void loadInstrumentByPach(){
+
+
+//            int bank = 128;
+//            Patch[] patches = new Patch[128];
+//            IntStream.range(0,128).forEach(i -> {
+//                patches[i] = new Patch(bank, i);
+//            });
+//            synthesizer.loadInstruments(soundbank, patches);
+
     }
 }
