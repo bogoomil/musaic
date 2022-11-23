@@ -2,6 +2,7 @@ package hu.boga.musaic.gui.trackeditor;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import hu.boga.musaic.core.events.TickEvent;
 import hu.boga.musaic.core.modell.events.CommandEnum;
 import hu.boga.musaic.core.note.NoteBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
@@ -85,31 +86,16 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         loopRectangle.setStroke(Color.WHITE);
         loopRectangle.setFill(Color.color(Color.WHITE.getRed(), Color.WHITE.getGreen(), Color.WHEAT.getBlue(), 0.3));
 
-        initMetaEventListener();
     }
 
-    private void initMetaEventListener() {
-        Player.sequencer.addMetaEventListener(metaMessage -> {
-            if(metaMessage.getType() == CommandEnum.CUE_MARKER.getIntValue()){
-                Task<Void> cursorTask = new Task<Void>() {
-                    @Override
-                    protected Void call() throws Exception {
-                        setCursorLinePosition(metaMessage);
-                        return null;
-                    }
-                };
-                Thread th = new Thread(cursorTask);
-                th.setDaemon(true);
-                th.start();
-            }
-        });
-    }
 
-    private void setCursorLinePosition(MetaMessage metaMessage) {
-        int tick = Integer.parseInt(new String(metaMessage.getData(), StandardCharsets.UTF_8));
-        final int x = (int) (tick * getTickWidth());
+    @Subscribe
+    private void handleTickEvent(TickEvent tickEvent){
+        final int x = (int) (tickEvent.getTick() * getTickWidth());
         cursorLine.setStartX(x);
         cursorLine.setEndX(x);
+
+
     }
 
     private void initCursorLine() {

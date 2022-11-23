@@ -1,5 +1,6 @@
 package hu.boga.musaic.midigateway.sequence;
 
+import com.google.common.eventbus.EventBus;
 import hu.boga.musaic.core.exceptions.MusaicException;
 import hu.boga.musaic.core.gateway.sequence.SequenceGateway;
 import hu.boga.musaic.core.modell.SequenceModell;
@@ -33,7 +34,7 @@ class SequenceGatewayImplTest {
         trackModell.setName("teszt");
         sequenceModell.tracks.add(trackModell);
 
-        gateway = new SequenceGatewayImpl();
+        gateway = new SequenceGatewayImpl(new EventBus());
     }
 
     @Test

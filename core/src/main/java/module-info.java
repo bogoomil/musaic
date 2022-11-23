@@ -13,6 +13,7 @@ module core {
     exports hu.boga.musaic.core.modell.events;
     exports hu.boga.musaic.core.gateway.synth;
     exports hu.boga.musaic.core.note;
+    exports hu.boga.musaic.core.events;
 
     requires com.google.guice;
     requires javax.inject;

@@ -42,7 +42,7 @@ public class SequenceEditor implements SequenceBoundaryOut {
     public Label tempoLabel;
     public TempoSlider tempoSlider;
 
-    public final EventBus eventBus = new EventBus();
+    public final EventBus eventBus;
     public VBox propertiesVBox;
     public HBox centerPane;
     public VBox tracksVBox;
@@ -55,9 +55,11 @@ public class SequenceEditor implements SequenceBoundaryOut {
 
 
     @Inject
-    public SequenceEditor(SequenceBoundaryIn boundaryInProvider) {
+    public SequenceEditor(SequenceBoundaryIn boundaryInProvider, EventBus eventBus) {
         this.boundaryIn = boundaryInProvider;
+        this.eventBus = eventBus;
         eventBus.register(this);
+
     }
 
     public void initialize() {

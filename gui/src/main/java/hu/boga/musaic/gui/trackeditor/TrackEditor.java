@@ -176,6 +176,7 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
     public void setEventBus(EventBus eventBus) {
         this.eventBus = eventBus;
+        eventBus.register(this.trackEditorPanel);
     }
 
     public static class TrackChangedEvent {
