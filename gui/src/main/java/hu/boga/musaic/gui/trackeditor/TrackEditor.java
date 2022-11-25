@@ -169,7 +169,11 @@ public class TrackEditor implements TrackBoundaryOut, NoteChangeListener {
 
 
     public void duplicate(ActionEvent actionEvent) {
-        this.trackBoundaryIn.duplicate(trackDto.id, getLoopStart(), getLoopEnd());
+        String[] ids = trackEditorPanel.getSelectedNoteRectangles().stream()
+                .map(noteRectangle -> noteRectangle.getNoteId())
+                .collect(Collectors.toList())
+                .toArray(new String[0]);
+        this.trackBoundaryIn.duplicate(trackDto.id, ids, getLoopStart(), getLoopEnd());
         int newLoopEnd = getLoopEnd() + (getLoopEnd() - getLoopStart());
         this.trackEditorPanel.setLoopEnd(newLoopEnd);
     }

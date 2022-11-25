@@ -3,8 +3,6 @@ u
 Egui/src/main/java/hu/boga/musaic/gui/trackeditor/TrackProperties.java,2/a/2aaabac7bc9a51b47374f9c67f9d5a95b8bba4b5
 w
 Gcore/src/main/java/hu/boga/musaic/core/InMemorySequenceModellStore.java,1/8/18fac3d4490dbeec16784201b1b8634fbc7042e9
-|
-Lcore/src/main/java/hu/boga/musaic/core/track/interactor/TrackInteractor.java,b/7/b723bbebfb9fd62aca74f89c9e66b656422623c9
 n
 >core/src/main/java/hu/boga/musaic/core/modell/TrackModell.java,c/3/c31db9db2419726b0c6bc03516e486efbdde7e26
 x
@@ -29,10 +27,6 @@ f
 6gui/src/main/java/hu/boga/musaic/gui/GuiConstants.java,0/2/02b4d4a7974199fb7a4ce147d8e13530b9f76a45
 r
 Bgui/src/main/java/hu/boga/musaic/gui/noteeditor/NoteRectangle.java,c/4/c4b3fc07488f91834e75f94e0aa64a35fa1468ca
-z
-Jgui/src/main/java/hu/boga/musaic/gui/trackeditor/TrackEditorBasePanel.java,b/a/bad1f60d0e988ef56fc300829b9803a955fd5a93
-y
-Igui/src/main/java/hu/boga/musaic/gui/sequencemanager/SequenceManager.java,a/f/afc14f98853ad40884ced988b3787bce09339a28
 h
 8gui/src/main/java/hu/boga/musaic/gui/MainController.java,a/9/a9521251e14893eb26b5aeff2e3a742bc710a238
 v

@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TrackInteractor implements TrackBoundaryIn {
 
@@ -61,10 +62,11 @@ public class TrackInteractor implements TrackBoundaryIn {
     }
 
     @Override
-    public void duplicate(String trackId, int fromTick, int toTick) {
+    public void duplicate(String trackId, String[] ids,  int fromTick, int toTick) {
+        List<String> idList = Arrays.asList(ids);
         InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
             sequenceModell.getTrackById(trackId).ifPresent(trackModell -> {
-                List<NoteModell> notesToCopy = trackModell.getNotesBetween(fromTick, toTick);
+                List<NoteModell> notesToCopy = trackModell.getNotesBetween(fromTick, toTick).stream().filter(noteModell -> idList.contains(noteModell.getId())).collect(Collectors.toList());
                 notesToCopy.forEach(noteModell -> {
                     NoteModell modellToAdd = noteModell.clone();
                     modellToAdd.tick = modellToAdd.tick + (toTick - fromTick);
