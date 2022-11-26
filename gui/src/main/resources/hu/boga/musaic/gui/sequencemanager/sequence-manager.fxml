@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="hu.boga.musaic.gui.sequencemanager.SequenceManager"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="hu.boga.musaic.gui.sequencemanager.SequenceManager">
+    <top>
+        <MenuBar fx:id="mainmenu" BorderPane.alignment="CENTER">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Save" onAction="#saveSequence"/>
+                        <MenuItem mnemonicParsing="false" text="Save as..." onAction="#saveAsSequence"/>
+                        <MenuItem mnemonicParsing="false" text="Import..." onAction="#openSequence"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Track">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Add"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+</BorderPane>

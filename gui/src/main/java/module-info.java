@@ -12,6 +12,7 @@ module gui {
     requires core;
     requires midigateway;
 
+
     exports hu.boga.musaic;
     exports hu.boga.musaic.gui.sequenceeditor;
     exports hu.boga.musaic.gui.trackeditor;
@@ -27,5 +28,7 @@ module gui {
     opens hu.boga.musaic.gui.noteeditor to com.google.common, com.google.guice, javafx.fxml;
     exports hu.boga.musaic.gui.sequencemanager;
     opens hu.boga.musaic.gui.sequencemanager to com.google.common, javafx.fxml;
+
+
 
 }

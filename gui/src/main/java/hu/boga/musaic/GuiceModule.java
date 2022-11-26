@@ -17,6 +17,7 @@ import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryOut;
 import hu.boga.musaic.core.track.interactor.TrackInteractor;
 import hu.boga.musaic.core.track.interactor.TrackPropertiesInteractor;
+import hu.boga.musaic.gui.sequencemanager.SequenceManager;
 import hu.boga.musaic.gui.trackeditor.TrackEditor;
 import hu.boga.musaic.gui.sequenceeditor.SequenceEditor;
 import hu.boga.musaic.gui.trackeditor.TrackProperties;
@@ -32,7 +33,7 @@ public class GuiceModule extends AbstractModule {
     protected void configure() {
 
         bind(SequenceBoundaryIn.class).to(SequenceInteractor.class);
-        bind(SequenceBoundaryOut.class).to(SequenceEditor.class);
+        bind(SequenceBoundaryOut.class).to(SequenceManager.class);
 
         bind(TrackBoundaryIn.class).to(TrackInteractor.class);
         bind(TrackBoundaryOut.class).to(TrackEditor.class);

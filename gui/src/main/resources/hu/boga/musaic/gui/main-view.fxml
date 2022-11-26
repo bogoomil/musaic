@@ -5,27 +5,12 @@
 
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.MainController">
     <top>
-        <MenuBar>
+        <MenuBar fx:id="mainmenu">
             <Menu text="File">
                 <MenuItem onAction="#newProject" text="New" />
-                <MenuItem onAction="#openFile" text="Open" />
                 <SeparatorMenuItem />
                 <MenuItem text="Exit" />
             </Menu>
-            <Menu text="Edit">
-                <MenuItem text="Copy" />
-                <MenuItem text="Cut" />
-                <MenuItem text="Paste" />
-            </Menu>
-            <Menu text="Help">
-                <MenuItem disable="true" text="Search" />
-                <MenuItem text="Online Manual" visible="false" />
-                <SeparatorMenuItem />
-                <MenuItem text="About" />
-            </Menu>
         </MenuBar>
     </top>
-    <center>
-        <TabPane fx:id="mainTab" tabClosingPolicy="SELECTED_TAB" />
-    </center>
 </BorderPane>

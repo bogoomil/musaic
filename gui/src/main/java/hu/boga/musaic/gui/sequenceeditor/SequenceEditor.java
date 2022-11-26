@@ -188,7 +188,7 @@ public class SequenceEditor implements SequenceBoundaryOut {
         this.boundaryIn.open(file.getAbsolutePath());
     }
 
-    @Override
+//    @Override
     public void displayNewTrack(TrackDto trackDto) {
         trackEditor.setTrack(trackDto.id, null);
         initTrackPropertiesPanel(trackDto);
