@@ -40,7 +40,7 @@ public class SequenceGatewayImpl implements SequenceGateway {
         Sequence sequence = null;
         try {
             sequence = new SequenceModellToSequenceConverter(modell).convert();
-            Saver.save(sequence, path);
+            modell.name = Saver.save(sequence, path);
         } catch (InvalidMidiDataException e) {
             throw new MusaicException("unable to save modell: " + e.getMessage(), e);
         }
@@ -48,22 +48,8 @@ public class SequenceGatewayImpl implements SequenceGateway {
 
     @Override
     public void play(SequenceModell modell, long fromTick, long toTick) {
-
-        if(metaEventListener != null){
-            Player.sequencer.removeMetaEventListener(metaEventListener);
-        }
-
-        metaEventListener = new MetaEventListener() {
-            @Override
-            public void meta(MetaMessage metaMessage) {
-                if(metaMessage.getType() == CommandEnum.CUE_MARKER.getIntValue()){
-                    int tick = Integer.parseInt(new String(metaMessage.getData(), StandardCharsets.UTF_8));
-                    eventBus.post(new TickEvent(modell.getId(), tick));
-                }
-            }
-        };
-        Player.sequencer.addMetaEventListener(metaEventListener);
-
+        removeMetaEventListener(metaEventListener);
+        createMetaEventListener(modell);
         LOG.debug("start playback");
         Sequence sequence = null;
         try {
@@ -72,6 +58,14 @@ public class SequenceGatewayImpl implements SequenceGateway {
         } catch (InvalidMidiDataException e) {
             throw new MusaicException("unable to play modell: " + e.getMessage(), e);
         }
+    }
+
+    protected void createMetaEventListener(SequenceModell modell) {
+        Player.createMetaEventListener(modell, eventBus);
+    }
+
+    protected void removeMetaEventListener(MetaEventListener listener) {
+        Player.removeMetaEventListener(listener);
     }
 
     @Override

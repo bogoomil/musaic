@@ -5,7 +5,6 @@ import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
-import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
 import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryOut;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +20,7 @@ import static org.mockito.ArgumentMatchers.eq;
 class TrackPropertiesInteractorTest {
     public static final String NEW_NAME = "NEW_NAME";
     public static final String TRACK_ID = "TRACK_ID";
-    TrackPropertiesInteractor trackInteractor;
+    TrackPropertiesInteractor trackPropertiesInteractor;
     private SequenceModell modell;
     private TrackModell trackModell;
     private TrackPropertiesBoundaryOut boundaryOut;
@@ -36,7 +35,7 @@ class TrackPropertiesInteractorTest {
         boundaryOut = Mockito.mock(TrackPropertiesBoundaryOut.class);
         TrackBoundaryIn boundaryIn = Mockito.mock(TrackBoundaryIn.class);
 
-        trackInteractor = new TrackPropertiesInteractor(boundaryOut);
+        trackPropertiesInteractor = new TrackPropertiesInteractor(boundaryOut);
 
         modell = new SequenceModell();
         trackModell = new TrackModell();
@@ -50,13 +49,13 @@ class TrackPropertiesInteractorTest {
 
     @Test
     void setMuted(){
-        trackInteractor.setMuted(trackModell.getId(), true);
+        trackPropertiesInteractor.setMuted(trackModell.getId(), true);
         assertTrue(trackModell.muted);
     }
 
     @Test
     void updateTrackChannel() {
-        trackInteractor.updateTrackChannel(trackModell.getId(), 4);
+        trackPropertiesInteractor.updateTrackChannel(trackModell.getId(), 4);
         Mockito.verify(boundaryOut).displayTrack(Mockito.any());
         assertEquals(4, trackModell.channel);
     }
@@ -67,7 +66,7 @@ class TrackPropertiesInteractorTest {
         TrackDto dto = new TrackDto();
         dto.id = trackModell.getId();
         dto.name = NEW_NAME;
-        trackInteractor.updateTrackName(dto);
+        trackPropertiesInteractor.updateTrackName(dto);
         Mockito.verify(boundaryOut).displayTrack(Mockito.any());
 
         assertEquals(NEW_NAME, trackModell.getName());
@@ -79,7 +78,7 @@ class TrackPropertiesInteractorTest {
         try (MockedStatic<InMemorySequenceModellStore> mockedStatic = Mockito.mockStatic(InMemorySequenceModellStore.class)) {
             mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceByTrackId(trackModell.getId())).thenReturn(Optional.of(modell));
             mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceById(modell.getId())).thenReturn(modell);
-            trackInteractor.removeTrack(trackModell.getId());
+            trackPropertiesInteractor.removeTrack(trackModell.getId());
 
             assertEquals(1, modell.tracks.size());
         }
@@ -87,28 +86,26 @@ class TrackPropertiesInteractorTest {
 
     @Test
     void updateVolume(){
-        trackInteractor.updateVolume(trackModell.getId(), -0.5);
+        trackPropertiesInteractor.updateVolume(trackModell.getId(), -0.5);
         assertEquals(0.5, noteModell.velocity);
         Mockito.verify(boundaryOut).displayTrack(Mockito.any());
 
-        trackInteractor.updateVolume(trackModell.getId(), 100);
+        trackPropertiesInteractor.updateVolume(trackModell.getId(), 0.5);
         assertEquals(1, noteModell.velocity);
 
-        trackInteractor.updateVolume(trackModell.getId(), -0.5);
+        trackPropertiesInteractor.updateVolume(trackModell.getId(), -0.5);
         assertEquals(0.5, noteModell.velocity);
 
-        trackInteractor.updateVolume(trackModell.getId(), 0.5);
+        trackPropertiesInteractor.updateVolume(trackModell.getId(), 0.5);
         assertEquals(1, noteModell.velocity);
 
-        trackInteractor.updateVolume(trackModell.getId(), -100);
+        trackPropertiesInteractor.updateVolume(trackModell.getId(), -1);
         assertEquals(0, noteModell.velocity);
 
-        trackInteractor.updateVolume(trackModell.getId(), 0.5);
+        trackPropertiesInteractor.updateVolume(trackModell.getId(), 0.5);
         assertEquals(0.5, noteModell.velocity);
 
-        trackInteractor.updateVolume(trackModell.getId(), 0.5);
+        trackPropertiesInteractor.updateVolume(trackModell.getId(), 0.5);
         assertEquals(1, noteModell.velocity);
-
-
     }
 }

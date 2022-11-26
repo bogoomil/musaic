@@ -25,6 +25,8 @@ public class SequenceManager implements SequenceBoundaryOut {
     private String filePath;
     private SequenceDto dto;
 
+    private boolean initialized;
+
     SequenceBoundaryIn boundaryIn;
     private FileChooser fileChooser = new FileChooser();
 
@@ -38,14 +40,22 @@ public class SequenceManager implements SequenceBoundaryOut {
     public void displaySequence(SequenceDto dto) {
         LOG.debug("sequence id: {}", dto.id);
         this.dto = dto;
-        Scene scene = mainmenu.getScene();
-        Stage stage = (Stage) scene.getWindow();
-        stage.setTitle(dto.name != null ? dto.name : dto.id);
+        setTitle(dto.name);
+    }
+
+    void setTitle(String title){
+        if(initialized){
+            Scene scene = mainmenu.getScene();
+            Stage stage = (Stage) scene.getWindow();
+            stage.setTitle(dto.name != null ? dto.name : dto.id);
+        }
     }
 
 
     public void initialize() {
         LOG.debug("initializing sequence manager....");
+        boundaryIn.create();
+        initialized = true;
     }
 
     public void openSequence(ActionEvent actionEvent) {

@@ -1,6 +1,9 @@
 package hu.boga.musaic.midigateway;
 
+import com.google.common.eventbus.EventBus;
+import hu.boga.musaic.core.events.TickEvent;
 import hu.boga.musaic.core.exceptions.MusaicException;
+import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.events.CommandEnum;
 import hu.boga.musaic.core.modell.events.MetaMessageEventModell;
 import hu.boga.musaic.midigateway.utils.MidiUtil;
@@ -13,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
 public class Player {
     private static final Logger LOG = LoggerFactory.getLogger(Player.class);
@@ -142,6 +144,27 @@ public class Player {
         return tickLengthInMs;
     }
 
+    public static void removeMetaEventListener(MetaEventListener listener) {
+        sequencer.removeMetaEventListener(listener);
+    }
+
+    public static void createMetaEventListener(SequenceModell modell, EventBus eventBus) {
+        sequencer.addMetaEventListener(new MetaEventListener() {
+            @Override
+            public void meta(MetaMessage metaMessage) {
+                processMetaEvent(metaMessage, modell, eventBus);
+            }
+        });
+    }
+
+    private static void processMetaEvent(MetaMessage metaMessage, SequenceModell modell, EventBus eventBus) {
+        if(metaMessage.getType() == CommandEnum.CUE_MARKER.getIntValue()){
+            int tick = Integer.parseInt(new String(metaMessage.getData(), StandardCharsets.UTF_8));
+            eventBus.post(new TickEvent(modell.getId(), tick));
+        }
+    }
+
+
     private void loadInstrumentByPach(){
 
 
@@ -153,4 +176,6 @@ public class Player {
 //            synthesizer.loadInstruments(soundbank, patches);
 
     }
+
+
 }

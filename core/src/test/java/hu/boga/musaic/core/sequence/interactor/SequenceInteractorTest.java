@@ -24,7 +24,6 @@ import static org.mockito.Mockito.times;
 
 class SequenceInteractorTest {
 
-    public static final String SEQUENCE_ID = "SEQUENCE_ID";
     public static final String PATH = "PATH";
 
     private SequenceInteractor interactor;
@@ -65,7 +64,7 @@ class SequenceInteractorTest {
 
     @Test
     void play(){
-        interactor.play(SEQUENCE_ID, 0, 1);
+        interactor.play(modell.getId(), 0, 1);
         Mockito.verify(gateway).play(Mockito.any(), eq(0L), eq(1L));
 
     }
@@ -97,10 +96,11 @@ class SequenceInteractorTest {
 
     @Test
     void save(){
-        interactor.save(SEQUENCE_ID, PATH);
+        interactor.save(modell.getId(), PATH);
         ArgumentCaptor<String> captor1 = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> captor2 = ArgumentCaptor.forClass(String.class);
         Mockito.verify(gateway).save(Mockito.any(), captor2.capture());
+        Mockito.verify(boundaryOut).displaySequence(Mockito.any());
         assertNotNull(captor2.getValue());
     }
 

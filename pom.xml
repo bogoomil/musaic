@@ -187,11 +187,13 @@
                     <verbose>false</verbose>
                     <skip>false</skip>
                     <failWhenNoMutations>false</failWhenNoMutations>
+                    <withHistory>true</withHistory>
                     <excludedClasses>
                         <param>hu.boga.musaic.core.sequence.boundary.dtos.*</param>
                         <param>hu.boga.musaic.core.track.boundary.dtos.*</param>
                         <param>hu.boga.musaic.musictheory.*</param>
                         <param>hu.boga.musaic.midigateway.Player</param>
+                        <param>hu.boga.musaic.midigateway.Saver</param>
                     </excludedClasses>
                 </configuration>
             </plugin>

@@ -64,10 +64,11 @@ public class TrackPropertiesInteractor implements TrackPropertiesBoundaryIn {
     }
 
     private double calcNewVelocity(double current, double percent){
-        double newValue = current + percent;
-        if(newValue >= 1) newValue = 1;
-        if (newValue <= 0) newValue = 0;
+        double velocity = current + percent;
+        return isVelocityOutOfBounds(velocity) ? current : velocity;
+    }
 
-        return newValue;
+    private boolean isVelocityOutOfBounds(double velocity){
+        return velocity < 0 || velocity > 1;
     }
 }

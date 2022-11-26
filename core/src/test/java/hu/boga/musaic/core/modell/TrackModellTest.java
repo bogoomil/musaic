@@ -4,6 +4,8 @@ import hu.boga.musaic.core.modell.events.NoteModell;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -36,4 +38,14 @@ class TrackModellTest {
         assertEquals(trackModell.solo, cloned.solo);
 
     }
+
+    @Test
+    void getNotesBetween(){
+        trackModell.eventModells.add(new NoteModell(0,0,1,1, 0));
+        trackModell.eventModells.add(new NoteModell(0,2,1,1, 0));
+        List<NoteModell> notes = trackModell.getNotesBetween(1,2);
+        assertEquals(1, notes.size());
+        assertEquals(1, notes.get(0).tick);
+    }
+
 }

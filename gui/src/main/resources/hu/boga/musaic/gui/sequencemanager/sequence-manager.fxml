@@ -8,21 +8,21 @@
     <top>
         <MenuBar fx:id="mainmenu" BorderPane.alignment="CENTER">
             <menus>
-                <Menu mnemonicParsing="false" text="File">
+                <Menu mnemonicParsing="false" text="Sequence">
                     <items>
                         <MenuItem mnemonicParsing="false" text="Save" onAction="#saveSequence"/>
                         <MenuItem mnemonicParsing="false" text="Save as..." onAction="#saveAsSequence"/>
                         <MenuItem mnemonicParsing="false" text="Import..." onAction="#openSequence"/>
                     </items>
                 </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Settings"/>
+                    </items>
+                </Menu>
                 <Menu mnemonicParsing="false" text="Track">
                     <items>
                         <MenuItem mnemonicParsing="false" text="Add"/>
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="About"/>
                     </items>
                 </Menu>
             </menus>

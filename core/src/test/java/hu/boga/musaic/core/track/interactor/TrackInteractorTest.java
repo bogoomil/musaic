@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
@@ -21,13 +23,13 @@ import static org.mockito.Mockito.times;
 
 class TrackInteractorTest {
 
-    public static final String NEW_NAME = "NEW_NAME";
-    public static final String TRACK_ID = "TRACK_ID";
     TrackInteractor trackInteractor;
     private SequenceModell modell;
     private TrackModell trackModell;
     private TrackBoundaryOut boundaryOut;
     private NoteModell noteModell;
+
+    private String noteId;
 
 
     @BeforeEach
@@ -46,6 +48,7 @@ class TrackInteractorTest {
 
         noteModell = new NoteModell(12, 1, 32, 1, 0);
         trackModell.eventModells.add(noteModell);
+        noteId = noteModell.getId();
 
         noteModell = new NoteModell(12, 600, 32, 1, 0);
         trackModell.eventModells.add(noteModell);
@@ -107,15 +110,21 @@ class TrackInteractorTest {
         Mockito.verify(boundaryOut).displayTrack(Mockito.any());
     }
 
-//    @Test
-//    void duplicate(){
-//        trackInteractor.duplicate(trackModell.getId(), trackModell.getNotesBetween() 1, 512);
-//        assertEquals(3, trackModell.getNotes().size());
-//        assertEquals(1, trackModell.getNotes().get(0).tick);
-//        assertEquals(600, trackModell.getNotes().get(1).tick);
-//        assertEquals(512, trackModell.getNotes().get(2).tick);
-//        Mockito.verify(boundaryOut).displayTrack(Mockito.any());
-//    }
+    @Test
+    void duplicate(){
+        String[] ids = {noteId};
+        trackModell.eventModells.add(new NoteModell(0, 3, 100, 100, 0));
+        trackInteractor.duplicate(trackModell.getId(), ids, 1,512);
+
+        List<NoteModell> notes = trackModell.getNotes();
+
+        assertEquals(4, notes.size());
+        assertEquals(1, notes.get(0).tick);
+        assertEquals(600, notes.get(1).tick);
+        assertEquals(3, notes.get(2).tick);
+        assertEquals(512, notes.get(3).tick);
+        Mockito.verify(boundaryOut).displayTrack(Mockito.any());
+    }
 
     @Test
     void moveUpAndDownNotes(){
