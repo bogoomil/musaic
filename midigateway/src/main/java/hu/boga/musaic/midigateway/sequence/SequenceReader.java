@@ -25,7 +25,9 @@ public class SequenceReader {
     private SequenceModell tryingToOpen(String path) throws InvalidMidiDataException, IOException {
         File file = new File(path);
         Sequence sequence = MidiSystem.getSequence(file);
-        return convertSquence(sequence);
+        SequenceModell modell =  convertSquence(sequence);
+        modell.name = file.getName();
+        return modell;
     }
 
     private SequenceModell convertSquence(Sequence sequence) {
