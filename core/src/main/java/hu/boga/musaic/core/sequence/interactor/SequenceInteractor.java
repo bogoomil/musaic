@@ -54,7 +54,7 @@ public class SequenceInteractor implements SequenceBoundaryIn {
 
     @Override
     public void save(String sequenceId, String path) {
-        gateway.save(InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId), path);
+        gateway.save(InMemorySequenceModellStore.getSequenceById(sequenceId), path);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class SequenceInteractor implements SequenceBoundaryIn {
         SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId);
         TrackModell trackModell = new TrackModell();
         modell.tracks.add(trackModell);
-        boundaryOut.displayNewTrack(new TrackModelltoDtoConverter(trackModell).convert());
+        boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());
     }
 
     @Override

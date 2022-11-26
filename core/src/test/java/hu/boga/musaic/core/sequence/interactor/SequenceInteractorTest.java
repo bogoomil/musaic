@@ -107,8 +107,8 @@ class SequenceInteractorTest {
     @Test
     void addTrack(){
         interactor.addTrack(modell.getId());
-        Mockito.verify(boundaryOut).displayNewTrack(trackDtoArgumentCaptor.capture());
-        assertNotNull(trackDtoArgumentCaptor.getValue().id);
+        Mockito.verify(boundaryOut).displaySequence(sequenceDtoArgumentCaptor.capture());
+        assertNotNull(sequenceDtoArgumentCaptor.getValue().id);
     }
 
     @Test
