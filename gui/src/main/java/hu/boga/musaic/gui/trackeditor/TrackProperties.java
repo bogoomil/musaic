@@ -9,11 +9,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +33,8 @@ public class TrackProperties implements TrackPropertiesBoundaryOut {
     public AnchorPane mainPanel;
     public Button volUp;
     public Button volDown;
+    public Canvas canvas;
+    public Pane pane;
 
     private TrackPropertiesBoundaryIn boundaryIn;
     private TrackDto trackDto;

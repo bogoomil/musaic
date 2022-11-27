@@ -18,9 +18,8 @@ import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryOut;
 import hu.boga.musaic.core.track.interactor.TrackInteractor;
 import hu.boga.musaic.core.track.interactor.TrackPropertiesInteractor;
 import hu.boga.musaic.gui.sequencemanager.SequenceManager;
+import hu.boga.musaic.gui.sequencemanager.components.track.TrackManager;
 import hu.boga.musaic.gui.trackeditor.TrackEditor;
-import hu.boga.musaic.gui.sequenceeditor.SequenceEditor;
-import hu.boga.musaic.gui.trackeditor.TrackProperties;
 import hu.boga.musaic.midigateway.sequence.SequenceGatewayImpl;
 import hu.boga.musaic.midigateway.synth.SynthGatewayImpl;
 
@@ -39,7 +38,7 @@ public class GuiceModule extends AbstractModule {
         bind(TrackBoundaryOut.class).to(TrackEditor.class);
 
         bind(TrackPropertiesBoundaryIn.class).to(TrackPropertiesInteractor.class);
-        bind(TrackPropertiesBoundaryOut.class).to(TrackProperties.class);
+        bind(TrackPropertiesBoundaryOut.class).to(TrackManager.class);
 
         bind(NoteBoundaryIn.class).to(NoteInteractor.class).in(Singleton.class);
         bind(SynthGateway.class).to(SynthGatewayImpl.class);

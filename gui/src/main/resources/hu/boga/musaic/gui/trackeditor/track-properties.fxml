@@ -1,52 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
+<?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane fx:id="mainPanel" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.trackeditor.TrackProperties">
    <children>
-      <VBox layoutX="4.0" layoutY="7.0">
-         <children>
-            <HBox spacing="5.0">
-               <children>
-                  <Label text="Name" />
-                  <TextField fx:id="trackName" />
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </HBox>
-            <HBox spacing="5.0">
-               <children>
-                  <Label text="Channel" />
-                  <ComboBox fx:id="cbChannel" prefWidth="150.0" />
-               </children>
-               <padding>
-                  <Insets top="5.0" />
-               </padding>
-            </HBox>
-            <HBox spacing="5.0">
-               <children>
-                  <Button fx:id="btnNotes" mnemonicParsing="false" text="NOTES" />
-                  <Button fx:id="btnDelTrack" mnemonicParsing="false" text="Del track" />
-                  <Button mnemonicParsing="false" onAction="#onDuplicateTrackClicked" text="Duplicate" />
-                  <CheckBox fx:id="chxbMute" mnemonicParsing="false" text="Mute track" />
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </HBox>
-            <HBox prefHeight="11.0" prefWidth="254.0" spacing="5.0">
-               <children>
-                  <Button fx:id="volUp" mnemonicParsing="false" text="vol up 10%" />
-                  <Button fx:id="volDown" mnemonicParsing="false" text="vol down 10%" />
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </HBox>
-         </children>
-      </VBox>
+      <HBox prefHeight="131.0" prefWidth="792.0">
+         <VBox layoutX="4.0" layoutY="7.0">
+            <children>
+               <HBox spacing="5.0">
+                  <children>
+                     <Label text="Name" />
+                     <TextField fx:id="trackName" />
+                  </children>
+                  <padding>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  </padding>
+               </HBox>
+               <HBox spacing="5.0">
+                  <children>
+                     <Label text="Channel" />
+                     <ComboBox fx:id="cbChannel" prefWidth="150.0" />
+                  </children>
+                  <padding>
+                     <Insets top="5.0" />
+                  </padding>
+               </HBox>
+               <HBox spacing="5.0">
+                  <children>
+                     <Button fx:id="btnNotes" mnemonicParsing="false" text="NOTES" />
+                     <Button fx:id="btnDelTrack" mnemonicParsing="false" text="Del track" />
+                     <Button mnemonicParsing="false" onAction="#onDuplicateTrackClicked" text="Duplicate" />
+                     <CheckBox fx:id="chxbMute" mnemonicParsing="false" text="Mute track" />
+                  </children>
+                  <padding>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  </padding>
+               </HBox>
+               <HBox prefHeight="11.0" prefWidth="254.0" spacing="5.0">
+                  <children>
+                     <Button fx:id="volUp" mnemonicParsing="false" text="vol up 10%" />
+                     <Button fx:id="volDown" mnemonicParsing="false" text="vol down 10%" />
+                  </children>
+                  <padding>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  </padding>
+               </HBox>
+            </children>
+         </VBox>
+         <Pane fx:id="pane" prefHeight="78.0" prefWidth="205.0" style="-fx-background-color: black;">
+            <children>
+               <Canvas fx:id="canvas" height="131.0" width="720.0" />
+            </children>
+         </Pane>
+      </HBox>
    </children>
 </AnchorPane>

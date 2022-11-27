@@ -28,7 +28,10 @@ module gui {
     opens hu.boga.musaic.gui.noteeditor to com.google.common, com.google.guice, javafx.fxml;
     exports hu.boga.musaic.gui.sequencemanager;
     opens hu.boga.musaic.gui.sequencemanager to com.google.common, javafx.fxml;
-
+    exports hu.boga.musaic.gui.sequencemanager.components;
+    opens hu.boga.musaic.gui.sequencemanager.components to com.google.common, javafx.fxml;
+    exports hu.boga.musaic.gui.sequencemanager.components.track;
+    opens hu.boga.musaic.gui.sequencemanager.components.track to com.google.common, javafx.fxml;
 
 
 }
