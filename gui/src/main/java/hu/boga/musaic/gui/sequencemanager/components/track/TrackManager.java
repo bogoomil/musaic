@@ -46,8 +46,6 @@ public class TrackManager implements TrackPropertiesBoundaryOut {
     @FXML
     private Button volDown;
     @FXML
-    private Canvas canvas;
-    @FXML
     private Pane pane;
 
     private TrackPropertiesBoundaryIn boundaryIn;
@@ -89,7 +87,7 @@ public class TrackManager implements TrackPropertiesBoundaryOut {
 
     public void setGridPainter(GridPainter gridPainter) {
         this.gridPainter = gridPainter;
-        this.gridPainter.setCanvas(canvas);
+        gridPainter.setPane(pane);
     }
 
     private void updateTrackName() {
@@ -130,25 +128,17 @@ public class TrackManager implements TrackPropertiesBoundaryOut {
     }
 
     private void updateMainPanelColor(String color) {
-        try {
-            setMainPanelColor(Color.web(color));
-        } catch (Exception e) {
-            setMainPanelColor(Color.GRAY);
-        }
+        mainPanel.setBackground(new Background(
+                new BackgroundFill(
+                        Color.web(color),
+                        CornerRadii.EMPTY,
+                        Insets.EMPTY)));
     }
 
     private void removeListeners() {
         trackName.textProperty().removeListener(trackNameListener);
         cbChannel.valueProperty().removeListener(channelComboListener);
         chxbMute.selectedProperty().removeListener(mutedListener);
-    }
-
-    private void setMainPanelColor(Color color) {
-        mainPanel.setBackground(new Background(
-                new BackgroundFill(
-                        color,
-                        CornerRadii.EMPTY,
-                        Insets.EMPTY)));
     }
 
     private void channelChanged(final String trackId, final int channel) {

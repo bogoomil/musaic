@@ -1,53 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
-<?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="mainPanel" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.sequencemanager.components.track.TrackManager">
-   <left>
-      <VBox BorderPane.alignment="CENTER">
-         <children>
-            <HBox spacing="5.0">
-               <children>
-                  <Label style="-fx-font-size: 10;" text="Name" />
-                  <TextField fx:id="trackName" style="-fx-font-size: 10;" />
-                  <Label style="-fx-font-size: 10;" text="Channel" />
-                  <ComboBox fx:id="cbChannel" prefHeight="24.0" prefWidth="76.0" />
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </HBox>
-            <HBox spacing="5.0">
-               <children>
-                  <Button fx:id="btnNotes" mnemonicParsing="false" style="-fx-font-size: 10;" text="NOTES" />
-                  <Button fx:id="btnDelTrack" mnemonicParsing="false" style="-fx-font-size: 10;" text="Del track" />
-                  <Button mnemonicParsing="false" onAction="#onDuplicateTrackClicked" style="-fx-font-size: 10;" text="Duplicate" />
-                  <CheckBox fx:id="chxbMute" mnemonicParsing="false" style="-fx-font-size: 10;" text="Mute track" />
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </HBox>
-            <HBox prefHeight="11.0" prefWidth="254.0" spacing="5.0">
-               <children>
-                  <Button fx:id="volUp" mnemonicParsing="false" style="-fx-font-size: 9;" text="up 10%" />
-                  <Button fx:id="volDown" mnemonicParsing="false" style="-fx-font-size: 9;" text="down 10%" />
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </HBox>
-         </children>
-      </VBox>
-   </left>
-   <center>
-      <Pane fx:id="pane" minWidth="800.0" BorderPane.alignment="CENTER">
-         <children>
-            <Canvas fx:id="canvas" />
-         </children>
-      </Pane>
-   </center>
+<BorderPane fx:id="mainPanel" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/16"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="hu.boga.musaic.gui.sequencemanager.components.track.TrackManager">
+    <left>
+        <VBox BorderPane.alignment="CENTER">
+            <children>
+                <HBox spacing="5.0">
+                    <children>
+                        <Label style="-fx-font-size: 10;" text="Name"/>
+                        <TextField fx:id="trackName" style="-fx-font-size: 10;"/>
+                        <Label style="-fx-font-size: 10;" text="Channel"/>
+                        <ComboBox fx:id="cbChannel" prefHeight="24.0" prefWidth="76.0"/>
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
+                </HBox>
+                <HBox spacing="5.0">
+                    <children>
+                        <Button fx:id="btnNotes" mnemonicParsing="false" style="-fx-font-size: 10;" text="NOTES"/>
+                        <Button fx:id="btnDelTrack" mnemonicParsing="false" style="-fx-font-size: 10;"
+                                text="Del track"/>
+                        <Button mnemonicParsing="false" onAction="#onDuplicateTrackClicked" style="-fx-font-size: 10;"
+                                text="Duplicate"/>
+                        <CheckBox fx:id="chxbMute" mnemonicParsing="false" style="-fx-font-size: 10;"
+                                  text="Mute track"/>
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
+                </HBox>
+                <HBox prefHeight="11.0" prefWidth="254.0" spacing="5.0">
+                    <children>
+                        <Button fx:id="volUp" mnemonicParsing="false" style="-fx-font-size: 9;" text="up 10%"/>
+                        <Button fx:id="volDown" mnemonicParsing="false" style="-fx-font-size: 9;" text="down 10%"/>
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
+                </HBox>
+            </children>
+        </VBox>
+    </left>
+    <center>
+        <Pane fx:id="pane" minWidth="800.0" BorderPane.alignment="CENTER">
+            <Pane fx:id="notesPane"></Pane>
+        </Pane>
+    </center>
 </BorderPane>
