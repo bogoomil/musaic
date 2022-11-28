@@ -69,8 +69,6 @@ Qmidigateway/src/main/java/hu/boga/musaic/midigateway/sequence/SequenceReader.ja
 gmidigateway/src/main/java/hu/boga/musaic/midigateway/converters/ShortMessageEventToModellConverter.java,c/2/c207d86e25ffb675cc20799f7a61c22d69383076
 ›
 kmidigateway/src/test/java/hu/boga/musaic/midigateway/converters/ShortMessageEventToModellConverterTest.java,a/6/a6d91b1318a5e5dbfda84e0aae2e4e29268aebf6
-7
-pom.xml,4/4/442292b8a7efeabbe4cc176709b833b1792140ec
 o
 ?midigateway/src/main/java/hu/boga/musaic/midigateway/Saver.java,0/b/0bab06482796e50aa2a8d247ed17d9e3a9f33c5e
 p
@@ -83,9 +81,5 @@ w
 Ggui/src/main/java/hu/boga/musaic/gui/sequenceeditor/SequenceEditor.java,1/e/1e99096c61b5c7a916ccc40453a060c13e4b82eb
 q
 Acore/src/main/java/hu/boga/musaic/core/modell/SequenceModell.java,e/8/e8d3419464c99b2db41ead1cdc09013bd15e5319
-‚
-Rcore/src/main/java/hu/boga/musaic/core/sequence/interactor/SequenceInteractor.java,c/e/ce7b341cf54f57526774b94f6dc41dbe54562b1f
-R
-"gui/src/main/java/module-info.java,7/e/7eb51de7783f19d325cce8c4c0170ca79a02ba70
 Ž
 ^gui/src/main/java/hu/boga/musaic/gui/sequencemanager/components/track/DuplicateTrackEvent.java,7/3/7396a4efedf45ac4fb499e6ff1ac56b6933a6062

@@ -34,4 +34,9 @@ module gui {
     opens hu.boga.musaic.gui.sequencemanager.components.track to com.google.common, javafx.fxml;
 
 
+    opens hu.boga.musaic.gui.sequence to javafx.fxml, com.google.guice, com.google.inject;
+    exports hu.boga.musaic.gui.sequence to com.google.guice, com.google.inject;
+
+
+
 }

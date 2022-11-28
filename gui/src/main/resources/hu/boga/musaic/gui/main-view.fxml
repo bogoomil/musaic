@@ -8,7 +8,8 @@
     <top>
         <MenuBar fx:id="mainmenu">
             <Menu text="File">
-                <MenuItem onAction="#newProject" text="New"/>
+                <MenuItem onAction="#create" text="New"/>
+                <MenuItem onAction="#open" text="Open"/>
                 <SeparatorMenuItem/>
                 <MenuItem text="Exit"/>
             </Menu>

@@ -17,7 +17,9 @@ import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryOut;
 import hu.boga.musaic.core.track.interactor.TrackInteractor;
 import hu.boga.musaic.core.track.interactor.TrackPropertiesInteractor;
-import hu.boga.musaic.gui.sequencemanager.SequenceManager;
+import hu.boga.musaic.gui.sequence.SequencePresenter;
+import hu.boga.musaic.gui.sequence.SequenceService;
+import hu.boga.musaic.gui.sequence.SequenceServiceImpl;
 import hu.boga.musaic.gui.sequencemanager.components.track.TrackManager;
 import hu.boga.musaic.gui.trackeditor.TrackEditor;
 import hu.boga.musaic.midigateway.sequence.SequenceGatewayImpl;
@@ -31,22 +33,20 @@ public class GuiceModule extends AbstractModule {
     @Override
     protected void configure() {
 
-        bind(SequenceBoundaryIn.class).to(SequenceInteractor.class);
-        bind(SequenceBoundaryOut.class).to(SequenceManager.class);
+        bind(SequenceBoundaryIn.class).to(SequenceInteractor.class).in(Singleton.class);
+
+        bind(SequenceServiceImpl.class).in(Singleton.class);
+        bind(SequenceBoundaryOut.class).to(SequenceServiceImpl.class);
+        bind(SequenceService.class).to(SequenceServiceImpl.class);
 
         bind(TrackBoundaryIn.class).to(TrackInteractor.class);
         bind(TrackBoundaryOut.class).to(TrackEditor.class);
-
         bind(TrackPropertiesBoundaryIn.class).to(TrackPropertiesInteractor.class);
         bind(TrackPropertiesBoundaryOut.class).to(TrackManager.class);
-
         bind(NoteBoundaryIn.class).to(NoteInteractor.class).in(Singleton.class);
         bind(SynthGateway.class).to(SynthGatewayImpl.class);
-
         bind(SequenceGateway.class).to(SequenceGatewayImpl.class).in(Singleton.class);
-
         bind(EventBus.class).toInstance(new EventBus("MAIN_APP_EVENTBUS"));
 
     }
-
 }
