@@ -31,8 +31,6 @@ public class TrackManager implements TrackPropertiesBoundaryOut {
 
     private static final Logger LOG = LoggerFactory.getLogger(TrackManager.class);
     @FXML
-    private AnchorPane controlls;
-    @FXML
     private TextField trackName;
     @FXML
     private ComboBox<Integer> cbChannel;
@@ -59,8 +57,10 @@ public class TrackManager implements TrackPropertiesBoundaryOut {
     private ChangeListener<? super Boolean> mutedListener = (observable, oldValue, newValue) -> boundaryIn.setMuted(trackDto.id, chxbMute.isSelected());
     private ChangeListener<? super String> trackNameListener = (observable, oldValue, newValue) -> updateTrackName();
     private EventHandler<ActionEvent> delAction = event -> deleteTrack();
-    private EventHandler<ActionEvent> btnNotesOnAction = ev -> showNoteManager();
+    private EventHandler<ActionEvent> btnNotesOnAction = event -> showNoteManager();
     private String[] colorMapping;
+    private EventHandler<ActionEvent> volUpOnAction = event -> boundaryIn.updateVolume(trackDto.id, 0.1);
+    private EventHandler<ActionEvent> volDownOnAction = event -> boundaryIn.updateVolume(trackDto.id, -0.1);
 
     @Inject
     public TrackManager(TrackPropertiesBoundaryIn boundaryIn) {
@@ -68,8 +68,11 @@ public class TrackManager implements TrackPropertiesBoundaryOut {
     }
 
     public void initialize() {
-        volUp.setOnAction(event -> boundaryIn.updateVolume(trackDto.id, 0.1));
-        volDown.setOnAction(event -> boundaryIn.updateVolume(trackDto.id, -0.1));
+        volUp.setOnAction(volUpOnAction);
+        volDown.setOnAction(volDownOnAction);
+        btnDelTrack.setOnAction(delAction);
+        btnNotes.setOnAction(btnNotesOnAction);
+
         cbChannel.getItems().addAll(IntStream.rangeClosed(0, 15).boxed().collect(Collectors.toList()));
     }
 
@@ -80,14 +83,14 @@ public class TrackManager implements TrackPropertiesBoundaryOut {
     }
 
     public void initProperties(TrackManagerProperties properties){
-        initGridPainter(properties.resolution, properties.fourthInmeasure, properties.measureNum, properties.zoom, properties.scroll);
+        initGridPainter(properties.fourthInmeasure, properties.measureNum, properties.zoom, properties.scroll);
         this.colorMapping = properties.colorMappings;
         this.eventBus = properties.eventBus;
         eventBus.register(this);
     }
 
-    private void initGridPainter(int resolution, int fourthInmeasure, int measureNum, DoubleProperty zoom, DoubleProperty scroll) {
-        this.gridPainter = new GridPainter(resolution, fourthInmeasure, measureNum, zoom, scroll);
+    private void initGridPainter(int fourthInmeasure, int measureNum, DoubleProperty zoom, DoubleProperty scroll) {
+        this.gridPainter = new GridPainter(fourthInmeasure, measureNum, zoom, scroll);
         gridPainter.setPane(pane);
     }
 
@@ -124,8 +127,12 @@ public class TrackManager implements TrackPropertiesBoundaryOut {
         cbChannel.valueProperty().addListener(channelComboListener);
         chxbMute.selectedProperty().addListener(mutedListener);
         trackName.textProperty().addListener(trackNameListener);
-        btnDelTrack.setOnAction(delAction);
-        btnNotes.setOnAction(btnNotesOnAction);
+    }
+
+    private void removeListeners() {
+        trackName.textProperty().removeListener(trackNameListener);
+        cbChannel.valueProperty().removeListener(channelComboListener);
+        chxbMute.selectedProperty().removeListener(mutedListener);
     }
 
     private void updateMainPanelColor(String color) {
@@ -134,12 +141,6 @@ public class TrackManager implements TrackPropertiesBoundaryOut {
                         Color.web(color),
                         CornerRadii.EMPTY,
                         Insets.EMPTY)));
-    }
-
-    private void removeListeners() {
-        trackName.textProperty().removeListener(trackNameListener);
-        cbChannel.valueProperty().removeListener(channelComboListener);
-        chxbMute.selectedProperty().removeListener(mutedListener);
     }
 
     private void channelChanged(final String trackId, final int channel) {

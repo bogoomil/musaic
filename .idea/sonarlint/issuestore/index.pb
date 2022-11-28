@@ -79,8 +79,6 @@ p
 Zgui/src/main/java/hu/boga/musaic/gui/sequencemanager/components/ChannelMappingManager.java,8/5/850f9d69f0194f78829152bfeba6b4df335f06be
 u
 Egui/src/main/java/hu/boga/musaic/gui/trackeditor/TrackProperties.java,2/a/2aaabac7bc9a51b47374f9c67f9d5a95b8bba4b5
-a
-1gui/src/main/java/hu/boga/musaic/GuiceModule.java,4/8/487c0469ec9fac68ad4ccb048dd9811bdf594c2e
 w
 Ggui/src/main/java/hu/boga/musaic/gui/sequenceeditor/SequenceEditor.java,1/e/1e99096c61b5c7a916ccc40453a060c13e4b82eb
 q
@@ -91,5 +89,3 @@ R
 "gui/src/main/java/module-info.java,7/e/7eb51de7783f19d325cce8c4c0170ca79a02ba70
 Ž
 ^gui/src/main/java/hu/boga/musaic/gui/sequencemanager/components/track/DuplicateTrackEvent.java,7/3/7396a4efedf45ac4fb499e6ff1ac56b6933a6062
-†
-Vcore/src/main/java/hu/boga/musaic/core/track/interactor/TrackPropertiesInteractor.java,1/6/16c789cb5afa089db0aa9dca7b4b81139567626a

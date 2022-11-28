@@ -25,8 +25,8 @@ public class TrackPropertiesInteractor implements TrackPropertiesBoundaryIn {
         InMemorySequenceModellStore.getSequenceByTrackId(id).ifPresent(sequenceModell -> {
             sequenceModell.getTrackById(id).ifPresent(trackModell -> {
                 trackModell.muted = muted;
+                LOG.debug("track muted: {}", id);
             });
-            LOG.debug("sequence to show: {}", sequenceModell);
         });
     }
 
@@ -59,6 +59,7 @@ public class TrackPropertiesInteractor implements TrackPropertiesBoundaryIn {
     public void updateVolume(String trackId, double velocityPercent) {
         InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
             trackModell.getNotes().forEach(noteModell -> noteModell.velocity = calcNewVelocity(noteModell.velocity, velocityPercent));
+            LOG.debug("updating volume: {}, vol: {}", trackId, velocityPercent);
             boundaryOut.displayTrack(new TrackModelltoDtoConverter(trackModell).convert());
         });
     }
