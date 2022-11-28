@@ -20,7 +20,7 @@ public class GridPainter {
 
     private Pane pane;
 
-    private double measureWidth = 20;
+    private double measureWidth = 10;
 
     public GridPainter(int resolution, int fourthsInMeasure, int measureNum, DoubleProperty zoomFactor, DoubleProperty scrollFactor) {
         this.resolution = resolution;
@@ -34,7 +34,9 @@ public class GridPainter {
 
     private void scrollGrid(Number newValue) {
         Group group = (Group) pane.getParent();
-        group.setLayoutX(-1 * newValue.doubleValue());
+        double v = pane.getPrefWidth() * (newValue.doubleValue() / 100);
+        group.toBack();
+        group.setLayoutX(-1 * v);
     }
 
     public void setPane(Pane pane) {
@@ -44,10 +46,12 @@ public class GridPainter {
 
     public void paintGrid() {
         pane.getChildren().clear();
+        pane.setPrefWidth(measureWidth * measureNum * zoomFactor.doubleValue());
         int x = 0;
         for(int i = 0; i < measureNum; i++){
             createMeasure(i);
         }
+        scrollGrid(scrollFactor.doubleValue());
     }
 
     private void createMeasure(int i) {

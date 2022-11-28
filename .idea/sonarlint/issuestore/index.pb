@@ -89,3 +89,7 @@ Acore/src/main/java/hu/boga/musaic/core/modell/SequenceModell.java,e/8/e8d34194
 Rcore/src/main/java/hu/boga/musaic/core/sequence/interactor/SequenceInteractor.java,c/e/ce7b341cf54f57526774b94f6dc41dbe54562b1f
 R
 "gui/src/main/java/module-info.java,7/e/7eb51de7783f19d325cce8c4c0170ca79a02ba70
+Ž
+^gui/src/main/java/hu/boga/musaic/gui/sequencemanager/components/track/DuplicateTrackEvent.java,7/3/7396a4efedf45ac4fb499e6ff1ac56b6933a6062
+†
+Vcore/src/main/java/hu/boga/musaic/core/track/interactor/TrackPropertiesInteractor.java,1/6/16c789cb5afa089db0aa9dca7b4b81139567626a

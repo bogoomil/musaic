@@ -31,6 +31,8 @@ public class TrackManager implements TrackPropertiesBoundaryOut {
 
     private static final Logger LOG = LoggerFactory.getLogger(TrackManager.class);
     @FXML
+    private AnchorPane controlls;
+    @FXML
     private TextField trackName;
     @FXML
     private ComboBox<Integer> cbChannel;
