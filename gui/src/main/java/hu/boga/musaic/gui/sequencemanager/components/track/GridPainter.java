@@ -1,6 +1,7 @@
 package hu.boga.musaic.gui.sequencemanager.components.track;
 
 import javafx.beans.property.DoubleProperty;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,7 +19,6 @@ public class GridPainter {
     private DoubleProperty scrollFactor;
 
     private Pane pane;
-    private double origHeight;
 
     private double measureWidth = 20;
 
@@ -27,19 +27,23 @@ public class GridPainter {
         this.fourthsInMeasure = fourthsInMeasure;
         this.measureNum = measureNum;
         this.zoomFactor = zoomFactor;
-        zoomFactor.addListener((observable, oldValue, newValue) -> paintGrid());
         this.scrollFactor = scrollFactor;
+        zoomFactor.addListener((observable, oldValue, newValue) -> paintGrid());
+        scrollFactor.addListener((observable, oldValue, newValue) -> scrollGrid(newValue));
+    }
+
+    private void scrollGrid(Number newValue) {
+        Group group = (Group) pane.getParent();
+        group.setLayoutX(-1 * newValue.doubleValue());
     }
 
     public void setPane(Pane pane) {
         this.pane = pane;
-        origHeight = pane.getHeight();
         paintGrid();
     }
 
     public void paintGrid() {
         pane.getChildren().clear();
-        System.out.println("painting grid, zoom: " + zoomFactor.intValue());
         int x = 0;
         for(int i = 0; i < measureNum; i++){
             createMeasure(i);
@@ -53,14 +57,11 @@ public class GridPainter {
             double rectW = barW / fourthsInMeasure;
             double rectX = i * barW + j * rectW;
             measureEndX = rectW + rectX;
-
-            System.out.println("painting rects: " + rectX + ", " + rectW);
-
-            Rectangle rectangle = new Rectangle(rectX , 0, rectW, pane.getHeight() - 2  );
+            Rectangle rectangle = new Rectangle(rectX , 0, rectW, 80  );
             rectangle.setFill(j % 2 == 0 ? Color.LIGHTSKYBLUE : Color.DEEPSKYBLUE);
             pane.getChildren().add(rectangle);
         }
-        Line line = new Line(measureEndX, 0, measureEndX, pane.getHeight() - 2);
+        Line line = new Line(measureEndX, 0, measureEndX, 80);
         line.setStroke(Color.RED);
         line.setStrokeWidth(1);
 

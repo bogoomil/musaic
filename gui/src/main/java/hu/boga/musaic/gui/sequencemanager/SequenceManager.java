@@ -8,9 +8,7 @@ import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.gui.sequencemanager.components.ChannelMappingManager;
-import hu.boga.musaic.gui.sequencemanager.components.track.DuplicateTrackEvent;
-import hu.boga.musaic.gui.sequencemanager.components.track.GridPainter;
-import hu.boga.musaic.gui.sequencemanager.components.track.TrackManager;
+import hu.boga.musaic.gui.sequencemanager.components.track.*;
 import hu.boga.musaic.gui.trackeditor.events.TrackDeletedEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -93,11 +91,22 @@ public class SequenceManager implements SequenceBoundaryOut {
     private void tryCreatingNewTrackPaneld(TrackDto trackDto, FXMLLoader loader) throws IOException {
         BorderPane pane = loader.load();
         TrackManager trackManager = loader.getController();
-        trackManager.setGridPainter(new GridPainter(dto.resolution, 4, 100, zoomSlider.valueProperty(), scrollSlider.valueProperty()));
-        trackManager.setColor(dto.channelToColorMappings);
-        trackManager.setEventBus(eventBus);
+        trackManager.initProperties(createTrackManagerProperties());
         trackManager.displayTrack(trackDto);
         tracksVBox.getChildren().add(pane);
+    }
+
+    private TrackManagerProperties createTrackManagerProperties() {
+        TrackManagerProperties properties = new TrackManagerProperties.Builder()
+                .withEventBus(eventBus)
+                .withColorMappings(dto.channelToColorMappings)
+                .withFourthInmeasure(4)
+                .withMeasureNum(100)
+                .withResolution(dto.resolution)
+                .withZoom(zoomSlider.valueProperty())
+                .withScroll(scrollSlider.valueProperty())
+                .build();
+        return properties;
     }
 
     private void setTitle(String title) {
@@ -115,6 +124,10 @@ public class SequenceManager implements SequenceBoundaryOut {
         zoomSlider.setMin(1);
         zoomSlider.setMax(10);
         zoomSlider.setValue(1);
+
+        scrollSlider.setMin(0);
+        scrollSlider.setMax(100);
+        scrollSlider.setValue(0);
 
         initialized = true;
     }

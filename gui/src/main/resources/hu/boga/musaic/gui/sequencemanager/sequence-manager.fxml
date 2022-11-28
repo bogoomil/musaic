@@ -39,18 +39,27 @@
                            <children>
                               <Label text="Zoom" />
                                <Slider fx:id="zoomSlider" />
-                              <Label text="Horizontal scroll" />
-                               <Slider fx:id="scrollSlider" />
                            </children>
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding></VBox>
                     </top>
                     <center>
-                        <ScrollPane>
+                        <ScrollPane hbarPolicy="NEVER">
                             <VBox fx:id="tracksVBox" />
                         </ScrollPane>
                     </center>
+                     <bottom>
+                        <VBox prefHeight="28.0" prefWidth="600.0" spacing="5.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="Horizontal scroll" />
+                               <Slider fx:id="scrollSlider" />
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </VBox>
+                     </bottom>
                 </BorderPane>
             </content>
           </Tab>

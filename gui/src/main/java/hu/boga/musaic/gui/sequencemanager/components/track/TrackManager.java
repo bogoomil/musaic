@@ -5,6 +5,7 @@ import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryOut;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.gui.trackeditor.events.TrackDeletedEvent;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -76,17 +77,15 @@ public class TrackManager implements TrackPropertiesBoundaryOut {
         updateGui();
     }
 
-    public void setColor(String[] color) {
-        this.colorMapping = color;
-    }
-
-    public void setEventBus(final EventBus eventBus) {
-        this.eventBus = eventBus;
+    public void initProperties(TrackManagerProperties properties){
+        initGridPainter(properties.resolution, properties.fourthInmeasure, properties.measureNum, properties.zoom, properties.scroll);
+        this.colorMapping = properties.colorMappings;
+        this.eventBus = properties.eventBus;
         eventBus.register(this);
     }
 
-    public void setGridPainter(GridPainter gridPainter) {
-        this.gridPainter = gridPainter;
+    private void initGridPainter(int resolution, int fourthInmeasure, int measureNum, DoubleProperty zoom, DoubleProperty scroll) {
+        this.gridPainter = new GridPainter(resolution, fourthInmeasure, measureNum, zoom, scroll);
         gridPainter.setPane(pane);
     }
 
