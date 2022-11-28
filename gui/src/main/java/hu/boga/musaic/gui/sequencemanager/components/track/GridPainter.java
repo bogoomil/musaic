@@ -2,16 +2,12 @@ package hu.boga.musaic.gui.sequencemanager.components.track;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 public class GridPainter {
-    private int resolution;
     private int fourthsInMeasure;
     private int measureNum;
 
@@ -22,8 +18,7 @@ public class GridPainter {
 
     private double measureWidth = 10;
 
-    public GridPainter(int resolution, int fourthsInMeasure, int measureNum, DoubleProperty zoomFactor, DoubleProperty scrollFactor) {
-        this.resolution = resolution;
+    public GridPainter(int fourthsInMeasure, int measureNum, DoubleProperty zoomFactor, DoubleProperty scrollFactor) {
         this.fourthsInMeasure = fourthsInMeasure;
         this.measureNum = measureNum;
         this.zoomFactor = zoomFactor;
