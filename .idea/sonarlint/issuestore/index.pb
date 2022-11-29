@@ -43,16 +43,12 @@ p
 Lcore/src/main/java/hu/boga/musaic/core/track/interactor/TrackInteractor.java,b/7/b723bbebfb9fd62aca74f89c9e66b656422623c9
 €
 Pcore/src/test/java/hu/boga/musaic/core/track/interactor/TrackInteractorTest.java,5/b/5b691c4d47e9d32dc5456fd137729b1ce33851f4
-’
-bmidigateway/src/test/java/hu/boga/musaic/midigateway/converters/SequenceToModellConverterTest.java,c/7/c7f15ea4572e8ef7d6a883ac0a143cef35394c4f
 y
 Imidigateway/src/main/java/hu/boga/musaic/midigateway/utils/TempoUtil.java,e/c/ece9a5f45bc8418433bb42fcc2a2e51f9ec4c469
 –
 fmidigateway/src/main/java/hu/boga/musaic/midigateway/converters/SequenceModellToSequenceConverter.java,7/9/79c1ae5e3fa665fe2f41b0aeffa0201cd491ed49
 †
 Vmidigateway/src/main/java/hu/boga/musaic/midigateway/sequence/SequenceGatewayImpl.java,a/d/adf2cbfdc15ed0c1f27a8e83369641d22877e57f
-Š
-Zmidigateway/src/test/java/hu/boga/musaic/midigateway/sequence/SequenceGatewayImplTest.java,7/3/737db9f85c48d855555185175b2ecb9f4130622c
 x
 Hmidigateway/src/main/java/hu/boga/musaic/midigateway/utils/NoteUtil.java,1/9/197ac17d786881079ca61e38bbd5c1622f4e93df
 x

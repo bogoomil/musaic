@@ -47,21 +47,21 @@ class SequenceModellToSequenceConverterTest {
     @Test
     void convert() throws InvalidMidiDataException {
         Sequence sequence = new SequenceModellToSequenceConverter(sequenceModell).convert();
-        assertEquals(2, sequence.getTracks().length);
+        assertEquals(1, sequence.getTracks().length);
         assertEquals(0, sequence.getDivisionType());
         assertEquals(128, sequence.getResolution());
         assertEquals(120, TempoUtil.getTempo(sequence));
-        assertEquals(2, sequence.getTracks()[0].size());
+        assertEquals(7, sequence.getTracks()[0].size());
 
-        assertFalse(NoteUtil.getNoteOnEvents(sequence.getTracks()[1]).isEmpty());
-        assertFalse(MidiUtil.getMidiEventsMetaMessage(sequence.getTracks()[1]).isEmpty());
+        assertFalse(NoteUtil.getNoteOnEvents(sequence.getTracks()[0]).isEmpty());
+        assertFalse(MidiUtil.getMidiEventsMetaMessage(sequence.getTracks()[0]).isEmpty());
 
-        byte[] b = MidiUtil.getMidiEventsMetaMessage(sequence.getTracks()[1]).get(1).getMessage().getMessage();
+        byte[] b = MidiUtil.getMidiEventsMetaMessage(sequence.getTracks()[0]).get(1).getMessage().getMessage();
         String trackName = new String(b, StandardCharsets.UTF_8);
 
         assertTrue(trackName.contains("fing"));
 
-        List<MidiEvent> l = MidiUtil.getMidiEventsShortMessage(sequence.getTracks()[1]);
+        List<MidiEvent> l = MidiUtil.getMidiEventsShortMessage(sequence.getTracks()[0]);
         assertEquals(3, l.size());
     }
 }

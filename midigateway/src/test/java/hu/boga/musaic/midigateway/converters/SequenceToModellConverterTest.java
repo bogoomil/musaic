@@ -18,7 +18,7 @@ class SequenceToModellConverterTest {
     void convert() {
         SequenceModell modell = new SequenceReader().open(PATH);
         assertEquals(0, modell.tempo);
-        assertEquals(2, modell.tracks.size());
+        assertEquals(1, modell.tracks.size());
         assertEquals(128, modell.resolution);
         assertEquals(0, modell.division);
 
