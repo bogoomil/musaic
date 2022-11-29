@@ -54,6 +54,7 @@ public class SequenceInteractor implements SequenceBoundaryIn {
 
     @Override
     public void save(String sequenceId, String path) {
+        LOG.debug("id: {}, path: {}", sequenceId, path);
         SequenceModell modell = InMemorySequenceModellStore.getSequenceById(sequenceId);
         gateway.save(modell, path);
         boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());
@@ -61,12 +62,14 @@ public class SequenceInteractor implements SequenceBoundaryIn {
 
     @Override
     public void setTempo(String sequenceId, int tempo) {
+        LOG.debug("id: {}, tempo: {}", sequenceId, tempo);
         SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId);
         modell.tempo = tempo;
     }
 
     @Override
     public void addTrack(String sequenceId) {
+        LOG.debug("id: {}", sequenceId);
         SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId);
         TrackModell trackModell = new TrackModell();
         modell.tracks.add(trackModell);
@@ -79,28 +82,16 @@ public class SequenceInteractor implements SequenceBoundaryIn {
     }
 
     @Override
-    public void reloadSequence(String sequenceId) {
-        SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId);
-        boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());
-    }
-
-    @Override
-    public void updateChannelColorMapping(String sequenceId, int channel, String color) {
-        LOG.debug("new color: " + color);
-        SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId);
-        modell.channelToColorMapping[channel] = color;
-        boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());
-    }
-
-    @Override
-    public void updateChannelToProgramMappings(String id, int i, int selectedProgram) {
+    public void updateChannelToProgramMappings(String id, int channel, int selectedProgram) {
+        LOG.debug("seq: {}, channel: {}, program: {}", id, channel, selectedProgram);
         SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(id);
-        modell.updateChannelToProgramMapping(i, selectedProgram);
+        modell.updateChannelToProgramMapping(channel, selectedProgram);
         boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());
     }
 
     @Override
     public void duplicateTrack(String trackId) {
+        LOG.debug("track: {}", trackId);
         InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
             sequenceModell.getTrackById(trackId).ifPresent(trackModell -> {
                 TrackModell clone = trackModell.clone();

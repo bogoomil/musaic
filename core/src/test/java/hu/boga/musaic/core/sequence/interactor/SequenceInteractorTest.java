@@ -45,6 +45,7 @@ class SequenceInteractorTest {
         trackDtoArgumentCaptor = ArgumentCaptor.forClass(TrackDto.class);
         interactor = new SequenceInteractor(boundaryOut, gateway);
         modell = new SequenceModell();
+        modell.tracks.add(new TrackModell());
         InMemorySequenceModellStore.SEQUENCE_MODELS.put(modell.getId(), modell);
     }
 
@@ -115,23 +116,6 @@ class SequenceInteractorTest {
     void stop(){
         interactor.stop();
         Mockito.verify(gateway).stop();
-    }
-
-
-    @Test
-    void reloadSequence(){
-        interactor.create();
-        interactor.reloadSequence(modell.getId());
-        Mockito.verify(boundaryOut, times(2)).displaySequence(sequenceDtoArgumentCaptor.capture());
-
-        assertEquals(modell.getId(), sequenceDtoArgumentCaptor.getValue().id);
-    }
-
-    @Test
-    void updateChannelColorMapping(){
-        interactor.updateChannelColorMapping(modell.getId(), 10, "LOFOS");
-        assertEquals("LOFOS", modell.channelToColorMapping[10]);
-        Mockito.verify(boundaryOut).displaySequence(Mockito.any());
     }
 
     @Test

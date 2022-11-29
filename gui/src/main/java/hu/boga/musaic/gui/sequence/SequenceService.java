@@ -6,4 +6,5 @@ public interface SequenceService {
     void open(String path);
     void create();
     SequenceDto getSequenceDto();
+    void updateChannelMapping(String id, int channel, int program);
 }

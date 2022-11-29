@@ -25,18 +25,25 @@ public class SequenceServiceImpl implements SequenceService, SequenceBoundaryOut
         LOG.debug("displayed dto: {}, {}", this.dto, this);
     }
 
-    public void create(){
+    @Override
+    public void create() {
         boundaryIn.create();
     }
 
-    public void open(String path){
+    @Override
+    public void open(String path) {
         LOG.debug("open: {} {}", path, this);
         boundaryIn.open(path);
         LOG.debug("done...{}", this);
-
     }
 
+    @Override
     public SequenceDto getSequenceDto() {
         return dto;
+    }
+
+    @Override
+    public void updateChannelMapping(String id, int channel, int program) {
+        boundaryIn.updateChannelToProgramMappings(id, channel, program);
     }
 }

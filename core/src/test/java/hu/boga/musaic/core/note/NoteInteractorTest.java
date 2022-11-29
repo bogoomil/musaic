@@ -4,6 +4,7 @@ import hu.boga.musaic.core.InMemorySequenceModellStore;
 import hu.boga.musaic.core.gateway.sequence.SequenceGateway;
 import hu.boga.musaic.core.gateway.synth.SynthGateway;
 import hu.boga.musaic.core.modell.SequenceModell;
+import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.modell.events.NoteModell;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ class NoteInteractorTest {
         noteInteractor = new NoteInteractor(synthGateway);
 
         modell = new SequenceModell();
+        modell.tracks.add(new TrackModell());
         InMemorySequenceModellStore.SEQUENCE_MODELS.put(modell.getId(), modell);
 
     }

@@ -80,7 +80,7 @@ class TrackPropertiesInteractorTest {
             mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceById(modell.getId())).thenReturn(modell);
             trackPropertiesInteractor.removeTrack(trackModell.getId());
 
-            assertEquals(1, modell.tracks.size());
+            assertEquals(0, modell.tracks.size());
         }
     }
 

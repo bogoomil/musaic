@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -30,6 +31,19 @@ public class MainController {
         create(createSequence());
     }
 
+    private Pane createSequence() throws IOException {
+        FXMLLoader loader = initFXMLLoader();
+        BorderPane pane =  loader.load();
+        SequencePresenter presenter = loader.getController();
+        presenter.create();
+        return pane;
+    }
+
+    @FXML
+    private void open(ActionEvent actionEvent) throws IOException {
+        openFile();
+    }
+
     private void create(Pane pane){
         Stage newWindow = new Stage();
         newWindow.setTitle("new sequence");
@@ -40,19 +54,10 @@ public class MainController {
         newWindow.show();
     }
 
-
-    private AnchorPane createSequence() throws IOException {
+    private FXMLLoader initFXMLLoader() {
         FXMLLoader loader = new FXMLLoader(SequencePresenter.class.getResource("sequence-view.fxml"));
         loader.setControllerFactory(GuiceModule.INJECTOR::getInstance);
-        AnchorPane pane =  loader.load();
-        SequencePresenter presenter = loader.getController();
-        presenter.create();
-        return pane;
-    }
-
-    @FXML
-    private void open(ActionEvent actionEvent) throws IOException {
-        openFile();
+        return loader;
     }
 
     private void openFile() throws IOException {
@@ -64,9 +69,8 @@ public class MainController {
     }
 
     private void openSequence(String path) throws IOException {
-        FXMLLoader loader = new FXMLLoader(SequencePresenter.class.getResource("sequence-view.fxml"));
-        loader.setControllerFactory(GuiceModule.INJECTOR::getInstance);
-        AnchorPane pane =  loader.load();
+        FXMLLoader loader = initFXMLLoader();
+        BorderPane pane =  loader.load();
         SequencePresenter presenter = loader.getController();
         presenter.open(path);
         create(pane);

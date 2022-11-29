@@ -14,7 +14,6 @@ module gui {
 
 
     exports hu.boga.musaic;
-    exports hu.boga.musaic.gui.sequenceeditor;
     exports hu.boga.musaic.gui.trackeditor;
     exports hu.boga.musaic.gui.controls;
 

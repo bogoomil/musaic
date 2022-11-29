@@ -99,7 +99,6 @@ public class SequenceManager implements SequenceBoundaryOut {
     private TrackManagerProperties createTrackManagerProperties() {
         TrackManagerProperties properties = new TrackManagerProperties.Builder()
                 .withEventBus(eventBus)
-                .withColorMappings(dto.channelToColorMappings)
                 .withFourthInmeasure(4)
                 .withMeasureNum(100)
                 .withResolution(dto.resolution)
@@ -158,7 +157,7 @@ public class SequenceManager implements SequenceBoundaryOut {
 
     @Subscribe
     public void onTrackDeletedEvent(TrackDeletedEvent event) {
-        boundaryIn.reloadSequence(dto.id);
+        boundaryIn.load(dto.id);
     }
 
     @Subscribe

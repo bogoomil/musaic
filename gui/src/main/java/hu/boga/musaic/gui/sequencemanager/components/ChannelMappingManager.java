@@ -35,17 +35,8 @@ public class ChannelMappingManager {
             });
             hBox.getChildren().add(instrCombo);
             ColorPicker colorPicker = new ColorPicker();
-            if (sequenceDto.channelToColorMappings[i] != null) {
-                instrCombo.setBackground(new Background(
-                        new BackgroundFill(
-                                Color.web(sequenceDto.channelToColorMappings[i]),
-                                CornerRadii.EMPTY,
-                                Insets.EMPTY)));
-                colorPicker.setValue(Color.web(sequenceDto.channelToColorMappings[i]));
-            }
             hBox.getChildren().add(colorPicker);
             colorPicker.setOnAction(event -> {
-                boundaryIn.updateChannelColorMapping(sequenceDto.id, finalI, colorPicker.getValue().toString());
             });
             vBox.getChildren().add(hBox);
         }

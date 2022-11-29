@@ -31,8 +31,6 @@ public class SequenceModellToDtoConverter {
                 .collect(Collectors.toList());
 
         dto.channelToProgramMappings = modell.getChannelToProgramMappings();
-
-        dto.channelToColorMappings = modell.channelToColorMapping;
         dto.name = modell.name;
         return dto;
     }

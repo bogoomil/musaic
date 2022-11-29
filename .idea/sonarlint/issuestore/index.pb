@@ -29,8 +29,6 @@ _
 /gui/src/main/java/hu/boga/musaic/MusaicApp.java,c/4/c44cd36ef418bbdcea2521422bc6463b3494de26
 Å
 Qcore/src/main/java/hu/boga/musaic/core/sequence/boundary/SequenceBoundaryOut.java,3/5/3508653be571fbe81a454cf068bf5a1316f2881c
-ó
-gcore/src/main/java/hu/boga/musaic/core/sequence/interactor/converters/SequenceModellToDtoConverter.java,9/f/9f9807db400944cd0d9eb9b43179cf722699547e
 w
 Gcore/src/main/java/hu/boga/musaic/core/InMemorySequenceModellStore.java,1/8/18fac3d4490dbeec16784201b1b8634fbc7042e9
 n
@@ -45,10 +43,6 @@ p
 Lcore/src/main/java/hu/boga/musaic/core/track/interactor/TrackInteractor.java,b/7/b723bbebfb9fd62aca74f89c9e66b656422623c9
 Ä
 Pcore/src/test/java/hu/boga/musaic/core/track/interactor/TrackInteractorTest.java,5/b/5b691c4d47e9d32dc5456fd137729b1ce33851f4
-Ü
-Vcore/src/test/java/hu/boga/musaic/core/sequence/interactor/SequenceInteractorTest.java,6/9/6973877b063b571f28f4fcdaff883d87c46065d2
-ä
-Zcore/src/test/java/hu/boga/musaic/core/track/interactor/TrackPropertiesInteractorTest.java,c/a/cafa518a2cee35b6019c874deab5526669e33284
 í
 bmidigateway/src/test/java/hu/boga/musaic/midigateway/converters/SequenceToModellConverterTest.java,c/7/c7f15ea4572e8ef7d6a883ac0a143cef35394c4f
 y
@@ -73,13 +67,7 @@ o
 ?midigateway/src/main/java/hu/boga/musaic/midigateway/Saver.java,0/b/0bab06482796e50aa2a8d247ed17d9e3a9f33c5e
 p
 @midigateway/src/main/java/hu/boga/musaic/midigateway/Player.java,4/c/4c55d8b35ec4b88a7d86660d4e4ca466b26758bc
-ä
-Zgui/src/main/java/hu/boga/musaic/gui/sequencemanager/components/ChannelMappingManager.java,8/5/850f9d69f0194f78829152bfeba6b4df335f06be
 u
 Egui/src/main/java/hu/boga/musaic/gui/trackeditor/TrackProperties.java,2/a/2aaabac7bc9a51b47374f9c67f9d5a95b8bba4b5
-w
-Ggui/src/main/java/hu/boga/musaic/gui/sequenceeditor/SequenceEditor.java,1/e/1e99096c61b5c7a916ccc40453a060c13e4b82eb
-q
-Acore/src/main/java/hu/boga/musaic/core/modell/SequenceModell.java,e/8/e8d3419464c99b2db41ead1cdc09013bd15e5319
 é
 ^gui/src/main/java/hu/boga/musaic/gui/sequencemanager/components/track/DuplicateTrackEvent.java,7/3/7396a4efedf45ac4fb499e6ff1ac56b6933a6062
