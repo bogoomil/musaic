@@ -39,7 +39,7 @@ public class SequenceServiceImpl implements SequenceService, SequenceBoundaryOut
 
     @Override
     public SequenceModell getSequence() {
-        return new SequenceDtoToModellConverter(dto).convert();
+        return new SequenceModell(dto);
     }
 
     @Override
@@ -50,5 +50,15 @@ public class SequenceServiceImpl implements SequenceService, SequenceBoundaryOut
     @Override
     public void save(String id, String path) {
         boundaryIn.save(id, path);
+    }
+
+    @Override
+    public void addTrack(String id) {
+        boundaryIn.addTrack(id);
+    }
+
+    @Override
+    public void duplicateTrack(String id) {
+        boundaryIn.duplicateTrack(id);
     }
 }

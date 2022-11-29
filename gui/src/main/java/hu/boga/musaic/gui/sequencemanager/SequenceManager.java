@@ -79,7 +79,7 @@ public class SequenceManager implements SequenceBoundaryOut {
     }
 
     private void displayTrack(TrackDto trackDto) {
-        FXMLLoader loader = new FXMLLoader(TrackManager.class.getResource("track-manager.fxml"));
+        FXMLLoader loader = new FXMLLoader(TrackManager.class.getResource("track-view.fxml"));
         loader.setControllerFactory(GuiceModule.INJECTOR::getInstance);
         try {
             tryCreatingNewTrackPaneld(trackDto, loader);

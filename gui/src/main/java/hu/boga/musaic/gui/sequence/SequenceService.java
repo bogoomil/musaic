@@ -8,4 +8,6 @@ public interface SequenceService {
     SequenceModell getSequence();
     void updateChannelMapping(String id, int channel, int program);
     void save(String id, String path);
+    void addTrack(String id);
+    void duplicateTrack(String id);
 }
