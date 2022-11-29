@@ -24,9 +24,6 @@
                         </HBox>
                         <HBox spacing="5.0">
                             <children>
-                                <Button fx:id="btnNotes" mnemonicParsing="false" style="-fx-font-size: 10;" text="NOTES" />
-                                <Button fx:id="btnDelTrack" mnemonicParsing="false" style="-fx-font-size: 10;" text="Del track" />
-                                <Button mnemonicParsing="false" onAction="#onDuplicateTrackClicked" style="-fx-font-size: 10;" text="Duplicate" />
                                 <CheckBox fx:id="chxbMute" mnemonicParsing="false" style="-fx-font-size: 10;" text="Mute track" />
                             </children>
                             <padding>

@@ -10,4 +10,5 @@ public interface SequenceService {
     void save(String id, String path);
     void addTrack(String id);
     void duplicateTrack(String id);
+    void removeTrack(String id);
 }

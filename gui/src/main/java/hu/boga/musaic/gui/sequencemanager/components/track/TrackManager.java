@@ -100,8 +100,8 @@ public class TrackManager implements TrackPropertiesBoundaryOut {
     }
 
     private void deleteTrack() {
-        boundaryIn.removeTrack(trackDto.id);
-        this.eventBus.post(new TrackDeletedEvent(trackDto.id));
+//        boundaryIn.removeTrack(trackDto.id);
+//        this.eventBus.post(new TrackDeletedEvent(trackDto.id));
     }
 
     private void showNoteManager() {

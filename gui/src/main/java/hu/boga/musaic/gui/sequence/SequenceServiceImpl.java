@@ -61,4 +61,9 @@ public class SequenceServiceImpl implements SequenceService, SequenceBoundaryOut
     public void duplicateTrack(String id) {
         boundaryIn.duplicateTrack(id);
     }
+
+    @Override
+    public void removeTrack(String id) {
+        boundaryIn.removeTrack(id);
+    }
 }

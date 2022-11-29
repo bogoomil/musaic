@@ -49,8 +49,8 @@ public class TrackProperties implements TrackPropertiesBoundaryOut {
         boundaryIn.updateTrackName(trackDto);
     };
     private EventHandler<ActionEvent> delAction = event -> {
-        boundaryIn.removeTrack(trackDto.id);
-        this.eventBus.post(new TrackDeletedEvent(trackDto.id));
+//        boundaryIn.removeTrack(trackDto.id);
+//        this.eventBus.post(new TrackDeletedEvent(trackDto.id));
     };
     private EventHandler<ActionEvent> btnNotesOnAction = ev -> trackEditor.setTrack(trackDto.id, channelToColorMapping[trackDto.channel]);
 
