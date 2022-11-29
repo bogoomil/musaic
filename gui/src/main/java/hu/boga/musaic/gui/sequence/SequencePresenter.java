@@ -72,7 +72,7 @@ public class SequencePresenter implements ChannelMappingChangeListener {
     private void displayTrack(TrackModell trackModell)  {
         HBox box = new HBox();
         box.getChildren().add(createButtons(trackModell.id));
-        box.getChildren().add(getTrackView(trackModell));
+        box.getChildren().add(createTrackView(trackModell));
         tracksVBox.getChildren().add(box);
     }
 
@@ -95,7 +95,7 @@ public class SequencePresenter implements ChannelMappingChangeListener {
         return button;
     }
 
-    private BorderPane getTrackView(TrackModell trackModell) {
+    private BorderPane createTrackView(TrackModell trackModell) {
         FXMLLoader loader = new FXMLLoader(TrackPresenter.class.getResource("track-view.fxml"));
         loader.setControllerFactory(c -> trackPresenterFactory.create(trackModell, zoomSlider.valueProperty(), scrollSlider.valueProperty()));
         BorderPane trackView = null;
