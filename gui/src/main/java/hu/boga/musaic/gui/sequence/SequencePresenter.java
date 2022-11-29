@@ -8,16 +8,16 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 
 public class SequencePresenter {
-
     private static final Logger LOG = LoggerFactory.getLogger(SequencePresenter.class);
-
-    private String path;
-
     @FXML
     private Label label;
 
-    @Inject
     SequenceService service;
+
+    @Inject
+    public SequencePresenter(SequenceService service) {
+        this.service = service;
+    }
 
     public void initialize() {
         System.out.println("init seq prezi");

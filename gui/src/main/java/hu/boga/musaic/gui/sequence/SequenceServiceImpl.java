@@ -11,10 +11,13 @@ import javax.inject.Inject;
 public class SequenceServiceImpl implements SequenceService, SequenceBoundaryOut {
 
     private static final Logger LOG = LoggerFactory.getLogger(SequenceService.class);
-
-    @Inject
     private SequenceBoundaryIn boundaryIn;
     private SequenceDto dto;
+
+    @Inject
+    public SequenceServiceImpl(SequenceBoundaryIn boundaryIn) {
+        this.boundaryIn = boundaryIn;
+    }
 
     @Override
     public void displaySequence(SequenceDto dto) {
