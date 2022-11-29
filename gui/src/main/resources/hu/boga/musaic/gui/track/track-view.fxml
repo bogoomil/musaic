@@ -5,9 +5,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="mainPanel" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.track.TrackPresenterImpl">
+<BorderPane fx:id="mainPanel" prefWidth="373.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.track.TrackPresenterImpl">
     <center>
-        <AnchorPane fx:id="controlls">
+        <AnchorPane fx:id="controlls" prefWidth="304.0">
             <children>
                 <VBox BorderPane.alignment="CENTER">
                     <children>
@@ -22,18 +22,11 @@
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </padding>
                         </HBox>
-                        <HBox spacing="5.0">
-                            <children>
-                                <CheckBox fx:id="chxbMute" mnemonicParsing="false" style="-fx-font-size: 10;" text="Mute track" />
-                            </children>
-                            <padding>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </padding>
-                        </HBox>
                         <HBox prefHeight="11.0" prefWidth="254.0" spacing="5.0">
                             <children>
                                 <Button fx:id="volUp" mnemonicParsing="false" style="-fx-font-size: 9;" text="up 10%" />
                                 <Button fx:id="volDown" mnemonicParsing="false" style="-fx-font-size: 9;" text="down 10%" />
+                                <CheckBox fx:id="chxbMute" mnemonicParsing="false" style="-fx-font-size: 10;" text="Mute track" />
                             </children>
                             <padding>
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

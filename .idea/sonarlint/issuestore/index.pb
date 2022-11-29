@@ -61,13 +61,6 @@ p
 ^gui/src/main/java/hu/boga/musaic/gui/sequencemanager/components/track/DuplicateTrackEvent.java,7/3/7396a4efedf45ac4fb499e6ff1ac56b6933a6062
 q
 Agui/src/main/java/hu/boga/musaic/gui/trackeditor/TrackEditor.java,d/d/dd2b00068f795c8ea2ef0b745ccbe1d55aa28e01
-‘
-agui/src/main/java/hu/boga/musaic/gui/sequencemanager/components/track/TrackManagerProperties.java,9/0/90cd91ebf98933ab094f1c878d4aefdbd3d30a6b
-†
-Vgui/src/main/java/hu/boga/musaic/gui/sequencemanager/components/track/GridPainter.java,7/8/782523b93d2a004d1795204763105a6a0897d649
-:
-
-.gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
 ~
 Ncore/src/main/java/hu/boga/musaic/core/sequence/boundary/dtos/SequenceDto.java,4/c/4c416e97c44b8b83f927e8209337891c43928e01
 —
