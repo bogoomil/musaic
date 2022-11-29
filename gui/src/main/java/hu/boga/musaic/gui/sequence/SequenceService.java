@@ -5,6 +5,7 @@ import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 public interface SequenceService {
     void open(String path);
     void create();
-    SequenceDto getSequenceDto();
+    SequenceModell getSequence();
     void updateChannelMapping(String id, int channel, int program);
+    void save(String id, String path);
 }

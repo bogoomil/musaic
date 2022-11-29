@@ -38,12 +38,17 @@ public class SequenceServiceImpl implements SequenceService, SequenceBoundaryOut
     }
 
     @Override
-    public SequenceDto getSequenceDto() {
-        return dto;
+    public SequenceModell getSequence() {
+        return new SequenceDtoToModellConverter(dto).convert();
     }
 
     @Override
     public void updateChannelMapping(String id, int channel, int program) {
         boundaryIn.updateChannelToProgramMappings(id, channel, program);
+    }
+
+    @Override
+    public void save(String id, String path) {
+        boundaryIn.save(id, path);
     }
 }
