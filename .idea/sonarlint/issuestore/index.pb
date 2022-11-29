@@ -22,8 +22,6 @@ h
 v
 Fgui/src/main/java/hu/boga/musaic/gui/trackeditor/TrackEditorPanel.java,0/d/0deeaad057bda1e7dca07f3e733866162e918895
 z
-Jcore/src/main/java/hu/boga/musaic/core/track/boundary/TrackBoundaryIn.java,9/d/9d641c1e95125601adb8349aa1c7c4c69e0f8947
-z
 Jgui/src/main/java/hu/boga/musaic/gui/trackeditor/TrackEditorBasePanel.java,b/a/bad1f60d0e988ef56fc300829b9803a955fd5a93
 _
 /gui/src/main/java/hu/boga/musaic/MusaicApp.java,c/4/c44cd36ef418bbdcea2521422bc6463b3494de26
@@ -37,8 +35,6 @@ l
 <core/src/main/java/hu/boga/musaic/core/events/TickEvent.java,c/5/c53ba577eb5c769700943b15602a5c6fdfc6546d
 p
 @core/src/test/java/hu/boga/musaic/core/events/TickEventTest.java,d/7/d7e67c36859f9f428522c2a12c609a47aba9e65c
-|
-Lcore/src/main/java/hu/boga/musaic/core/track/interactor/TrackInteractor.java,b/7/b723bbebfb9fd62aca74f89c9e66b656422623c9
 €
 Pcore/src/test/java/hu/boga/musaic/core/track/interactor/TrackInteractorTest.java,5/b/5b691c4d47e9d32dc5456fd137729b1ce33851f4
 y
@@ -61,16 +57,10 @@ o
 ?midigateway/src/main/java/hu/boga/musaic/midigateway/Saver.java,0/b/0bab06482796e50aa2a8d247ed17d9e3a9f33c5e
 p
 @midigateway/src/main/java/hu/boga/musaic/midigateway/Player.java,4/c/4c55d8b35ec4b88a7d86660d4e4ca466b26758bc
-u
-Egui/src/main/java/hu/boga/musaic/gui/trackeditor/TrackProperties.java,2/a/2aaabac7bc9a51b47374f9c67f9d5a95b8bba4b5
 Ž
 ^gui/src/main/java/hu/boga/musaic/gui/sequencemanager/components/track/DuplicateTrackEvent.java,7/3/7396a4efedf45ac4fb499e6ff1ac56b6933a6062
 q
 Agui/src/main/java/hu/boga/musaic/gui/trackeditor/TrackEditor.java,d/d/dd2b00068f795c8ea2ef0b745ccbe1d55aa28e01
-‡
-Wgui/src/main/java/hu/boga/musaic/gui/sequencemanager/components/track/TrackManager.java,9/f/9f67b040cf651abb7cb829ded885954c1664561b
-†
-Vcore/src/main/java/hu/boga/musaic/core/track/interactor/TrackPropertiesInteractor.java,1/6/16c789cb5afa089db0aa9dca7b4b81139567626a
 ‘
 agui/src/main/java/hu/boga/musaic/gui/sequencemanager/components/track/TrackManagerProperties.java,9/0/90cd91ebf98933ab094f1c878d4aefdbd3d30a6b
 †
@@ -96,8 +86,6 @@ Sgui/src/main/java/hu/boga/musaic/gui/sequence/components/ChannelMappingManager.
 Zgui/src/main/java/hu/boga/musaic/gui/sequencemanager/components/ChannelMappingManager.java,8/5/850f9d69f0194f78829152bfeba6b4df335f06be
 €
 Pcore/src/main/java/hu/boga/musaic/core/sequence/boundary/SequenceBoundaryIn.java,a/9/a9db255afb05f24c794a86a8cfb5db1a351eaf0d
-†
-Vcore/src/test/java/hu/boga/musaic/core/sequence/interactor/SequenceInteractorTest.java,6/9/6973877b063b571f28f4fcdaff883d87c46065d2
 ’
 bmidigateway/src/test/java/hu/boga/musaic/midigateway/converters/SequenceToModellConverterTest.java,c/7/c7f15ea4572e8ef7d6a883ac0a143cef35394c4f
 Š

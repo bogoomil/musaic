@@ -74,18 +74,6 @@ class TrackPropertiesInteractorTest {
     }
 
     @Test
-    void removeTrack() {
-        modell.tracks.add(new TrackModell());
-        try (MockedStatic<InMemorySequenceModellStore> mockedStatic = Mockito.mockStatic(InMemorySequenceModellStore.class)) {
-            mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceByTrackId(trackModell.getId())).thenReturn(Optional.of(modell));
-            mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceById(modell.getId())).thenReturn(modell);
-            trackPropertiesInteractor.removeTrack(trackModell.getId());
-
-            assertEquals(1, modell.tracks.size());
-        }
-    }
-
-    @Test
     void updateVolume(){
         trackPropertiesInteractor.updateVolume(trackModell.getId(), -0.5);
         assertEquals(0.5, noteModell.velocity);

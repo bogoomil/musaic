@@ -49,13 +49,6 @@ public class TrackPropertiesInteractor implements TrackPropertiesBoundaryIn {
     }
 
     @Override
-    public void removeTrack(String trackId) {
-        InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
-            sequenceModell.tracks.removeIf(trackModell -> trackModell.getId().equals(trackId));
-        });
-    }
-
-    @Override
     public void updateVolume(String trackId, double velocityPercent) {
         InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
             trackModell.getNotes().forEach(noteModell -> noteModell.velocity = calcNewVelocity(noteModell.velocity, velocityPercent));

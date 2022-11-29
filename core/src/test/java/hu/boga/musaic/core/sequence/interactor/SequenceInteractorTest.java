@@ -12,9 +12,11 @@ import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -137,5 +139,19 @@ class SequenceInteractorTest {
         assertEquals(1, modell.tracks.get(2).eventModells.size());
         Mockito.verify(boundaryOut).displaySequence(Mockito.any());
     }
+
+    @Test
+    void removeTrack() {
+        TrackModell trackModell = new TrackModell();
+        modell.tracks.add(trackModell);
+        try (MockedStatic<InMemorySequenceModellStore> mockedStatic = Mockito.mockStatic(InMemorySequenceModellStore.class)) {
+            mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceByTrackId(trackModell.getId())).thenReturn(Optional.of(modell));
+            mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceById(modell.getId())).thenReturn(modell);
+            interactor.removeTrack(trackModell.getId());
+
+            assertEquals(1, modell.tracks.size());
+        }
+    }
+
 
 }

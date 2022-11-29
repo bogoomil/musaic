@@ -11,4 +11,6 @@ public interface SequenceBoundaryIn {
     void stop();
     void updateChannelToProgramMappings(String sequenceId, int channel, int program);
     void duplicateTrack(String trackId);
+
+    void removeTrack(String trackId);
 }

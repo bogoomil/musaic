@@ -8,12 +8,10 @@ import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 import hu.boga.musaic.core.sequence.interactor.converters.SequenceModellToDtoConverter;
-import hu.boga.musaic.core.track.interactor.converters.TrackModelltoDtoConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.util.Optional;
 
 public class SequenceInteractor implements SequenceBoundaryIn {
 
@@ -100,6 +98,15 @@ public class SequenceInteractor implements SequenceBoundaryIn {
             boundaryOut.displaySequence(new SequenceModellToDtoConverter(sequenceModell).convert());
         });
     }
+
+    @Override
+    public void removeTrack(String trackId) {
+        InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
+            sequenceModell.tracks.removeIf(trackModell -> trackModell.getId().equals(trackId));
+            boundaryOut.displaySequence(new SequenceModellToDtoConverter(sequenceModell).convert());
+        });
+    }
+
 
     private SequenceModell createNewSequence(){
         SequenceModell modell = new SequenceModell();
