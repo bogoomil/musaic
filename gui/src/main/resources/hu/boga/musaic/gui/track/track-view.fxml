@@ -24,9 +24,9 @@
                         </HBox>
                         <HBox prefHeight="11.0" prefWidth="254.0" spacing="5.0">
                             <children>
-                                <Button fx:id="volUp" mnemonicParsing="false" style="-fx-font-size: 9;" text="up 10%" />
-                                <Button fx:id="volDown" mnemonicParsing="false" style="-fx-font-size: 9;" text="down 10%" />
-                                <CheckBox fx:id="chxbMute" mnemonicParsing="false" style="-fx-font-size: 10;" text="Mute track" />
+                                <Button fx:id="volUp" mnemonicParsing="false" onAction="#onVolUp" style="-fx-font-size: 9;" text="up 10%" />
+                                <Button fx:id="volDown" mnemonicParsing="false" onAction="#onVolDown" style="-fx-font-size: 9;" text="down 10%" />
+                                <CheckBox fx:id="chxbMute" mnemonicParsing="false" onAction="#onMute" style="-fx-font-size: 10;" text="Mute track" />
                             </children>
                             <padding>
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -43,7 +43,7 @@
            <children>
                <Group BorderPane.alignment="CENTER">
                    <children>
-                       <Pane fx:id="pane" prefHeight="80.0" prefWidth="44.0" />
+                       <Pane fx:id="gridPane" prefHeight="80.0" prefWidth="44.0" />
                        <Pane fx:id="notesPane" prefHeight="19.0" prefWidth="67.0" style="-fx-border-color: black;" />
                    </children>
                </Group>

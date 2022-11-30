@@ -25,4 +25,32 @@ public class TrackServiceImpl implements TrackService, TrackPropertiesBoundaryOu
     public TrackModell getModell() {
         return new TrackModell(dto);
     }
+
+    @Override
+    public void updateVolume(String id, double v) {
+        boundaryIn.updateVolume(id, v);
+    }
+
+    @Override
+    public void updateName(String id, String newName) {
+        TrackDto dto = new TrackDto();
+        dto.id = id;
+        dto.name = newName;
+        boundaryIn.updateTrackName(dto);
+    }
+
+    @Override
+    public void updateChannel(String id, int newValue) {
+        boundaryIn.updateTrackChannel(id, newValue);
+    }
+
+    @Override
+    public void mute(String id, boolean value) {
+        boundaryIn.setMuted(id, value);
+    }
+
+    @Override
+    public void load(String trackId) {
+        boundaryIn.load(trackId);
+    }
 }

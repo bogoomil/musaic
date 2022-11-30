@@ -97,7 +97,7 @@ public class SequencePresenter implements ChannelMappingChangeListener {
 
     private BorderPane createTrackView(TrackModell trackModell) {
         FXMLLoader loader = new FXMLLoader(TrackPresenter.class.getResource("track-view.fxml"));
-        loader.setControllerFactory(c -> trackPresenterFactory.create(trackModell, zoomSlider.valueProperty(), scrollSlider.valueProperty()));
+        loader.setControllerFactory(c -> trackPresenterFactory.create(trackModell.id, zoomSlider.valueProperty(), scrollSlider.valueProperty()));
         BorderPane trackView = null;
         try {
             trackView = loader.load();

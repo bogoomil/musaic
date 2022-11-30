@@ -2,7 +2,18 @@ package hu.boga.musaic.gui.track;
 
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import hu.boga.musaic.gui.sequence.SequenceModell;
+import hu.boga.musaic.gui.sequence.SequencePresenter;
 import javafx.beans.property.DoubleProperty;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,19 +21,33 @@ public class TrackPresenterImpl implements TrackPresenter{
 
     private static final Logger LOG = LoggerFactory.getLogger(TrackPresenterImpl.class);
 
+    private final String trackId;
+    private TrackModell trackModell;
     private final TrackService trackService;
-    private final TrackModell trackModell;
+    @FXML
+    private BorderPane mainPanel;
+    @FXML
+    private CheckBox chxbMute;
+    @FXML
+    private TextField trackName;
+    @FXML
+    private ComboBox cbChannel;
+    @FXML
+    private Pane gridPane;
+    @FXML
+    private Pane notesPane;
 
     @AssistedInject
     public TrackPresenterImpl(TrackService trackService,
-                              @Assisted TrackModell trackModell,
+                              @Assisted String trackId,
                               @Assisted("zoom")DoubleProperty zoom,
                               @Assisted("scroll") DoubleProperty scroll) {
         this.trackService = trackService;
-        this.trackModell = trackModell;
+        this.trackId = trackId;
         zoom.addListener((observable, oldValue, newValue) -> updateZoom(newValue));
         scroll.addListener((observable, oldValue, newValue) -> updateScroll(newValue));
-        LOG.debug("track presenter created with: {}, service: {}", trackModell.id, trackService);
+
+        LOG.debug("track presenter created with: {}, service: {}", trackId, trackService);
     }
 
     private void updateScroll(Number newValue) {
@@ -34,7 +59,59 @@ public class TrackPresenterImpl implements TrackPresenter{
     }
 
     public void initialize(){
-        LOG.debug("initializing: {}", trackModell.id);
+        cbChannel.getItems().addAll(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15);
+        cbChannel.valueProperty().addListener((observable, oldValue, newValue) -> onChannelChanged(Integer.parseInt("" + newValue)));
+        trackName.textProperty().addListener((observable, oldValue, newValue) -> onNameChanged(newValue));
+        trackService.load(trackId);
+        updateGui();
     }
 
+    private void updateGui(){
+        this.trackModell = trackService.getModell();
+        updateMainPanelColor(SequenceModell.COLOR_MAPPING[trackModell.channel]);
+        trackName.setText(trackModell.name);
+        cbChannel.getSelectionModel().select(trackModell.channel);
+        chxbMute.setSelected(trackModell.muted);
+    }
+
+    private void updateMainPanelColor(String color) {
+        mainPanel.setBackground(new Background(
+                new BackgroundFill(
+                        Color.web(color),
+                        CornerRadii.EMPTY,
+                        Insets.EMPTY)));
+    }
+
+
+    @FXML
+    private void onVolUp(ActionEvent actionEvent) {
+        LOG.debug("vol up");
+        trackService.updateVolume(trackModell.id, 0.1);
+    }
+
+    @FXML
+    private void onNameChanged(String newName) {
+        LOG.debug("name changed: {}", newName);
+        trackService.updateName(trackModell.id, newName);
+    }
+
+    @FXML
+    private void onChannelChanged(int newValue) {
+        LOG.debug("channel changed: {}", newValue);
+        trackService.updateChannel(trackModell.id, newValue);
+        updateGui();
+    }
+
+    @FXML
+    private void onVolDown(ActionEvent actionEvent) {
+        LOG.debug("vol down");
+        trackService.updateVolume(trackModell.id, -0.1);
+    }
+
+    @FXML
+    private void onMute(ActionEvent actionEvent) {
+        LOG.debug("mute");
+        boolean muted = chxbMute.isSelected();
+        trackService.mute(trackModell.id, muted);
+    }
 }

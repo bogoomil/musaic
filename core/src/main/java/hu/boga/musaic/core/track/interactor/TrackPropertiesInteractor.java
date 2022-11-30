@@ -31,6 +31,14 @@ public class TrackPropertiesInteractor implements TrackPropertiesBoundaryIn {
     }
 
     @Override
+    public void load(String trackId) {
+        InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
+            boundaryOut.displayTrack(new TrackModelltoDtoConverter(trackModell).convert());
+        });
+
+    }
+
+    @Override
     public void updateTrackChannel(String trackId, int channel) {
         InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
             LOG.debug("updating track: {}, channel: {}", trackId, channel);
