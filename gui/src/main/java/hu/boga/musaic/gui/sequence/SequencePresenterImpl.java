@@ -75,7 +75,6 @@ public class SequencePresenterImpl implements SequencePresenter, ChannelMappingC
 
     private void updateGui(){
         this.modell = service.getSequence();
-        LOG.debug("initializing gui with sequence: {}", modell);
         displayChannelMapping();
         displayTracks();
     }

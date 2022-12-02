@@ -61,11 +61,6 @@ public class TrackPresenterImpl implements TrackPresenter{
         this.scroll = scroll;
         this.resolution = resolution;
         this.fourthInBar = fourthInBar;
-
-//        zoom.addListener((observable, oldValue, newValue) -> updateZoom(newValue));
-//        scroll.addListener((observable, oldValue, newValue) -> updateScroll(newValue));
-
-        LOG.debug("track presenter created with: {}, service: {}", trackId, trackService);
     }
 
     private void updateScroll(Number newValue) {
@@ -104,7 +99,7 @@ public class TrackPresenterImpl implements TrackPresenter{
 
         GridPanel gridPanel = new GridPanel(zoom, scroll, resolution, fourthInBar);
         panelGroup.getChildren().add(gridPanel);
-        NotesPanel notesPanel = new NotesPanel(zoom, scroll, resolution, fourthInBar);
+        NotesPanel notesPanel = new NotesPanel(zoom, scroll, resolution, fourthInBar, trackModell);
         panelGroup.getChildren().add(notesPanel);
     }
 

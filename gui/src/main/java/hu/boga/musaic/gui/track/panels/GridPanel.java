@@ -7,8 +7,11 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 public class GridPanel extends ZoomablePanel {
+
+    public static final int HEIGHT = 60;
+
     public GridPanel(DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar) {
-        super(zoom, scroll, resolution, fourthInBar);
+        super(zoom, scroll, resolution, fourthInBar, null);
     }
 
     @Override
@@ -32,12 +35,12 @@ public class GridPanel extends ZoomablePanel {
         for(int j = 0; j < fourthInBar.intValue(); j++){
             double rectX = i * barW + j * rectW;
             measureEndX = rectW + rectX;
-            Rectangle rectangle = new Rectangle(rectX , 0, rectW, 60  );
+            Rectangle rectangle = new Rectangle(rectX , 0, rectW, HEIGHT);
             rectangle.setFill(j % 2 == 0 ? Color.LIGHTSKYBLUE : Color.DEEPSKYBLUE);
             getChildren().add(rectangle);
         }
 
-        Line line = new Line(measureEndX, 0, measureEndX, 80);
+        Line line = new Line(measureEndX, 0, measureEndX, HEIGHT);
         line.setStroke(Color.RED);
         line.setStrokeWidth(1);
         getChildren().add(line);

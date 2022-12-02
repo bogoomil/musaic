@@ -4,7 +4,9 @@ import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.gui.note.NoteModell;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TrackModell {
     public String id;
@@ -33,5 +35,24 @@ public class TrackModell {
                 ", solo=" + solo +
                 ", notes=" + notes +
                 '}';
+    }
+
+    public List<NoteModell> getNotesNormalized(){
+        List<NoteModell> notes = new ArrayList<>();
+        int lowestMidiCode = getLowestPitch();
+        this.notes.forEach(noteModell -> {
+            NoteModell clone = noteModell.clone();
+            clone.midiCode = noteModell.midiCode - lowestMidiCode;
+            notes.add(clone);
+        });
+        return notes;
+    }
+
+    private int getLowestPitch(){
+        if(!notes.isEmpty()){
+            this.notes.sort(Comparator.comparingInt(noteModell -> noteModell.midiCode));
+            return notes.get(0).midiCode;
+        }
+        return 0;
     }
 }
