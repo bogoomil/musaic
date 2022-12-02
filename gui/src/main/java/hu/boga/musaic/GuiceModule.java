@@ -12,8 +12,7 @@ import hu.boga.musaic.core.sequence.interactor.SequenceInteractor;
 import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryOut;
 import hu.boga.musaic.core.track.interactor.TrackPropertiesInteractor;
-import hu.boga.musaic.gui.sequence.SequenceService;
-import hu.boga.musaic.gui.sequence.SequenceServiceImpl;
+import hu.boga.musaic.gui.sequence.*;
 import hu.boga.musaic.gui.track.*;
 import hu.boga.musaic.midigateway.sequence.SequenceGatewayImpl;
 import hu.boga.musaic.midigateway.synth.SynthGatewayImpl;
@@ -41,8 +40,9 @@ public class GuiceModule extends AbstractModule {
                 .implement(TrackPresenter.class, TrackPresenterImpl.class)
                 .build(TrackPresenterFactory.class));
 
-
-
+        install(new FactoryModuleBuilder()
+                .implement(SequencePresenter.class, SequencePresenterImpl.class)
+                .build(SequencePresenterFactory.class));
 
         bind(SynthGateway.class).to(SynthGatewayImpl.class);
         bind(SequenceGateway.class).to(SequenceGatewayImpl.class).in(Singleton.class);

@@ -4,6 +4,7 @@ import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import hu.boga.musaic.gui.sequence.SequenceModell;
 import hu.boga.musaic.gui.track.panels.GridPanel;
+import hu.boga.musaic.gui.track.panels.NotesPanel;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.value.ChangeListener;
@@ -101,7 +102,10 @@ public class TrackPresenterImpl implements TrackPresenter{
         cbChannel.getSelectionModel().select(trackModell.channel);
         chxbMute.setSelected(trackModell.muted);
 
-        GridPanel gridPanel = new GridPanel(zoom, scroll, resolution, fourthInBar, panelGroup);
+        GridPanel gridPanel = new GridPanel(zoom, scroll, resolution, fourthInBar);
+        panelGroup.getChildren().add(gridPanel);
+        NotesPanel notesPanel = new NotesPanel(zoom, scroll, resolution, fourthInBar);
+        panelGroup.getChildren().add(notesPanel);
     }
 
     private void updateMainPanelColor(String color) {

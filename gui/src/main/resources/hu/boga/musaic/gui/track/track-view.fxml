@@ -43,7 +43,7 @@
         </AnchorPane>
     </center>
     <right>
-        <AnchorPane style="-fx-view-order: 9;">
+        <AnchorPane style="-fx-view-order: 100;">
             <children>
                 <Group fx:id="panelGroup" BorderPane.alignment="CENTER" />
             </children>

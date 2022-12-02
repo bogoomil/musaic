@@ -12,6 +12,7 @@ module gui {
     requires org.slf4j;
     requires core;
     requires midigateway;
+    requires jsr305;
 
 
     exports hu.boga.musaic;
