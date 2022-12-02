@@ -5,6 +5,9 @@ import hu.boga.musaic.gui.sequence.components.ChannelMappingManager;
 import hu.boga.musaic.gui.track.TrackModell;
 import hu.boga.musaic.gui.track.TrackPresenter;
 import hu.boga.musaic.gui.track.TrackPresenterFactory;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -44,6 +47,10 @@ public class SequencePresenter implements ChannelMappingChangeListener {
     public SequencePresenter(SequenceService service, TrackPresenterFactory trackPresenterFactory) {
         this.service = service;
         this.trackPresenterFactory = trackPresenterFactory;
+    }
+
+    public void initialize(){
+        zoomSlider.setValue(10);
     }
 
     public void open(String path) {
@@ -96,8 +103,15 @@ public class SequencePresenter implements ChannelMappingChangeListener {
     }
 
     private BorderPane createTrackView(TrackModell trackModell) {
+
+        IntegerProperty resolution = new SimpleIntegerProperty(modell.resolution);
+        IntegerProperty fourthInBar = new SimpleIntegerProperty(4);
+
         FXMLLoader loader = new FXMLLoader(TrackPresenter.class.getResource("track-view.fxml"));
-        loader.setControllerFactory(c -> trackPresenterFactory.create(trackModell.id, zoomSlider.valueProperty(), scrollSlider.valueProperty()));
+        loader.setControllerFactory(c -> trackPresenterFactory.create(trackModell.id,
+                zoomSlider.valueProperty(),
+                scrollSlider.valueProperty(),
+                resolution, fourthInBar));
         BorderPane trackView = null;
         try {
             trackView = loader.load();
