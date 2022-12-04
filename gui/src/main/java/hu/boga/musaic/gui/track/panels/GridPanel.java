@@ -10,8 +10,11 @@ public class GridPanel extends ZoomablePanel {
 
     public static final int HEIGHT = 60;
 
-    public GridPanel(DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar) {
-        super(zoom, scroll, resolution, fourthInBar, null);
+    public GridPanel(DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNum) {
+        super(zoom, scroll, resolution, fourthInBar, measureNum, null);
+        fourthInBar.addListener((observable, oldValue, newValue) -> {
+            updateGui();
+        });
     }
 
     @Override

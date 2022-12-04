@@ -57,8 +57,6 @@ o
 ?midigateway/src/main/java/hu/boga/musaic/midigateway/Saver.java,0/b/0bab06482796e50aa2a8d247ed17d9e3a9f33c5e
 p
 @midigateway/src/main/java/hu/boga/musaic/midigateway/Player.java,4/c/4c55d8b35ec4b88a7d86660d4e4ca466b26758bc
-Ž
-^gui/src/main/java/hu/boga/musaic/gui/sequencemanager/components/track/DuplicateTrackEvent.java,7/3/7396a4efedf45ac4fb499e6ff1ac56b6933a6062
 q
 Agui/src/main/java/hu/boga/musaic/gui/trackeditor/TrackEditor.java,d/d/dd2b00068f795c8ea2ef0b745ccbe1d55aa28e01
 ~
@@ -75,8 +73,6 @@ Ccore/src/test/java/hu/boga/musaic/core/note/NoteInteractorTest.java,7/9/792ebd
 Zgui/src/main/java/hu/boga/musaic/gui/sequence/components/ChannelMappingChangeListener.java,1/c/1c19274927674b6a411b17ec457aff5e456ea39f
 ƒ
 Sgui/src/main/java/hu/boga/musaic/gui/sequence/components/ChannelMappingManager.java,c/a/ca481d9c7eb626d8b92b48cca649f11eb39fb230
-Š
-Zgui/src/main/java/hu/boga/musaic/gui/sequencemanager/components/ChannelMappingManager.java,8/5/850f9d69f0194f78829152bfeba6b4df335f06be
 €
 Pcore/src/main/java/hu/boga/musaic/core/sequence/boundary/SequenceBoundaryIn.java,a/9/a9db255afb05f24c794a86a8cfb5db1a351eaf0d
 ’

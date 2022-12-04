@@ -5,6 +5,7 @@ import com.google.inject.assistedinject.AssistedInject;
 import hu.boga.musaic.gui.sequence.SequenceModell;
 import hu.boga.musaic.gui.track.panels.GridPanel;
 import hu.boga.musaic.gui.track.panels.NotesPanel;
+import hu.boga.musaic.gui.track.panels.NotesPanelBase;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.value.ChangeListener;
@@ -43,7 +44,7 @@ public class TrackPresenterImpl implements TrackPresenter{
     private TrackModell trackModell;
     private final TrackService trackService;
     final DoubleProperty zoom, scroll;
-    final IntegerProperty resolution, fourthInBar;
+    final IntegerProperty resolution, fourthInBar, measureNum;
     private ChangeListener channelListener = (observable, oldValue, newValue) -> onChannelChanged(Integer.parseInt("" + newValue));
     private ChangeListener<String> nameChangeListener = (observable, oldValue, newValue) -> onNameChanged(newValue);
 
@@ -53,7 +54,8 @@ public class TrackPresenterImpl implements TrackPresenter{
                               @Assisted("zoom")DoubleProperty zoom,
                               @Assisted("scroll") DoubleProperty scroll,
                               @Assisted("resolution")IntegerProperty resolution,
-                              @Assisted("fourthInBar") IntegerProperty fourthInBar
+                              @Assisted("fourthInBar") IntegerProperty fourthInBar,
+                              @Assisted("measureNum") IntegerProperty measureNum
                               ) {
         this.trackService = trackService;
         this.trackId = trackId;
@@ -61,6 +63,7 @@ public class TrackPresenterImpl implements TrackPresenter{
         this.scroll = scroll;
         this.resolution = resolution;
         this.fourthInBar = fourthInBar;
+        this.measureNum = measureNum;
     }
 
     private void updateScroll(Number newValue) {
@@ -97,9 +100,9 @@ public class TrackPresenterImpl implements TrackPresenter{
         cbChannel.getSelectionModel().select(trackModell.channel);
         chxbMute.setSelected(trackModell.muted);
 
-        GridPanel gridPanel = new GridPanel(zoom, scroll, resolution, fourthInBar);
+        GridPanel gridPanel = new GridPanel(zoom, scroll, resolution, fourthInBar, measureNum);
         panelGroup.getChildren().add(gridPanel);
-        NotesPanel notesPanel = new NotesPanel(zoom, scroll, resolution, fourthInBar, trackModell);
+        NotesPanel notesPanel = new NotesPanel(zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
         panelGroup.getChildren().add(notesPanel);
     }
 

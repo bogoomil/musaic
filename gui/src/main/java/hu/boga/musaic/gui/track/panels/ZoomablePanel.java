@@ -9,18 +9,24 @@ public abstract class ZoomablePanel extends Pane {
     final DoubleProperty zoom, scroll;
     final IntegerProperty resolution, fourthInBar;
     protected TrackModell trackModell;
+    protected int measureNum;
 
-    final int measureWidth = 10;
-    final int measureNum = 100;
+    final static int measureWidth = 10;
 
-    public ZoomablePanel(DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, TrackModell trackModell) {
+    public ZoomablePanel(DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNumProperty, TrackModell trackModell) {
         this.zoom = zoom;
         this.scroll = scroll;
         this.resolution = resolution;
         this.fourthInBar = fourthInBar;
         this.trackModell = trackModell;
+        this.measureNum = measureNumProperty.get();
+
         zoom.addListener((observable, oldValue, newValue) -> updateGui());
         scroll.addListener((observable, oldValue, newValue) -> scrollGrid(newValue));
+        measureNumProperty.addListener((observable, oldValue, newValue) -> {
+            measureNum = newValue.intValue();
+            updateGui();
+        });
         updateGui();
         scrollGrid(scroll.doubleValue());
     }
@@ -32,27 +38,27 @@ public abstract class ZoomablePanel extends Pane {
         this.setLayoutX(-1 * v);
     }
 
-    protected int getTickAtX(double x){
+    protected int getTickAtX(double x) {
         return (int) (x / getTickWith());
     }
 
-    protected double getTickWith(){
+    protected double getTickWith() {
         return getFourthWidth() / resolution.intValue();
     }
 
-    protected double getFullWidth(){
+    protected double getFullWidth() {
         return measureWidth * measureNum * zoom.doubleValue();
     }
 
-    protected double getMeasureWidth(){
+    protected double getMeasureWidth() {
         return getFullWidth() / measureNum;
     }
 
-    protected double getFourthWidth(){
+    protected double getFourthWidth() {
         return getMeasureWidth() / fourthInBar.intValue();
     }
 
-    protected double getXByTick(int tick){
+    protected double getXByTick(int tick) {
         return getTickWith() * tick;
     }
 

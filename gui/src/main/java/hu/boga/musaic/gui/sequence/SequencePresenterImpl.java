@@ -12,8 +12,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -29,9 +28,16 @@ import java.util.Optional;
 
 public class SequencePresenterImpl implements SequencePresenter, ChannelMappingChangeListener {
     private static final Logger LOG = LoggerFactory.getLogger(SequencePresenterImpl.class);
-
+    public static final int INITIAL_MEASURE_NUM_VALUE = 10;
+    public static final int INITIAL_FOURTH_IN_BAR_VALUE = 4;
     @FXML
-    private Slider scrollSlider;
+    private ScrollBar horizontalScroll;
+    @FXML
+    private TextField measureNum;
+    @FXML
+    private TextField fourthInBar;
+//    @FXML
+//    private Slider scrollSlider;
     @FXML
     private Slider zoomSlider;
     @FXML
@@ -44,6 +50,8 @@ public class SequencePresenterImpl implements SequencePresenter, ChannelMappingC
     private final TrackPresenterFactory trackPresenterFactory;
     private SequenceModell modell;
     private Optional<String> path = Optional.empty();
+    IntegerProperty fourthInBarIntProp = new SimpleIntegerProperty(INITIAL_FOURTH_IN_BAR_VALUE);
+    IntegerProperty measureNumIntProp = new SimpleIntegerProperty(INITIAL_MEASURE_NUM_VALUE);
 
     @AssistedInject
     public SequencePresenterImpl(SequenceService service,
@@ -59,7 +67,20 @@ public class SequencePresenterImpl implements SequencePresenter, ChannelMappingC
 
     public void initialize(){
         zoomSlider.setValue(10);
+        initMeasureNum();
+        initFourthInBar();
+
         path.ifPresentOrElse(path -> open(path), () -> create());
+    }
+
+    private void initFourthInBar() {
+        fourthInBar.setText("" + INITIAL_FOURTH_IN_BAR_VALUE);
+        fourthInBar.textProperty().addListener((observable, oldValue, newValue) -> fourthInBarIntProp.setValue(Integer.parseInt(fourthInBar.getText())));
+    }
+
+    private void initMeasureNum() {
+        measureNum.setText("" + INITIAL_MEASURE_NUM_VALUE);
+        measureNum.textProperty().addListener((observable, oldValue, newValue) -> measureNumIntProp.setValue(Integer.parseInt(newValue)));
     }
 
     public void open(String path) {
@@ -111,15 +132,12 @@ public class SequencePresenterImpl implements SequencePresenter, ChannelMappingC
     }
 
     private BorderPane createTrackView(TrackModell trackModell) {
-
         IntegerProperty resolution = new SimpleIntegerProperty(modell.resolution);
-        IntegerProperty fourthInBar = new SimpleIntegerProperty(4);
-
         FXMLLoader loader = new FXMLLoader(TrackPresenter.class.getResource("track-view.fxml"));
         loader.setControllerFactory(c -> trackPresenterFactory.create(trackModell.id,
                 zoomSlider.valueProperty(),
-                scrollSlider.valueProperty(),
-                resolution, fourthInBar));
+                horizontalScroll.valueProperty(),
+                resolution, fourthInBarIntProp, measureNumIntProp));
         BorderPane trackView = null;
         try {
             trackView = loader.load();

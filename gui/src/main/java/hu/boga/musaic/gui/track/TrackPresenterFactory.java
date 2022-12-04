@@ -9,5 +9,6 @@ public interface TrackPresenterFactory {
                           @Assisted("zoom") DoubleProperty zoom,
                           @Assisted("scroll") DoubleProperty scroll,
                           @Assisted("resolution") IntegerProperty resolution,
-                          @Assisted("fourthInBar") IntegerProperty fourthInBar);
+                          @Assisted("fourthInBar") IntegerProperty fourthInBar,
+                          @Assisted("measureNum") IntegerProperty measureNum);
 }
