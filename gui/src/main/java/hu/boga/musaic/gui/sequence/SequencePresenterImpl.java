@@ -10,10 +10,8 @@ import hu.boga.musaic.gui.track.TrackModell;
 import hu.boga.musaic.gui.track.TrackPresenter;
 import hu.boga.musaic.gui.track.TrackPresenterFactory;
 import hu.boga.musaic.gui.track.events.MeasureSelectedEvent;
-import hu.boga.musaic.gui.track.events.OpenTrackEvent;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -233,11 +231,6 @@ public class SequencePresenterImpl implements SequencePresenter, ChannelMappingC
             stop();
             play();
         }
-    }
-
-    @Subscribe
-    void handleOpenTrackEvent(OpenTrackEvent event){
-
     }
 
 }

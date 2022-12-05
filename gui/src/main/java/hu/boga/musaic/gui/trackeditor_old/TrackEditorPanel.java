@@ -1,9 +1,8 @@
-package hu.boga.musaic.gui.trackeditor;
+package hu.boga.musaic.gui.trackeditor_old;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import hu.boga.musaic.core.events.TickEvent;
-import hu.boga.musaic.core.modell.events.CommandEnum;
 import hu.boga.musaic.core.note.NoteBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 import hu.boga.musaic.gui.noteeditor.NoteRectangle;
@@ -11,9 +10,7 @@ import hu.boga.musaic.gui.trackeditor.events.AddChordEvent;
 import hu.boga.musaic.gui.trackeditor.events.DeleteNoteEvent;
 import hu.boga.musaic.gui.trackeditor.events.NoteMovedEvent;
 import hu.boga.musaic.gui.trackeditor.events.NotePlayEvent;
-import hu.boga.musaic.midigateway.Player;
 import hu.boga.musaic.musictheory.enums.ChordType;
-import javafx.concurrent.Task;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -23,12 +20,9 @@ import javafx.scene.shape.Rectangle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.sound.midi.MetaMessage;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
 public class TrackEditorPanel extends TrackEditorBasePanel {

@@ -21,8 +21,6 @@ h
 8core/src/main/java/hu/boga/musaic/musictheory/Pitch.java,8/f/8f680188c4640d844857087c968784ff1204d031
 v
 Fgui/src/main/java/hu/boga/musaic/gui/trackeditor/TrackEditorPanel.java,0/d/0deeaad057bda1e7dca07f3e733866162e918895
-z
-Jgui/src/main/java/hu/boga/musaic/gui/trackeditor/TrackEditorBasePanel.java,b/a/bad1f60d0e988ef56fc300829b9803a955fd5a93
 _
 /gui/src/main/java/hu/boga/musaic/MusaicApp.java,c/4/c44cd36ef418bbdcea2521422bc6463b3494de26
 
@@ -45,8 +43,6 @@ gmidigateway/src/main/java/hu/boga/musaic/midigateway/converters/ShortMessageEve
 kmidigateway/src/test/java/hu/boga/musaic/midigateway/converters/ShortMessageEventToModellConverterTest.java,a/6/a6d91b1318a5e5dbfda84e0aae2e4e29268aebf6
 o
 ?midigateway/src/main/java/hu/boga/musaic/midigateway/Saver.java,0/b/0bab06482796e50aa2a8d247ed17d9e3a9f33c5e
-q
-Agui/src/main/java/hu/boga/musaic/gui/trackeditor/TrackEditor.java,d/d/dd2b00068f795c8ea2ef0b745ccbe1d55aa28e01
 ~
 Ncore/src/main/java/hu/boga/musaic/core/sequence/boundary/dtos/SequenceDto.java,4/c/4c416e97c44b8b83f927e8209337891c43928e01
 —
@@ -63,17 +59,9 @@ Zgui/src/main/java/hu/boga/musaic/gui/sequence/components/ChannelMappingChangeLi
 Sgui/src/main/java/hu/boga/musaic/gui/sequence/components/ChannelMappingManager.java,c/a/ca481d9c7eb626d8b92b48cca649f11eb39fb230
 €
 Pcore/src/main/java/hu/boga/musaic/core/sequence/boundary/SequenceBoundaryIn.java,a/9/a9db255afb05f24c794a86a8cfb5db1a351eaf0d
-h
-8gui/src/main/java/hu/boga/musaic/gui/MainController.java,a/9/a9521251e14893eb26b5aeff2e3a742bc710a238
-n
->gui/src/main/java/hu/boga/musaic/gui/track/TrackPresenter.java,7/e/7e62b1be844c6bc70b761bd6024e4a635bdcc9be
 Š
 Zmidigateway/src/test/java/hu/boga/musaic/midigateway/sequence/SequenceGatewayImplTest.java,7/3/737db9f85c48d855555185175b2ecb9f4130622c
-R
-"gui/src/main/java/module-info.java,7/e/7eb51de7783f19d325cce8c4c0170ca79a02ba70
 l
 <core/src/main/java/hu/boga/musaic/core/events/TickEvent.java,c/5/c53ba577eb5c769700943b15602a5c6fdfc6546d
 n
 >core/src/main/java/hu/boga/musaic/core/events/EventSystem.java,5/c/5c043a30d29644975ce828a32727ad4430bc0753
-p
-@gui/src/main/java/hu/boga/musaic/gui/track/panels/GridPanel.java,8/c/8c17739bb5ad24142623acda8b41acd2e9ca0218

@@ -1,4 +1,4 @@
-package hu.boga.musaic.gui.trackeditor;
+package hu.boga.musaic.gui.trackeditor_old;
 
 import hu.boga.musaic.gui.GuiConstants;
 import hu.boga.musaic.musictheory.Chord;

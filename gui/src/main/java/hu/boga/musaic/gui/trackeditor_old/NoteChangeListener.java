@@ -1,4 +1,4 @@
-package hu.boga.musaic.gui.trackeditor;
+package hu.boga.musaic.gui.trackeditor_old;
 
 import hu.boga.musaic.gui.trackeditor.events.AddChordEvent;
 import hu.boga.musaic.gui.trackeditor.events.DeleteNoteEvent;

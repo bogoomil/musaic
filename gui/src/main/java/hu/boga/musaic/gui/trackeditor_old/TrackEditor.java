@@ -1,4 +1,4 @@
-package hu.boga.musaic.gui.trackeditor;
+package hu.boga.musaic.gui.trackeditor_old;
 
 import com.google.common.eventbus.EventBus;
 import hu.boga.musaic.core.note.NoteBoundaryIn;

@@ -1,10 +1,9 @@
-package hu.boga.musaic.gui.trackeditor;
+package hu.boga.musaic.gui.trackeditor_old;
 
 import com.google.common.eventbus.EventBus;
 import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryOut;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
-import hu.boga.musaic.gui.trackeditor.events.TrackDeletedEvent;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.sound.midi.Instrument;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 

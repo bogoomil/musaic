@@ -8,6 +8,7 @@ import hu.boga.musaic.gui.track.panels.CursorPanel;
 import hu.boga.musaic.gui.track.panels.GridPanel;
 import hu.boga.musaic.gui.track.panels.NotesPanel;
 import hu.boga.musaic.gui.track.panels.SelectionPanel;
+import hu.boga.musaic.gui.trackeditor.TrackEditorPresenterFactory;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.value.ChangeListener;
@@ -49,9 +50,11 @@ public class TrackPresenterImpl implements TrackPresenter{
     final EventBus eventBus;
     private ChangeListener channelListener = (observable, oldValue, newValue) -> onChannelChanged(Integer.parseInt("" + newValue));
     private ChangeListener<String> nameChangeListener = (observable, oldValue, newValue) -> onNameChanged(newValue);
+    private final TrackEditorPresenterFactory trackEditorPresenterFactory;
 
     @AssistedInject
     public TrackPresenterImpl(TrackService trackService,
+                              TrackEditorPresenterFactory trackEditorPresenterFactory,
                               @Assisted String trackId,
                               @Assisted("zoom")DoubleProperty zoom,
                               @Assisted("scroll") DoubleProperty scroll,
@@ -68,6 +71,8 @@ public class TrackPresenterImpl implements TrackPresenter{
         this.fourthInBar = fourthInBar;
         this.measureNum = measureNum;
         this.eventBus = eventBus;
+        this.eventBus.register(this);
+        this.trackEditorPresenterFactory = trackEditorPresenterFactory;
     }
 
     private void updateScroll(Number newValue) {
@@ -110,7 +115,7 @@ public class TrackPresenterImpl implements TrackPresenter{
         panelGroup.getChildren().add(notesPanel);
         CursorPanel cursorPanel = new CursorPanel(zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
         panelGroup.getChildren().add(cursorPanel);
-        SelectionPanel selectionPanel = new SelectionPanel(zoom, scroll, resolution, fourthInBar, measureNum, trackModell, eventBus);
+        SelectionPanel selectionPanel = new SelectionPanel(zoom, scroll, resolution, fourthInBar, measureNum, trackModell, eventBus, trackEditorPresenterFactory);
         panelGroup.getChildren().add(selectionPanel);
     }
 
