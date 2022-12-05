@@ -9,7 +9,7 @@ public interface SequenceService {
     void addTrack(String id);
     void duplicateTrack(String id);
     void removeTrack(String id);
-
     void play(String sequenceId, int from, int to);
     void stop();
+    void updateTempo(String id, int tempo);
 }

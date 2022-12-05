@@ -60,7 +60,6 @@ public class SequenceInteractor implements SequenceBoundaryIn {
 
     @Override
     public void setTempo(String sequenceId, int tempo) {
-        LOG.debug("id: {}, tempo: {}", sequenceId, tempo);
         SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId);
         modell.tempo = tempo;
     }

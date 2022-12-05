@@ -83,7 +83,7 @@ public class SequencePresenterImpl implements SequencePresenter, ChannelMappingC
     }
 
     private void tempoChanged(String newValue) {
-        throw new UnsupportedOperationException("tempo setting not implemented yet...");
+        service.updateTempo(modell.id, Integer.parseInt(newValue));
     }
 
     public void initialize(){

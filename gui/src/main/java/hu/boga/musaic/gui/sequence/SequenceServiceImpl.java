@@ -76,4 +76,9 @@ public class SequenceServiceImpl implements SequenceService, SequenceBoundaryOut
     public void stop() {
         boundaryIn.stop();
     }
+
+    @Override
+    public void updateTempo(String id, int tempo) {
+        boundaryIn.setTempo(id, tempo);
+    }
 }

@@ -35,14 +35,10 @@ p
 @core/src/test/java/hu/boga/musaic/core/events/TickEventTest.java,d/7/d7e67c36859f9f428522c2a12c609a47aba9e65c
 Ä
 Pcore/src/test/java/hu/boga/musaic/core/track/interactor/TrackInteractorTest.java,5/b/5b691c4d47e9d32dc5456fd137729b1ce33851f4
-y
-Imidigateway/src/main/java/hu/boga/musaic/midigateway/utils/TempoUtil.java,e/c/ece9a5f45bc8418433bb42fcc2a2e51f9ec4c469
 x
 Hmidigateway/src/main/java/hu/boga/musaic/midigateway/utils/NoteUtil.java,1/9/197ac17d786881079ca61e38bbd5c1622f4e93df
 x
 Hmidigateway/src/main/java/hu/boga/musaic/midigateway/utils/MidiUtil.java,b/1/b1e998c13dcfbe6719863d0294a57c5a09e8e60d
-Å
-Qmidigateway/src/main/java/hu/boga/musaic/midigateway/sequence/SequenceReader.java,5/a/5a7c640806dd87f4a0763174edd7417229bc5419
 ó
 gmidigateway/src/main/java/hu/boga/musaic/midigateway/converters/ShortMessageEventToModellConverter.java,c/2/c207d86e25ffb675cc20799f7a61c22d69383076
 õ

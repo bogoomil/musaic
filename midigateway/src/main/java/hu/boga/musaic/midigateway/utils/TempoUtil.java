@@ -16,6 +16,7 @@ public class TempoUtil extends MidiUtil {
     }
 
     public static void addTempoEvents(Sequence sequence, int tempo) {
+        removeTempoEvents(sequence);
         Arrays.stream(sequence.getTracks()).forEach(track -> addTempoEvents(track, tempo));
     }
 
