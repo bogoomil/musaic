@@ -148,6 +148,7 @@ class SequenceInteractorTest {
             mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceByTrackId(trackModell.getId())).thenReturn(Optional.of(modell));
             mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceById(modell.getId())).thenReturn(modell);
             interactor.removeTrack(trackModell.getId());
+            Mockito.verify(boundaryOut).displaySequence(Mockito.any());
 
             assertEquals(1, modell.tracks.size());
         }

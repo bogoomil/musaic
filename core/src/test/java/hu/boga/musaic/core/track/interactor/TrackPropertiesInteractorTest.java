@@ -97,4 +97,10 @@ class TrackPropertiesInteractorTest {
         trackPropertiesInteractor.updateVolume(trackModell.getId(), 0.5);
         assertEquals(1, noteModell.velocity);
     }
+
+    @Test
+    void load(){
+        trackPropertiesInteractor.load(trackModell.getId());
+        Mockito.verify(boundaryOut).displayTrack(Mockito.any());
+    }
 }

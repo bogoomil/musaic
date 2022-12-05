@@ -63,8 +63,6 @@ Zgui/src/main/java/hu/boga/musaic/gui/sequence/components/ChannelMappingChangeLi
 Sgui/src/main/java/hu/boga/musaic/gui/sequence/components/ChannelMappingManager.java,c/a/ca481d9c7eb626d8b92b48cca649f11eb39fb230
 €
 Pcore/src/main/java/hu/boga/musaic/core/sequence/boundary/SequenceBoundaryIn.java,a/9/a9db255afb05f24c794a86a8cfb5db1a351eaf0d
-’
-bmidigateway/src/test/java/hu/boga/musaic/midigateway/converters/SequenceToModellConverterTest.java,c/7/c7f15ea4572e8ef7d6a883ac0a143cef35394c4f
 h
 8gui/src/main/java/hu/boga/musaic/gui/MainController.java,a/9/a9521251e14893eb26b5aeff2e3a742bc710a238
 n

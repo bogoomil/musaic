@@ -28,7 +28,7 @@ class SequenceToModellConverterTest {
     void getTempo(){
         try (MockedStatic<TempoUtil> mockedStatic = Mockito.mockStatic(TempoUtil.class)) {
             SequenceModell modell = new SequenceReader().open(PATH);
-            mockedStatic.verify(() -> TempoUtil.getTempo(Mockito.any()), times(1));
+            mockedStatic.verify(() -> TempoUtil.getTempo(Mockito.any()), times(2));
         }
     }
 }
