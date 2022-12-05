@@ -32,14 +32,12 @@ public class Player {
     private static Synthesizer initSynth() {
         Synthesizer synthesizer;
         try {
-
             File file = new File(SF_PATH);
             Soundbank soundbank = MidiSystem.getSoundbank(file);
             synthesizer = MidiSystem.getSynthesizer();
             synthesizer.open();
             Soundbank defaultSoundbank = synthesizer.getDefaultSoundbank();
             synthesizer.unloadAllInstruments(defaultSoundbank);
-
             synthesizer.loadAllInstruments(soundbank);
         } catch (MidiUnavailableException | InvalidMidiDataException | IOException e) {
             throw new MusaicException("unable to initialize synth: " + e.getMessage(), e);
@@ -74,7 +72,6 @@ public class Player {
 
     private static void addCues(Sequence sequence) {
         long tickLength = sequence.getTickLength() + 10;
-
         for (int i = 0; i < tickLength; i += 10) {
             String tickString = Integer.toString(i);
             MetaMessageEventModell mm = new MetaMessageEventModell(i, tickString.getBytes(StandardCharsets.UTF_8), CommandEnum.CUE_MARKER);
@@ -83,24 +80,14 @@ public class Player {
         }
     }
 
-
     private static void tryingToPlaySequence(Sequence sequence, long fromTick, long toTick) throws InvalidMidiDataException {
-        LOG.debug("start playback, tempo: {}, length: {}, from: {}, to: {}",
-                TempoUtil.getTempo(sequence),
-                sequence.getTickLength(),
-                fromTick,
-                toTick);
-
         resetSequencer();
-
         sequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
         sequencer.setSequence(sequence);
         sequencer.setTempoFactor(1f);
         sequencer.setTickPosition(fromTick);
-
         sequencer.setLoopEndPoint(toTick);
         sequencer.setLoopStartPoint(fromTick);
-
         sequencer.start();
     }
 
@@ -114,15 +101,11 @@ public class Player {
         sequencer.stop();
     }
 
-
     public static void playNote(int tempo, int channel, int resolution, int midiCode, int lengthInTicks, int instrument) {
         LOG.debug("channel: {}, instr num: {}, instr name: {}, bank: {}, sb: {}", channel, instrument);
-
         Arrays.stream(synth.getLoadedInstruments()).filter(instrument2 -> instrument2.getPatch().getProgram() == instrument).findAny().ifPresent(instrument2 -> {
             LOG.debug("instr name: {}, bank: {}, sb: {}", instrument2.getName(), instrument2.getPatch().getBank(), instrument2.getSoundbank().getName());
-
         });
-
         int length = (int) getNoteLenghtInMs(lengthInTicks, tempo, resolution);
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -145,7 +128,6 @@ public class Player {
             e.printStackTrace();
         }
     }
-
 
     private static double getNoteLenghtInMs(int tickCount, int tempo, int resolution) {
         return getTickLengthInMillis(tempo, resolution) * tickCount;
@@ -174,7 +156,6 @@ public class Player {
             EventSystem.EVENT_BUS.post(new TickEvent(modell.getId(), tick));
         }
     }
-
 
     private void loadInstrumentByPach() {
 
