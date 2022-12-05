@@ -35,7 +35,7 @@ class SequenceGatewayImplTest {
         trackModell.eventModells.add(new NoteModell(0, 0, 128, 1,3));
         sequenceModell.tracks.add(trackModell);
 
-        gateway = new SequenceGatewayImpl(new EventBus());
+        gateway = new SequenceGatewayImpl();
 
         gateway.save(sequenceModell, PATH_TO_SAVE);
     }
@@ -68,7 +68,7 @@ class SequenceGatewayImplTest {
             gateway.play(sequenceModell, 0, 1);
             mockedStatic.verify(() -> Player.playSequence(Mockito.any(), eq(0L), eq(1L)), times(1));
             mockedStatic.verify(() -> Player.removeMetaEventListener(Mockito.any()), times(1));
-            mockedStatic.verify(() -> Player.createMetaEventListener(eq(sequenceModell), Mockito.any()), times(1));
+            mockedStatic.verify(() -> Player.createMetaEventListener(eq(sequenceModell)), times(1));
         }
     }
 

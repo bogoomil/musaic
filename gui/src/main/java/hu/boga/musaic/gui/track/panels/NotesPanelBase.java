@@ -1,6 +1,5 @@
 package hu.boga.musaic.gui.track.panels;
 
-import hu.boga.musaic.gui.note.NoteModell;
 import hu.boga.musaic.gui.track.TrackModell;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -10,25 +9,19 @@ import javafx.scene.shape.Rectangle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 public abstract class NotesPanelBase extends ZoomablePanel {
     private static final Logger LOG = LoggerFactory.getLogger(NotesPanelBase.class);
 
     public NotesPanelBase(DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNum, TrackModell trackModell) {
         super(zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
-        LOG.debug("track modell: {}", trackModell.id);
-        this.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            LOG.debug("event x: {}, tick: {}", event.getX(), getTickAtX(event.getX()));
-        });
     }
 
     @Override
     void updateGui() {
-        paintNotes();
+        paint();
     }
 
-    abstract void paintNotes();
+    abstract void paint();
 
     void createBorder() {
         getChildren().clear();

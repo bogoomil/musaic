@@ -14,11 +14,13 @@ public class SequenceModell {
     public List<TrackModell> tracks = new ArrayList<>();
     public int resolution;
     public int fourthInMeasure = 4;
+    public int tempo;
 
     public SequenceModell(SequenceDto dto){
         this.id = dto.id;
         this.channelToProgramMappings = dto.channelToProgramMappings;
         this.resolution = dto.resolution;
+        this.tempo = (int) dto.tempo;
 
         dto.tracks.forEach(trackDto -> tracks.add(new TrackModell(trackDto)));
     }

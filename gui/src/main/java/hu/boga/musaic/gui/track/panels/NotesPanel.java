@@ -5,7 +5,6 @@ import hu.boga.musaic.gui.track.TrackModell;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +22,7 @@ public class NotesPanel extends NotesPanelBase {
         });
     }
 
-    @Override
-    void updateGui() {
-        paintNotes();
-    }
-
-    void paintNotes() {
+    void paint() {
         createBorder();
         List<NoteModell> notes = trackModell.getNotesNormalized();
         if (!notes.isEmpty()){

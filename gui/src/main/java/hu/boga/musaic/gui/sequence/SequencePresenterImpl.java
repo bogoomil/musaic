@@ -1,5 +1,7 @@
 package hu.boga.musaic.gui.sequence;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import hu.boga.musaic.gui.sequence.components.ChannelMappingChangeListener;
@@ -7,22 +9,27 @@ import hu.boga.musaic.gui.sequence.components.ChannelMappingManager;
 import hu.boga.musaic.gui.track.TrackModell;
 import hu.boga.musaic.gui.track.TrackPresenter;
 import hu.boga.musaic.gui.track.TrackPresenterFactory;
+import hu.boga.musaic.gui.track.events.MeasureSelectedEvent;
+import hu.boga.musaic.gui.track.events.OpenTrackEvent;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -31,13 +38,17 @@ public class SequencePresenterImpl implements SequencePresenter, ChannelMappingC
     public static final int INITIAL_MEASURE_NUM_VALUE = 10;
     public static final int INITIAL_FOURTH_IN_BAR_VALUE = 4;
     @FXML
+    private TextField tempo;
+    @FXML
+    private Button playButton;
+    @FXML
+    private Button stopButton;
+    @FXML
     private ScrollBar horizontalScroll;
     @FXML
     private TextField measureNum;
     @FXML
     private TextField fourthInBar;
-//    @FXML
-//    private Slider scrollSlider;
     @FXML
     private Slider zoomSlider;
     @FXML
@@ -53,6 +64,11 @@ public class SequencePresenterImpl implements SequencePresenter, ChannelMappingC
     IntegerProperty fourthInBarIntProp = new SimpleIntegerProperty(INITIAL_FOURTH_IN_BAR_VALUE);
     IntegerProperty measureNumIntProp = new SimpleIntegerProperty(INITIAL_MEASURE_NUM_VALUE);
 
+    private int selectionStart;
+    private int selectionEnd;
+    private boolean isPlaying;
+    private EventBus eventBus = new EventBus();
+
     @AssistedInject
     public SequencePresenterImpl(SequenceService service,
                                  TrackPresenterFactory trackPresenterFactory,
@@ -62,15 +78,32 @@ public class SequencePresenterImpl implements SequencePresenter, ChannelMappingC
         if(path != null){
             this.path = Optional.of(path);
         }
+        this.eventBus.register(this);
         LOG.debug("service: {}, factore: {}", service, trackPresenterFactory);
+    }
+
+    private void tempoChanged(String newValue) {
+        throw new UnsupportedOperationException("tempo setting not implemented yet...");
     }
 
     public void initialize(){
         zoomSlider.setValue(10);
         initMeasureNum();
         initFourthInBar();
-
+        playButton.setOnAction(event -> play());
+        stopButton.setOnAction(event -> stop());
+        tempo.textProperty().addListener((observable, oldValue, newValue) -> tempoChanged(newValue));
         path.ifPresentOrElse(path -> open(path), () -> create());
+    }
+
+    private void play(){
+        isPlaying = true;
+        service.play(modell.id, selectionStart, selectionEnd);
+    }
+
+    private void stop(){
+        isPlaying = false;
+        service.stop();
     }
 
     private void initFourthInBar() {
@@ -96,6 +129,7 @@ public class SequencePresenterImpl implements SequencePresenter, ChannelMappingC
 
     private void updateGui(){
         this.modell = service.getSequence();
+        tempo.setText(modell.tempo + "");
         displayChannelMapping();
         displayTracks();
     }
@@ -137,7 +171,9 @@ public class SequencePresenterImpl implements SequencePresenter, ChannelMappingC
         loader.setControllerFactory(c -> trackPresenterFactory.create(trackModell.id,
                 zoomSlider.valueProperty(),
                 horizontalScroll.valueProperty(),
-                resolution, fourthInBarIntProp, measureNumIntProp));
+                resolution,
+                fourthInBarIntProp,
+                measureNumIntProp, eventBus));
         BorderPane trackView = null;
         try {
             trackView = loader.load();
@@ -187,6 +223,21 @@ public class SequencePresenterImpl implements SequencePresenter, ChannelMappingC
     private void removeTrack(String id) {
         service.removeTrack(id);
         updateGui();
+    }
+
+    @Subscribe
+    void handleMeasureSelectedEvent(MeasureSelectedEvent event){
+        this.selectionStart = event.getSelectionStart();
+        this.selectionEnd = event.getSelectionEnd();
+        if(isPlaying){
+            stop();
+            play();
+        }
+    }
+
+    @Subscribe
+    void handleOpenTrackEvent(OpenTrackEvent event){
+
     }
 
 }

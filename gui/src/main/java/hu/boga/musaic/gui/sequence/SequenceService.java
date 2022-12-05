@@ -1,7 +1,5 @@
 package hu.boga.musaic.gui.sequence;
 
-import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
-
 public interface SequenceService {
     void open(String path);
     void create();
@@ -11,4 +9,7 @@ public interface SequenceService {
     void addTrack(String id);
     void duplicateTrack(String id);
     void removeTrack(String id);
+
+    void play(String sequenceId, int from, int to);
+    void stop();
 }

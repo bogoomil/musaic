@@ -1,11 +1,13 @@
 package hu.boga.musaic.gui.track;
 
+import com.google.common.eventbus.EventBus;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import hu.boga.musaic.gui.sequence.SequenceModell;
+import hu.boga.musaic.gui.track.panels.CursorPanel;
 import hu.boga.musaic.gui.track.panels.GridPanel;
 import hu.boga.musaic.gui.track.panels.NotesPanel;
-import hu.boga.musaic.gui.track.panels.NotesPanelBase;
+import hu.boga.musaic.gui.track.panels.SelectionPanel;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.value.ChangeListener;
@@ -16,7 +18,10 @@ import javafx.scene.Group;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,16 +40,13 @@ public class TrackPresenterImpl implements TrackPresenter{
     private TextField trackName;
     @FXML
     private ComboBox cbChannel;
-    @FXML
-    private Pane gridPane;
-    @FXML
-    private Pane notesPane;
 
     private final String trackId;
     private TrackModell trackModell;
     private final TrackService trackService;
     final DoubleProperty zoom, scroll;
     final IntegerProperty resolution, fourthInBar, measureNum;
+    final EventBus eventBus;
     private ChangeListener channelListener = (observable, oldValue, newValue) -> onChannelChanged(Integer.parseInt("" + newValue));
     private ChangeListener<String> nameChangeListener = (observable, oldValue, newValue) -> onNameChanged(newValue);
 
@@ -55,7 +57,8 @@ public class TrackPresenterImpl implements TrackPresenter{
                               @Assisted("scroll") DoubleProperty scroll,
                               @Assisted("resolution")IntegerProperty resolution,
                               @Assisted("fourthInBar") IntegerProperty fourthInBar,
-                              @Assisted("measureNum") IntegerProperty measureNum
+                              @Assisted("measureNum") IntegerProperty measureNum,
+                              @Assisted("eventBus")EventBus eventBus
                               ) {
         this.trackService = trackService;
         this.trackId = trackId;
@@ -64,6 +67,7 @@ public class TrackPresenterImpl implements TrackPresenter{
         this.resolution = resolution;
         this.fourthInBar = fourthInBar;
         this.measureNum = measureNum;
+        this.eventBus = eventBus;
     }
 
     private void updateScroll(Number newValue) {
@@ -104,6 +108,10 @@ public class TrackPresenterImpl implements TrackPresenter{
         panelGroup.getChildren().add(gridPanel);
         NotesPanel notesPanel = new NotesPanel(zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
         panelGroup.getChildren().add(notesPanel);
+        CursorPanel cursorPanel = new CursorPanel(zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
+        panelGroup.getChildren().add(cursorPanel);
+        SelectionPanel selectionPanel = new SelectionPanel(zoom, scroll, resolution, fourthInBar, measureNum, trackModell, eventBus);
+        panelGroup.getChildren().add(selectionPanel);
     }
 
     private void updateMainPanelColor(String color) {

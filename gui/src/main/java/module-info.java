@@ -30,5 +30,5 @@ module gui {
     opens hu.boga.musaic.gui.track to javafx.fxml;
     exports hu.boga.musaic.gui.track.events to com.google.guice, javafx.fxml;
     opens hu.boga.musaic.gui.track.events to javafx.fxml;
-
+    opens hu.boga.musaic.gui.track.panels to com.google.common;
 }

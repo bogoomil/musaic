@@ -66,4 +66,14 @@ public class SequenceServiceImpl implements SequenceService, SequenceBoundaryOut
     public void removeTrack(String id) {
         boundaryIn.removeTrack(id);
     }
+
+    @Override
+    public void play(String sequenceId, int from, int to) {
+        boundaryIn.play(sequenceId, from, to);
+    }
+
+    @Override
+    public void stop() {
+        boundaryIn.stop();
+    }
 }
