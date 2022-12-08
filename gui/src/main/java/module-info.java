@@ -33,4 +33,7 @@ module gui {
     opens hu.boga.musaic.gui.track.panels to com.google.common;
     exports hu.boga.musaic.gui.trackeditor to com.google.guice;
     opens hu.boga.musaic.gui.trackeditor to javafx.fxml;
+
+    //kukázni mja
+    opens hu.boga.musaic.gui.trackeditor_old to com.google.common;
 }

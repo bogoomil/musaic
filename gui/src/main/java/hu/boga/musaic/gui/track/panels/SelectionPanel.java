@@ -85,7 +85,13 @@ public class SelectionPanel extends NotesPanelBase {
 
     private void createTrackEditor() {
         FXMLLoader loader = new FXMLLoader(TrackEditorPresenter.class.getResource("track-editor.fxml"));
-        loader.setControllerFactory(c -> trackEditorPresenterFactory.create(trackModell.id, resolution, fourthInBar, new SimpleIntegerProperty(measureNum), eventBus));
+        loader.setControllerFactory(c -> trackEditorPresenterFactory.create(
+                trackModell.id,
+                resolution,
+                fourthInBar,
+                new SimpleIntegerProperty(measureNum),
+                new SimpleIntegerProperty(0),
+                eventBus));
         createWindow(tryLoadingPane(loader));
     }
 

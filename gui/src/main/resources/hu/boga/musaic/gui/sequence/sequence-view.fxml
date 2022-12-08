@@ -3,27 +3,27 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.*?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="hu.boga.musaic.gui.sequence.SequencePresenterImpl">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.sequence.SequencePresenterImpl">
 
     <top>
         <MenuBar fx:id="menu" BorderPane.alignment="CENTER">
             <menus>
                 <Menu mnemonicParsing="false" text="Sequence">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#saveSequence" text="Save"/>
-                        <MenuItem mnemonicParsing="false" onAction="#saveAsSequence" text="Save as..."/>
+                        <MenuItem mnemonicParsing="false" onAction="#saveSequence" text="Save" />
+                        <MenuItem mnemonicParsing="false" onAction="#saveAsSequence" text="Save as..." />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Edit">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Settings"/>
+                        <MenuItem mnemonicParsing="false" text="Settings" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Track">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#addTrack" text="Add"/>
+                        <MenuItem mnemonicParsing="false" onAction="#addTrack" text="Add" />
                     </items>
                 </Menu>
             </menus>
@@ -38,44 +38,56 @@
                             <left>
                                 <VBox spacing="5.0">
                                     <children>
-                                        <Label text="Zoom"/>
-                                        <Slider fx:id="zoomSlider"/>
-                                        <Label text="Measurenum"/>
-                                        <TextField fx:id="measureNum" alignment="TOP_RIGHT"/>
-                                        <Label text="4th / bar"/>
-                                        <TextField fx:id="fourthInBar" alignment="TOP_RIGHT"/>
-                                        <Label text="Tempo (bpm)"/>
-                                        <TextField fx:id="tempo" alignment="TOP_RIGHT"/>
+                                        <Label text="Zoom" >
+                                            <graphic>
+                                                <FontIcon iconLiteral="mdi-magnify-plus" iconSize="19" />
+                                            </graphic>
+                                        </Label>
+                                        <Slider fx:id="zoomSlider" />
+                                        <Label text="Measurenum" />
+                                        <TextField fx:id="measureNum" alignment="TOP_RIGHT" />
+                                        <Label text="4th / bar" />
+                                        <TextField fx:id="fourthInBar" alignment="TOP_RIGHT" />
+                                        <Label text="Tempo (bpm)" />
+                                        <TextField fx:id="tempo" alignment="TOP_RIGHT" />
                                         <HBox prefHeight="30.0" prefWidth="200.0" spacing="5.0">
                                             <children>
-                                                <Button fx:id="playButton" mnemonicParsing="false" text="Play"/>
-                                                <Button fx:id="stopButton" mnemonicParsing="false" text="Stop"/>
+                                                <Button fx:id="playButton" mnemonicParsing="false" text="Play">
+                                                    <graphic>
+                                                        <FontIcon iconLiteral="mdi2p-play" iconSize="19" />
+                                                    </graphic>
+                                                </Button>
+                                                <Button fx:id="stopButton" mnemonicParsing="false" text="Stop">
+                                                    <graphic>
+                                                        <FontIcon iconLiteral="mdi2s-stop" iconSize="19" />
+                                                    </graphic>
+                                                </Button>
                                             </children>
                                             <VBox.margin>
-                                                <Insets/>
+                                                <Insets />
                                             </VBox.margin>
                                             <padding>
-                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                             </padding>
                                         </HBox>
                                     </children>
                                     <padding>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </padding>
                                 </VBox>
                             </left>
                             <center>
                                 <ScrollPane hbarPolicy="NEVER">
-                                    <VBox fx:id="tracksVBox"/>
+                                    <VBox fx:id="tracksVBox" />
                                 </ScrollPane>
                             </center>
                             <bottom>
                                 <VBox prefHeight="28.0" prefWidth="600.0" spacing="5.0" BorderPane.alignment="CENTER">
                                     <children>
-                                        <ScrollBar fx:id="horizontalScroll"/>
+                                        <ScrollBar fx:id="horizontalScroll" />
                                     </children>
                                     <padding>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </padding>
                                 </VBox>
                             </bottom>
@@ -84,8 +96,7 @@
                 </Tab>
                 <Tab text="Channel mapping">
                     <content>
-                        <AnchorPane fx:id="channelMappingPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                    prefWidth="200.0"/>
+                        <AnchorPane fx:id="channelMappingPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                     </content>
                 </Tab>
             </tabs>

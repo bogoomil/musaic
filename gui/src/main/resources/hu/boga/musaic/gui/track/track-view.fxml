@@ -4,9 +4,9 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.*?>
 
-<BorderPane fx:id="mainPanel" prefWidth="373.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/16"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.track.TrackPresenterImpl">
+<BorderPane fx:id="mainPanel" prefWidth="373.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.track.TrackPresenterImpl">
     <center>
         <AnchorPane fx:id="controlls" prefWidth="304.0">
             <children>
@@ -14,26 +14,39 @@
                     <children>
                         <HBox spacing="5.0">
                             <children>
-                                <Label style="-fx-font-size: 10;" text="Name"/>
-                                <TextField fx:id="trackName" style="-fx-font-size: 10;"/>
-                                <Label style="-fx-font-size: 10;" text="Channel"/>
-                                <ComboBox fx:id="cbChannel" prefHeight="24.0" prefWidth="76.0"/>
+                                <Label style="-fx-font-size: 10;" text="Name" />
+                                <TextField fx:id="trackName" style="-fx-font-size: 10;" />
+                                <Label style="-fx-font-size: 10;" text="Channel" />
+                                <ComboBox fx:id="cbChannel" prefHeight="24.0" prefWidth="76.0" />
                             </children>
                             <padding>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </padding>
                         </HBox>
-                        <HBox prefHeight="11.0" prefWidth="254.0" spacing="5.0">
+                        <HBox prefHeight="24.0" prefWidth="304.0" spacing="5.0">
                             <children>
-                                <Button fx:id="volUp" mnemonicParsing="false" onAction="#onVolUp"
-                                        style="-fx-font-size: 9;" text="up 10%"/>
-                                <Button fx:id="volDown" mnemonicParsing="false" onAction="#onVolDown"
-                                        style="-fx-font-size: 9;" text="down 10%"/>
-                                <CheckBox fx:id="chxbMute" mnemonicParsing="false" onAction="#onMute"
-                                          style="-fx-font-size: 10;" text="Mute track"/>
+                                <Button fx:id="volUp" mnemonicParsing="false" onAction="#onVolUp" style="-fx-font-size: 9;">
+                                    <graphic>
+                                        <FontIcon iconLiteral="mdi2v-volume-plus" iconSize="19" />
+                                    </graphic>
+                                </Button>
+                                <Button fx:id="volDown" mnemonicParsing="false" onAction="#onVolDown" style="-fx-font-size: 9;">
+                                    <graphic>
+                                        <FontIcon iconLiteral="mdi2v-volume-minus" iconSize="19" />
+                                    </graphic>
+                                </Button>
+                                <CheckBox fx:id="chxbMute" mnemonicParsing="false" onAction="#onMute" style="-fx-font-size: 10;">
+                                    <graphic>
+                                        <FontIcon iconLiteral="mdi2v-volume-mute" iconSize="19" />
+                                    </graphic>
+                           <HBox.margin>
+                              <Insets top="4.0" />
+                           </HBox.margin>
+
+                                </CheckBox>
                             </children>
                             <padding>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </padding>
                         </HBox>
                     </children>
