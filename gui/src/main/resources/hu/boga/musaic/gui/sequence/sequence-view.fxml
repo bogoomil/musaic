@@ -38,7 +38,7 @@
                             <left>
                                 <VBox spacing="5.0">
                                     <children>
-                                        <Label text="Zoom" >
+                                        <Label text="Zoom">
                                             <graphic>
                                                 <FontIcon iconLiteral="mdi-magnify-plus" iconSize="19" />
                                             </graphic>
@@ -54,12 +54,12 @@
                                             <children>
                                                 <Button fx:id="playButton" mnemonicParsing="false" text="Play">
                                                     <graphic>
-                                                        <FontIcon iconLiteral="mdi2p-play" iconSize="19" />
+                                                        <FontIcon iconColor="#11ab1e" iconLiteral="mdi2p-play" iconSize="19" />
                                                     </graphic>
                                                 </Button>
                                                 <Button fx:id="stopButton" mnemonicParsing="false" text="Stop">
                                                     <graphic>
-                                                        <FontIcon iconLiteral="mdi2s-stop" iconSize="19" />
+                                                        <FontIcon iconColor="#e80000" iconLiteral="mdi2s-stop" iconSize="19" />
                                                     </graphic>
                                                 </Button>
                                             </children>
