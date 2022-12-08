@@ -3,6 +3,7 @@ package hu.boga.musaic.gui.track;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import hu.boga.musaic.gui.constants.GuiConstants;
 import hu.boga.musaic.gui.sequence.SequenceModell;
 import hu.boga.musaic.gui.track.panels.CursorPanel;
 import hu.boga.musaic.gui.track.panels.GridPanel;
@@ -109,13 +110,13 @@ public class TrackPresenterImpl implements TrackPresenter{
         cbChannel.getSelectionModel().select(trackModell.channel);
         chxbMute.setSelected(trackModell.muted);
 
-        GridPanel gridPanel = new GridPanel(zoom, scroll, resolution, fourthInBar, measureNum);
+        GridPanel gridPanel = new GridPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum);
         panelGroup.getChildren().add(gridPanel);
-        NotesPanel notesPanel = new NotesPanel(zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
+        NotesPanel notesPanel = new NotesPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
         panelGroup.getChildren().add(notesPanel);
-        CursorPanel cursorPanel = new CursorPanel(zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
+        CursorPanel cursorPanel = new CursorPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
         panelGroup.getChildren().add(cursorPanel);
-        SelectionPanel selectionPanel = new SelectionPanel(zoom, scroll, resolution, fourthInBar, measureNum, trackModell, eventBus, trackEditorPresenterFactory);
+        SelectionPanel selectionPanel = new SelectionPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModell, eventBus, trackEditorPresenterFactory);
         panelGroup.getChildren().add(selectionPanel);
     }
 

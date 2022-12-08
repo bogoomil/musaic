@@ -14,8 +14,8 @@ import java.util.List;
 public class NotesPanel extends NotesPanelBase {
     private static final Logger LOG = LoggerFactory.getLogger(NotesPanel.class);
 
-    public NotesPanel(DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNum, TrackModell trackModell) {
-        super(zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
+    public NotesPanel(int height, DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNum, TrackModell trackModell) {
+        super(height, zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
         LOG.debug("track modell: {}", trackModell.id);
         this.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             LOG.debug("event x: {}, tick: {}", event.getX(), getTickAtX(event.getX()));
@@ -30,11 +30,11 @@ public class NotesPanel extends NotesPanelBase {
             if(high == 0){
                 high = 1;
             }
-            double pitchHeight = (GridPanel.HEIGHT - 20) / high;
+            double pitchHeight = (height - 20) / high;
             double tickWidth = getTickWith();
             notes.forEach(noteModell -> {
                 double length = noteModell.length * tickWidth;
-                double y = GridPanel.HEIGHT - (pitchHeight * noteModell.midiCode) - 10;
+                double y = height - (pitchHeight * noteModell.midiCode) - 10;
                 double x = getXByTick((int) noteModell.tick);
                 Rectangle r = new Rectangle(x, y, length, 3);
                 getChildren().add(r);

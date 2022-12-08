@@ -9,7 +9,8 @@ public interface TrackEditorPresenterFactory {
     TrackEditorPresenter create(@Assisted String trackId,
                           @Assisted("resolution") IntegerProperty resolution,
                           @Assisted("fourthInBar") IntegerProperty fourthInBar,
-                          @Assisted("measureNum") IntegerProperty measureNum,
+                                @Assisted("measureNum") IntegerProperty measureNum,
+                                @Assisted("currentMeasure") IntegerProperty currentMeasure,
                           @Assisted("eventBus") EventBus eventBus);
 
 }

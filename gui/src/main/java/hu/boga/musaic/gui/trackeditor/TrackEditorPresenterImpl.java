@@ -37,13 +37,14 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
     private final TrackEditorService service;
     private final String trackId;
     private final EventBus eventBus;
-    private final IntegerProperty resolution, fourthInBar, measureNum;
+    private final IntegerProperty resolution, fourthInBar, measureNum, currentMeasure;
 
     @AssistedInject
     public TrackEditorPresenterImpl(TrackEditorService service, @Assisted String trackId,
                                     @Assisted("resolution") IntegerProperty resolution,
                                     @Assisted("fourthInBar") IntegerProperty fourthInBar,
                                     @Assisted("measureNum") IntegerProperty measureNum,
+                                    @Assisted("currentMeasure") IntegerProperty currentMeasure,
                                     @Assisted("eventBus") EventBus eventBus) {
         this.service = service;
         this.trackId = trackId;
@@ -51,6 +52,7 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
         this.resolution = resolution;
         this.fourthInBar = fourthInBar;
         this.measureNum = measureNum;
+        this.currentMeasure = currentMeasure;
 
         LOG.debug("service: {}, modell: {}, measure: {}", service, trackId, measureNum.intValue());
     }

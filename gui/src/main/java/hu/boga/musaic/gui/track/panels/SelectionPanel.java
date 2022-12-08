@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class SelectionPanel extends NotesPanelBase{
+public class SelectionPanel extends NotesPanelBase {
 
     private static final Logger LOG = LoggerFactory.getLogger(SelectionPanel.class);
     private final EventBus eventBus;
@@ -32,7 +32,8 @@ public class SelectionPanel extends NotesPanelBase{
     private final TrackEditorPresenterFactory trackEditorPresenterFactory;
     private int measureNum;
 
-    public SelectionPanel(DoubleProperty zoom,
+    public SelectionPanel(int height,
+                          DoubleProperty zoom,
                           DoubleProperty scroll,
                           IntegerProperty resolution,
                           IntegerProperty fourthInBar,
@@ -40,7 +41,7 @@ public class SelectionPanel extends NotesPanelBase{
                           TrackModell trackModell,
                           EventBus eventBus,
                           TrackEditorPresenterFactory trackEditorPresenterFactory) {
-        super(zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
+        super(height, zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
         this.eventBus = eventBus;
         this.eventBus.register(this);
         this.trackEditorPresenterFactory = trackEditorPresenterFactory;
@@ -53,7 +54,7 @@ public class SelectionPanel extends NotesPanelBase{
         double x = getXByTick(selectionStartInTicks);
         int width = (int) (getXByTick(selectionEndInTicks) - x);
 
-        Rectangle rectangle = new Rectangle((int) getXByTick(selectionStartInTicks), 0, width, GridPanel.HEIGHT);
+        Rectangle rectangle = new Rectangle((int) getXByTick(selectionStartInTicks), 0, width, height);
         rectangle.setFill(Color.color(Color.DARKORCHID.getRed(), Color.DARKORCHID.getGreen(), Color.DARKORCHID.getBlue(), 0.4));
         getChildren().add(rectangle);
     }
@@ -63,9 +64,9 @@ public class SelectionPanel extends NotesPanelBase{
         int selectionStart = measureNum * resolution.intValue() * 4;
         int selectionEnd = selectionStart + (4 * resolution.intValue());
 
-        if(event.getClickCount() == 2){
+        if (event.getClickCount() == 2) {
             openTrackEditor();
-        }else if(event.getClickCount() == 1){
+        } else if (event.getClickCount() == 1) {
             eventBus.post(new MeasureSelectedEvent(selectionStart, selectionEnd));
         }
     }
@@ -76,7 +77,7 @@ public class SelectionPanel extends NotesPanelBase{
     }
 
     @Subscribe
-    void handle(MeasureSelectedEvent event){
+    void handle(MeasureSelectedEvent event) {
         this.selectionStartInTicks = event.getSelectionStart();
         this.selectionEndInTicks = event.getSelectionEnd();
         updateGui();

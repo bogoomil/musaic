@@ -11,15 +11,17 @@ public abstract class ZoomablePanel extends Pane {
     protected TrackModell trackModell;
     protected int measureNum;
 
-    final static int measureWidth = 10;
+    protected final static int measureWidth = 10;
+    protected final int height;
 
-    public ZoomablePanel(DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNumProperty, TrackModell trackModell) {
+    public ZoomablePanel(int height, DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNumProperty, TrackModell trackModell) {
         this.zoom = zoom;
         this.scroll = scroll;
         this.resolution = resolution;
         this.fourthInBar = fourthInBar;
         this.trackModell = trackModell;
         this.measureNum = measureNumProperty.get();
+        this.height = height;
 
         zoom.addListener((observable, oldValue, newValue) -> updateGui());
         scroll.addListener((observable, oldValue, newValue) -> scrollGrid(newValue));

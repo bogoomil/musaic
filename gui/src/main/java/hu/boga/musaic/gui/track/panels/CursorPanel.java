@@ -17,8 +17,8 @@ public class CursorPanel extends NotesPanelBase{
     private static final Logger LOG = LoggerFactory.getLogger(CursorPanel.class);
     private Line cursor;
 
-    public CursorPanel(DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNum, TrackModell trackModell) {
-        super(zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
+    public CursorPanel(int height, DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNum, TrackModell trackModell) {
+        super(height, zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
         EventSystem.EVENT_BUS.register(this);
     }
 
@@ -30,7 +30,7 @@ public class CursorPanel extends NotesPanelBase{
     }
 
     private void initCursor() {
-        cursor = new Line(0, 0, 0, GridPanel.HEIGHT);
+        cursor = new Line(0, 0, 0, height);
         cursor.setStrokeWidth(2);
         cursor.setStroke(Color.RED);
     }

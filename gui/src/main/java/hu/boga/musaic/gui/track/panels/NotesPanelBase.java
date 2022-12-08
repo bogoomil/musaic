@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 public abstract class NotesPanelBase extends ZoomablePanel {
     private static final Logger LOG = LoggerFactory.getLogger(NotesPanelBase.class);
 
-    public NotesPanelBase(DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNum, TrackModell trackModell) {
-        super(zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
+    public NotesPanelBase(int height, DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNum, TrackModell trackModell) {
+        super(height, zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
     }
 
     @Override
@@ -31,7 +31,7 @@ public abstract class NotesPanelBase extends ZoomablePanel {
     }
 
     private void createBorderRectangle(double width) {
-        Rectangle rectangle = new Rectangle(0, 0, width, GridPanel.HEIGHT);
+        Rectangle rectangle = new Rectangle(0, 0, width, height);
         rectangle.setFill(null);
         rectangle.setStroke(Color.DARKORCHID);
         rectangle.setStrokeWidth(2);
