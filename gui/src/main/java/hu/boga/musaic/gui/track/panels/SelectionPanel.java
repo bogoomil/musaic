@@ -2,7 +2,7 @@ package hu.boga.musaic.gui.track.panels;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import hu.boga.musaic.gui.sequence.SequencePresenter;
+import hu.boga.musaic.gui.panels.ZoomablePanel;
 import hu.boga.musaic.gui.track.TrackModell;
 import hu.boga.musaic.gui.track.events.MeasureSelectedEvent;
 import hu.boga.musaic.gui.trackeditor.TrackEditorPresenter;
@@ -30,7 +30,7 @@ public final class SelectionPanel extends NotesPanelBase {
     private final EventBus eventBus;
     private int selectionStartInTicks, selectionEndInTicks;
     private final TrackEditorPresenterFactory trackEditorPresenterFactory;
-    private int measureNum;
+    private int currentMeasureIndex;
 
     public SelectionPanel(int height,
                           DoubleProperty zoom,
@@ -60,9 +60,9 @@ public final class SelectionPanel extends NotesPanelBase {
     }
 
     private void mouseClicked(MouseEvent event) {
-        measureNum = getTickAtX(event.getX()) / (4 * resolution.intValue());
-        int selectionStart = measureNum * resolution.intValue() * 4;
-        int selectionEnd = selectionStart + (4 * resolution.intValue());
+        currentMeasureIndex = getTickAtX(event.getX()) / (fourthInBar.intValue() * resolution.intValue());
+        int selectionStart = currentMeasureIndex * resolution.intValue() * fourthInBar.intValue();
+        int selectionEnd = selectionStart + (fourthInBar.intValue() * resolution.intValue());
 
         if (event.getClickCount() == 2) {
             openTrackEditor();
@@ -89,7 +89,7 @@ public final class SelectionPanel extends NotesPanelBase {
                 trackModell.id,
                 resolution,
                 fourthInBar,
-                new SimpleIntegerProperty(measureNum),
+                new SimpleIntegerProperty(measureNum.intValue()),
                 new SimpleIntegerProperty(0),
                 eventBus));
         createWindow(tryLoadingPane(loader));

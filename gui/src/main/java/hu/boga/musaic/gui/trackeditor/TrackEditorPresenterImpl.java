@@ -6,17 +6,25 @@ import com.google.inject.assistedinject.AssistedInject;
 import hu.boga.musaic.gui.controls.ModeCombo;
 import hu.boga.musaic.gui.controls.NoteNameCombo;
 import hu.boga.musaic.gui.track.TrackModell;
+import hu.boga.musaic.gui.trackeditor.panels.EditorBasePanel;
+import hu.boga.musaic.gui.trackeditor.panels.GridPanel;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.input.MouseEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TrackEditorPresenterImpl implements TrackEditorPresenter{
     private static final Logger LOG = LoggerFactory.getLogger(TrackEditorPresenterImpl.class);
+    @FXML
+    private Group panelGroup;
     @FXML
     private Button btnDuplicateLoop;
     @FXML
@@ -39,6 +47,8 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
     private final EventBus eventBus;
     private final IntegerProperty resolution, fourthInBar, measureNum, currentMeasure;
 
+    private TrackModell trackModell;
+
     @AssistedInject
     public TrackEditorPresenterImpl(TrackEditorService service, @Assisted String trackId,
                                     @Assisted("resolution") IntegerProperty resolution,
@@ -55,5 +65,24 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
         this.currentMeasure = currentMeasure;
 
         LOG.debug("service: {}, modell: {}, measure: {}", service, trackId, measureNum.intValue());
+    }
+
+    public void initialize(){
+        zoomSlider.setMin(1);
+        zoomSlider.setValue(10);
+        service.load(trackId);
+        updateGui();
+
+    }
+
+    @Override
+    public void updateGui() {
+        this.trackModell = service.getModell();
+        initPanels();
+    }
+
+    private void initPanels() {
+        EditorBasePanel panel = new GridPanel(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, trackModell, new SimpleIntegerProperty(10));
+        panelGroup.getChildren().add(panel);
     }
 }

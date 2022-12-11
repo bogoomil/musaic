@@ -103,21 +103,21 @@ public class TrackPresenterImpl implements TrackPresenter{
 
     }
 
-    private void updateGui(){
+    @Override
+    public void updateGui(){
         this.trackModell = trackService.getModell();
         updateMainPanelColor(SequenceModell.COLOR_MAPPING[trackModell.channel]);
         trackName.setText(trackModell.name);
         cbChannel.getSelectionModel().select(trackModell.channel);
         chxbMute.setSelected(trackModell.muted);
+        initPanels();
+    }
 
-        GridPanel gridPanel = new GridPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum);
-        panelGroup.getChildren().add(gridPanel);
-        NotesPanel notesPanel = new NotesPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
-        panelGroup.getChildren().add(notesPanel);
-        CursorPanel cursorPanel = new CursorPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
-        panelGroup.getChildren().add(cursorPanel);
-        SelectionPanel selectionPanel = new SelectionPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModell, eventBus, trackEditorPresenterFactory);
-        panelGroup.getChildren().add(selectionPanel);
+    private void initPanels() {
+        panelGroup.getChildren().add(new GridPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum));
+        panelGroup.getChildren().add(new NotesPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModell));
+        panelGroup.getChildren().add(new CursorPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModell));
+        panelGroup.getChildren().add(new SelectionPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModell, eventBus, trackEditorPresenterFactory));
     }
 
     private void updateMainPanelColor(String color) {

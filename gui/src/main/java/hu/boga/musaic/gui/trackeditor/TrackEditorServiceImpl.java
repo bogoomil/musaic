@@ -26,4 +26,9 @@ public class TrackEditorServiceImpl implements TrackEditorService, TrackBoundary
     public TrackModell getModell() {
         return trackModell;
     }
+
+    @Override
+    public void load(String trackId) {
+        this.boundaryIn.showTrack(trackId);
+    }
 }

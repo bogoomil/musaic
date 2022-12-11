@@ -22,9 +22,9 @@ public class GridPanel extends ScrollablePanel {
 
     private void paintGrid() {
         getChildren().clear();
-        setPrefWidth(measureWidth * measureNum * zoom.doubleValue());
+        setPrefWidth(measureWidth * measureNum.intValue() * zoom.doubleValue());
         int x = 0;
-        for(int i = 0; i < measureNum; i++){
+        for(int i = 0; i < measureNum.intValue(); i++){
             createMeasure(i);
         }
     }

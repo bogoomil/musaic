@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.*?>
 
+<?import javafx.scene.Group?>
 <BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.trackeditor.TrackEditorPresenterImpl">
     <top>
         <AnchorPane fx:id="topAnchorPane" style="-fx-pref-width: 100%;" BorderPane.alignment="CENTER">
@@ -81,6 +82,9 @@
     <center>
         <ScrollPane>
             <content>
+                <AnchorPane>
+                    <Group fx:id="panelGroup"/>
+                </AnchorPane>
             </content>
         </ScrollPane>
     </center>

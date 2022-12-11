@@ -16,7 +16,7 @@ public abstract class ScrollablePanel extends ZoomablePanel {
         this.scroll = scroll;
         scroll.addListener((observable, oldValue, newValue) -> scrollGrid(newValue));
         measureNumProperty.addListener((observable, oldValue, newValue) -> {
-            measureNum = newValue.intValue();
+            measureNum.setValue(newValue.intValue());
             updateGui();
         });
         updateGui();
