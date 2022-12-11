@@ -64,7 +64,7 @@ public class EditorBasePanel extends ZoomablePanel {
     }
 
     protected Pitch getPitchByY(final double y) {
-        final int pitch = (int) ((getHeight() / GuiConstants.NOTE_LINE_HEIGHT - 1) - (y / GuiConstants.NOTE_LINE_HEIGHT));
+        final int pitch = (int) ((getFullHeight() / GuiConstants.NOTE_LINE_HEIGHT) - (y / GuiConstants.NOTE_LINE_HEIGHT));
         return new Pitch(pitch);
     }
 

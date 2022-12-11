@@ -1,14 +1,25 @@
 package hu.boga.musaic.gui.trackeditor.panels;
 
+import hu.boga.musaic.gui.constants.GuiConstants;
 import hu.boga.musaic.gui.track.TrackModell;
+import hu.boga.musaic.gui.trackeditor_old.TrackEditorPanel;
+import hu.boga.musaic.musictheory.enums.NoteName;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class GridPanel extends EditorBasePanel {
 
@@ -33,9 +44,37 @@ public final class GridPanel extends EditorBasePanel {
     }
 
     private void createTexts() {
+        final List<String> noteNames = Arrays.stream(NoteName.values())
+                .sorted(Comparator.comparingInt(NoteName::ordinal).reversed())
+                .map(noteName -> noteName.name()).collect(Collectors.toList());
+        final int increment = GuiConstants.NOTE_LINE_HEIGHT;
+        int y = increment;
+        for (int i = 0; i <= hu.boga.musaic.gui.GuiConstants.OCTAVES; i++) {
+            for (int j = 0; j < 12; j++) {
+                final Text text = new Text(noteNames.get(j) + " " + (hu.boga.musaic.gui.GuiConstants.OCTAVES - i));
+                text.setX(5);
+                text.setY(y - 3);
+                text.setStroke(TrackEditorPanel.TEXT_COLOR);
+                text.setFont(Font.font("arial", FontWeight.LIGHT, 8));
+                y += increment;
+                shapes.getChildren().add(text);
+            }
+        }
     }
 
     private void createHorizontalLines() {
+        double width = getFullWidth();
+        double height = getFullHeight();
+        for (int y = 0; y < height; y += GuiConstants.NOTE_LINE_HEIGHT) {
+            final Line line = new Line();
+            line.setStrokeWidth(0.5);
+            line.setStroke(Color.RED);
+            line.setStartX(0);
+            line.setStartY(y);
+            line.setEndX(width);
+            line.setEndY(y);
+            shapes.getChildren().add(line);
+        }
     }
 
     private void createVerticalLines() {
@@ -50,9 +89,10 @@ public final class GridPanel extends EditorBasePanel {
             line.setEndX(x);
             line.setEndY(getFullHeight());
             if (i % countOf32ndsInBar == 0) {
-                line.setStrokeWidth(2);
+                line.setStrokeWidth(1);
                 line.setStroke(Color.BLACK);
             } else {
+                line.setStrokeWidth(0.5);
                 line.setStroke(Color.RED);
             }
             shapes.getChildren().addAll(line);
@@ -67,22 +107,14 @@ public final class GridPanel extends EditorBasePanel {
     }
 
     private void createMeasure(int i) {
-//        double measureEndX = 0;
         double height = getFullHeight();
         double barW = measureWidth * zoom.doubleValue();
         double rectW = barW / fourthInBar.intValue();
         for (int j = 0; j < fourthInBar.intValue(); j++) {
             double rectX = i * barW + j * rectW;
-//            measureEndX = rectW + rectX;
             Rectangle rectangle = new Rectangle(rectX, 0, rectW, height);
             rectangle.setFill(j % 2 == 0 ? Color.LIGHTSKYBLUE : Color.DEEPSKYBLUE);
             shapes.getChildren().add(rectangle);
         }
-//        Line line = new Line(measureEndX, 0, measureEndX, height);
-//        line.setStroke(Color.RED);
-//        line.setStrokeWidth(1);
-//        shapes.getChildren().add(line);
     }
-
-
 }
