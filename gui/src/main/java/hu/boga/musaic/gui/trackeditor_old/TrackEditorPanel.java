@@ -5,7 +5,7 @@ import com.google.common.eventbus.Subscribe;
 import hu.boga.musaic.core.events.TickEvent;
 import hu.boga.musaic.core.note.NoteBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
-import hu.boga.musaic.gui.noteeditor.NoteRectangle;
+import hu.boga.musaic.gui.trackeditor.NoteRectangle;
 import hu.boga.musaic.gui.trackeditor.events.AddChordEvent;
 import hu.boga.musaic.gui.trackeditor.events.DeleteNoteEvent;
 import hu.boga.musaic.gui.trackeditor.events.NoteMovedEvent;
@@ -291,7 +291,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     private NoteRectangle addNoteRectangle(final NoteDto noteDto) {
 
         final int x = (int) (noteDto.tick * getTickWidth());
-        final NoteRectangle noteRectangle = new NoteRectangle(noteDto, eventBus, noteColor, noteBoundaryIn);
+        final NoteRectangle noteRectangle = new NoteRectangle(null, eventBus, noteColor, noteBoundaryIn);
         noteRectangle.setX(x);
         noteRectangle.setY(this.getYByPitch((int) noteDto.midiCode));
         noteRectangle.setWidth(getTickWidth() * noteDto.length);

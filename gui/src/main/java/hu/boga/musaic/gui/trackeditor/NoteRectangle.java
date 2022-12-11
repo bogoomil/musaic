@@ -1,4 +1,4 @@
-package hu.boga.musaic.gui.noteeditor;
+package hu.boga.musaic.gui.trackeditor;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -26,17 +26,16 @@ public class NoteRectangle extends Rectangle {
     public static final Color SELECTED_COLOR = Color.color(Color.LAWNGREEN.getRed(), Color.LAWNGREEN.getGreen(), Color.LAWNGREEN.getBlue(), 0.8);
     private Color fill;
 
-    private int length;
     private boolean selected;
 
     private EventBus eventBus;
     private double offset;
-    private NoteDto noteDto;
+    private NoteModell noteDto;
     private NoteBoundaryIn noteBoundaryIn;
 
     private static final List<String> selectedIds = new ArrayList<>();
 
-    public NoteRectangle(NoteDto noteDto, EventBus eventBus, Color color, NoteBoundaryIn noteBoundaryIn) {
+    public NoteRectangle(NoteModell noteDto, EventBus eventBus, Color color, NoteBoundaryIn noteBoundaryIn) {
         this.noteDto = noteDto;
         this.eventBus = eventBus;
 

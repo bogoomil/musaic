@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
-public class GridPanel extends ZoomablePanel {
+public class GridPanel extends ScrollablePanel {
 
     public GridPanel(int height, DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNum) {
         super(height, zoom, scroll, resolution, fourthInBar, measureNum, null);
@@ -16,7 +16,7 @@ public class GridPanel extends ZoomablePanel {
     }
 
     @Override
-    void updateGui() {
+    protected void updateGui() {
         paintGrid();
     }
 

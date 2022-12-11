@@ -85,13 +85,18 @@ public class SequencePresenterImpl implements SequencePresenter, ChannelMappingC
     }
 
     public void initialize(){
-        zoomSlider.setValue(10);
+        initZoomSlider();
         initMeasureNum();
         initFourthInBar();
         playButton.setOnAction(event -> play());
         stopButton.setOnAction(event -> stop());
         tempo.textProperty().addListener((observable, oldValue, newValue) -> tempoChanged(newValue));
         path.ifPresentOrElse(path -> open(path), () -> create());
+    }
+
+    private void initZoomSlider() {
+        zoomSlider.setMin(1);
+        zoomSlider.setValue(10);
     }
 
     private void play(){

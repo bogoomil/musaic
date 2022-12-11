@@ -1,12 +1,11 @@
 package hu.boga.musaic.gui.track;
 
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
-import hu.boga.musaic.gui.note.NoteModell;
+import hu.boga.musaic.gui.trackeditor.NoteModell;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class TrackModell {
     public String id;
@@ -21,7 +20,6 @@ public class TrackModell {
         this.channel = dto.channel;
         this.muted = dto.muted;
         this.name = dto.name;
-
         dto.notes.forEach(noteDto -> notes.add(new NoteModell(noteDto)));
     }
 

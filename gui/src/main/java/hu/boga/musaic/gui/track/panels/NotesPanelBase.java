@@ -9,7 +9,7 @@ import javafx.scene.shape.Rectangle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class NotesPanelBase extends ZoomablePanel {
+public abstract class NotesPanelBase extends ScrollablePanel {
     private static final Logger LOG = LoggerFactory.getLogger(NotesPanelBase.class);
 
     public NotesPanelBase(int height, DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNum, TrackModell trackModell) {
@@ -17,11 +17,7 @@ public abstract class NotesPanelBase extends ZoomablePanel {
     }
 
     @Override
-    void updateGui() {
-        paint();
-    }
-
-    abstract void paint();
+    protected abstract void updateGui();
 
     void createBorder() {
         getChildren().clear();

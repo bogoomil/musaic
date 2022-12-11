@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class SelectionPanel extends NotesPanelBase {
+public final class SelectionPanel extends NotesPanelBase {
 
     private static final Logger LOG = LoggerFactory.getLogger(SelectionPanel.class);
     private final EventBus eventBus;
@@ -49,7 +49,7 @@ public class SelectionPanel extends NotesPanelBase {
     }
 
     @Override
-    void paint() {
+    protected void updateGui() {
         createBorder();
         double x = getXByTick(selectionStartInTicks);
         int width = (int) (getXByTick(selectionEndInTicks) - x);

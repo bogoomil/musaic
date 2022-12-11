@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class CursorPanel extends NotesPanelBase{
+public final class CursorPanel extends NotesPanelBase{
 
     private static final Logger LOG = LoggerFactory.getLogger(CursorPanel.class);
     private Line cursor;
@@ -23,7 +23,7 @@ public class CursorPanel extends NotesPanelBase{
     }
 
     @Override
-    void paint() {
+    protected void updateGui() {
         createBorder();
         initCursor();
         getChildren().add(cursor);

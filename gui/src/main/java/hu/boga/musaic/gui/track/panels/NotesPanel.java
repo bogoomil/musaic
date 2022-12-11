@@ -1,6 +1,6 @@
 package hu.boga.musaic.gui.track.panels;
 
-import hu.boga.musaic.gui.note.NoteModell;
+import hu.boga.musaic.gui.trackeditor.NoteModell;
 import hu.boga.musaic.gui.track.TrackModell;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class NotesPanel extends NotesPanelBase {
+public final class NotesPanel extends NotesPanelBase {
     private static final Logger LOG = LoggerFactory.getLogger(NotesPanel.class);
 
     public NotesPanel(int height, DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNum, TrackModell trackModell) {
@@ -22,7 +22,8 @@ public class NotesPanel extends NotesPanelBase {
         });
     }
 
-    void paint() {
+    @Override
+    protected void updateGui() {
         createBorder();
         List<NoteModell> notes = trackModell.getNotesNormalized();
         if (!notes.isEmpty()){
@@ -41,5 +42,4 @@ public class NotesPanel extends NotesPanelBase {
             });
         }
     }
-
 }

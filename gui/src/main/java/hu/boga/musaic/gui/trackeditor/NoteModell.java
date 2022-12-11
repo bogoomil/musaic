@@ -1,15 +1,18 @@
-package hu.boga.musaic.gui.note;
+package hu.boga.musaic.gui.trackeditor;
 
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 import hu.boga.musaic.musictheory.enums.NoteName;
 
+import java.util.UUID;
+
 public class NoteModell {
+    public final String id = UUID.randomUUID().toString();
     public long tick;
     public int midiCode;
-    public long length;
-    public double velocity = 1;
+    public final long length;
+    public double velocity;
 
-    public NoteModell(int midiCode, long tick, long length, double velocity) {
+    private NoteModell(int midiCode, long tick, long length, double velocity) {
         this.midiCode = midiCode;
         this.tick = tick;
         this.length = length;

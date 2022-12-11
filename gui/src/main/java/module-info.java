@@ -36,4 +36,5 @@ module gui {
 
     //kukázni mja
     opens hu.boga.musaic.gui.trackeditor_old to com.google.common;
+    opens hu.boga.musaic.gui.panels to com.google.common;
 }
