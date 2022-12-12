@@ -76,4 +76,8 @@ public class EditorBasePanel extends ZoomablePanel {
         return fourthInBar.intValue() * 8;
     }
 
+    protected int getYByPitch(final int midiCode) {
+        return (octaveNum.intValue() * 12 - 1 - midiCode) * GuiConstants.NOTE_LINE_HEIGHT;
+    }
+
 }

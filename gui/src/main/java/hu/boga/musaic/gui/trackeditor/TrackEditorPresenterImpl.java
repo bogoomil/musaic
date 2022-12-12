@@ -3,11 +3,17 @@ package hu.boga.musaic.gui.trackeditor;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import hu.boga.musaic.gui.controls.ChordTypeCombo;
 import hu.boga.musaic.gui.controls.ModeCombo;
+import hu.boga.musaic.gui.controls.NoteLengthCombo;
 import hu.boga.musaic.gui.controls.NoteNameCombo;
 import hu.boga.musaic.gui.track.TrackModell;
+import hu.boga.musaic.gui.trackeditor.panels.CursorLayer;
 import hu.boga.musaic.gui.trackeditor.panels.EditorBasePanel;
 import hu.boga.musaic.gui.trackeditor.panels.GridPanel;
+import hu.boga.musaic.gui.trackeditor.panels.MyObservable;
+import hu.boga.musaic.musictheory.enums.ChordType;
+import hu.boga.musaic.musictheory.enums.NoteLength;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
@@ -23,6 +29,10 @@ import org.slf4j.LoggerFactory;
 
 public class TrackEditorPresenterImpl implements TrackEditorPresenter{
     private static final Logger LOG = LoggerFactory.getLogger(TrackEditorPresenterImpl.class);
+    @FXML
+    private NoteLengthCombo noteLength;
+    @FXML
+    private ChordTypeCombo chordType;
     @FXML
     private Group panelGroup;
     @FXML
@@ -47,6 +57,9 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
     private final EventBus eventBus;
     private final IntegerProperty resolution, fourthInBar, measureNum, currentMeasure;
 
+    private final MyObservable<NoteLength> noteLengthProperty;
+    private final MyObservable<ChordType> chordtTypeProperty;
+
     private TrackModell trackModell;
 
     @AssistedInject
@@ -64,6 +77,12 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
         this.measureNum = measureNum;
         this.currentMeasure = currentMeasure;
 
+        noteLengthProperty = new MyObservable<>("noteLength");
+        chordtTypeProperty = new MyObservable<>("chordType");
+
+        chordtTypeProperty.setValue(ChordType.NONE);
+        noteLengthProperty.setValue(NoteLength.HARMICKETTED);
+
         LOG.debug("service: {}, modell: {}, measure: {}", service, trackId, measureNum.intValue());
     }
 
@@ -71,6 +90,21 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
         zoomSlider.setMin(1);
         zoomSlider.setValue(10);
         service.load(trackId);
+
+        noteLength.setValue(NoteLength.HARMICKETTED);
+        noteLength.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                noteLengthProperty.setValue(noteLength.getSelectedNoteLength());
+            }
+        });
+        chordType.setValue(ChordType.NONE);
+        chordType.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                chordtTypeProperty.setValue(chordType.getSelectedChordType());
+            }
+        });
         updateGui();
 
     }
@@ -82,7 +116,7 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
     }
 
     private void initPanels() {
-        EditorBasePanel panel = new GridPanel(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, trackModell, new SimpleIntegerProperty(10));
-        panelGroup.getChildren().add(panel);
+        panelGroup.getChildren().add(new GridPanel(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, trackModell, new SimpleIntegerProperty(10)));
+        panelGroup.getChildren().add(new CursorLayer(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, trackModell, new SimpleIntegerProperty(10), noteLengthProperty, chordtTypeProperty));
     }
 }

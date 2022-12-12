@@ -2,11 +2,11 @@
 
 <?import hu.boga.musaic.gui.controls.*?>
 <?import javafx.geometry.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.*?>
 
-<?import javafx.scene.Group?>
 <BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.trackeditor.TrackEditorPresenterImpl">
     <top>
         <AnchorPane fx:id="topAnchorPane" style="-fx-pref-width: 100%;" BorderPane.alignment="CENTER">
@@ -31,12 +31,33 @@
                     </padding>
                 </HBox>
                 <HBox spacing="10.0">
-                    <Label fx:id="zoomLabel">
-                        <graphic>
-                            <FontIcon iconLiteral="mdi-magnify-plus" scaleX="2.0" scaleY="2.0" />
-                        </graphic>
-                    </Label>
-                    <Slider fx:id="zoomSlider" prefHeight="16.0" prefWidth="486.0" />
+                    <VBox spacing="5.0">
+                        <HBox spacing="5.0">
+                            <Label fx:id="zoomLabel">
+                                <graphic>
+                                    <FontIcon iconLiteral="mdi-magnify-plus" scaleX="2.0" scaleY="2.0" />
+                                </graphic>
+                            </Label>
+                            <Slider fx:id="zoomSlider" prefHeight="16.0" prefWidth="486.0" />
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                        </HBox>
+                        <HBox spacing="5.0">
+                     <Label text="Chord" />
+                            <ChordTypeCombo fx:id="chordType" />
+                     <Label text="Length" />
+                            <NoteLengthCombo fx:id="noteLength" />
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                        </HBox>
+
+                    </VBox>
+
+
+
+
                     <VBox>
                         <children>
                             <Button fx:id="btnMoveUp" mnemonicParsing="false">
@@ -83,7 +104,7 @@
         <ScrollPane>
             <content>
                 <AnchorPane>
-                    <Group fx:id="panelGroup"/>
+                    <Group fx:id="panelGroup" />
                 </AnchorPane>
             </content>
         </ScrollPane>

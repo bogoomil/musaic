@@ -105,8 +105,6 @@ y
 Imidigateway/src/main/java/hu/boga/musaic/midigateway/utils/TempoUtil.java,e/c/ece9a5f45bc8418433bb42fcc2a2e51f9ec4c469
 }
 Mgui/src/main/java/hu/boga/musaic/gui/trackeditor_old/SettingsContextMenu.java,4/b/4b76552330a5d7c4ad1399e8daaa565886702cb3
-y
-Igui/src/main/java/hu/boga/musaic/gui/trackeditor_old/CursorRectangle.java,0/0/00b3d101e7642953ebce641dd3b1e3dafbe2393f
 Å
 Qgui/src/main/java/hu/boga/musaic/gui/trackeditor/TrackEditorPresenterFactory.java,f/6/f65c43f68525f47c94cd6ccb9598eddf32dab902
 R
