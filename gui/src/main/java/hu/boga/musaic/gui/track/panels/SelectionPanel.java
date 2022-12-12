@@ -5,11 +5,13 @@ import com.google.common.eventbus.Subscribe;
 import hu.boga.musaic.gui.panels.ZoomablePanel;
 import hu.boga.musaic.gui.track.TrackModell;
 import hu.boga.musaic.gui.track.events.MeasureSelectedEvent;
+import hu.boga.musaic.gui.track.events.TrackEditingFinishedEvent;
 import hu.boga.musaic.gui.trackeditor.TrackEditorPresenter;
 import hu.boga.musaic.gui.trackeditor.TrackEditorPresenterFactory;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
@@ -19,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,6 +113,13 @@ public final class SelectionPanel extends NotesPanelBase {
         newWindow.setScene(new Scene(pane));
         newWindow.initModality(Modality.APPLICATION_MODAL);
         newWindow.initOwner(null);
+        newWindow.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                LOG.debug("track editor closing");
+                eventBus.post(new TrackEditingFinishedEvent(trackModell.id));
+            }
+        });
         newWindow.show();
     }
 

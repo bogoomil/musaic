@@ -49,9 +49,9 @@ public final class GridPanel extends EditorBasePanel {
                 .map(noteName -> noteName.name()).collect(Collectors.toList());
         final int increment = GuiConstants.NOTE_LINE_HEIGHT;
         int y = increment;
-        for (int i = 0; i <= hu.boga.musaic.gui.GuiConstants.OCTAVES; i++) {
+        for (int i = 0; i <= octaveNum.intValue(); i++) {
             for (int j = 0; j < 12; j++) {
-                final Text text = new Text(noteNames.get(j) + " " + (hu.boga.musaic.gui.GuiConstants.OCTAVES - i));
+                final Text text = new Text(noteNames.get(j) + " " + (octaveNum.intValue() - i));
                 text.setX(5);
                 text.setY(y - 3);
                 text.setStroke(TrackEditorPanel.TEXT_COLOR);
@@ -66,15 +66,19 @@ public final class GridPanel extends EditorBasePanel {
         double width = getFullWidth();
         double height = getFullHeight();
         for (int y = 0; y < height; y += GuiConstants.NOTE_LINE_HEIGHT) {
-            final Line line = new Line();
-            line.setStrokeWidth(0.5);
-            line.setStroke(Color.RED);
-            line.setStartX(0);
-            line.setStartY(y);
-            line.setEndX(width);
-            line.setEndY(y);
-            shapes.getChildren().add(line);
+            createHorizontalLine(width, y);
         }
+    }
+
+    private void createHorizontalLine(double width, int y) {
+        final Line line = new Line();
+        line.setStrokeWidth(0.5);
+        line.setStroke(Color.RED);
+        line.setStartX(0);
+        line.setStartY(y);
+        line.setEndX(width);
+        line.setEndY(y);
+        shapes.getChildren().add(line);
     }
 
     private void createVerticalLines() {
@@ -83,21 +87,25 @@ public final class GridPanel extends EditorBasePanel {
         final double w32nds = this.get32ndsWidth();
         double x = 0;
         for (int i = 0; i < countOf32nds; i++) {
-            final Line line = new Line();
-            line.setStartX(x);
-            line.setStartY(0);
-            line.setEndX(x);
-            line.setEndY(getFullHeight());
-            if (i % countOf32ndsInBar == 0) {
-                line.setStrokeWidth(1);
-                line.setStroke(Color.BLACK);
-            } else {
-                line.setStrokeWidth(0.5);
-                line.setStroke(Color.RED);
-            }
-            shapes.getChildren().addAll(line);
+            createVerticalLine(countOf32ndsInBar, x, i);
             x += w32nds;
         }
+    }
+
+    private void createVerticalLine(int countOf32ndsInBar, double x, int i) {
+        final Line line = new Line();
+        line.setStartX(x);
+        line.setStartY(0);
+        line.setEndX(x);
+        line.setEndY(getFullHeight());
+        if (i % countOf32ndsInBar == 0) {
+            line.setStrokeWidth(1);
+            line.setStroke(Color.BLACK);
+        } else {
+            line.setStrokeWidth(0.5);
+            line.setStroke(Color.RED);
+        }
+        shapes.getChildren().addAll(line);
     }
 
     private void createMeasures() {

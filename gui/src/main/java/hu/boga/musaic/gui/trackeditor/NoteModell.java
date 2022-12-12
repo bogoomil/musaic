@@ -6,13 +6,14 @@ import hu.boga.musaic.musictheory.enums.NoteName;
 import java.util.UUID;
 
 public class NoteModell {
-    public final String id = UUID.randomUUID().toString();
+    public final String id;
     public long tick;
     public int midiCode;
     public final long length;
     public double velocity;
 
-    private NoteModell(int midiCode, long tick, long length, double velocity) {
+    private NoteModell(String id, int midiCode, long tick, long length, double velocity) {
+        this.id = id;
         this.midiCode = midiCode;
         this.tick = tick;
         this.length = length;
@@ -20,7 +21,7 @@ public class NoteModell {
     }
 
     public NoteModell(NoteDto noteDto) {
-        this(noteDto.midiCode, noteDto.tick, noteDto.length, noteDto.velocity);
+        this(noteDto.id, noteDto.midiCode, noteDto.tick, noteDto.length, noteDto.velocity);
     }
 
     @Override
@@ -30,7 +31,7 @@ public class NoteModell {
     }
 
     public NoteModell clone(){
-        return new NoteModell(this.midiCode, this.tick, this.length, this.velocity);
+        return new NoteModell(this.id, this.midiCode, this.tick, this.length, this.velocity);
     }
 
     public long getEndTick(){

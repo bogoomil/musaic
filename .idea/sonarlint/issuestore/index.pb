@@ -85,8 +85,6 @@ fmidigateway/src/main/java/hu/boga/musaic/midigateway/converters/SequenceModellT
 bmidigateway/src/test/java/hu/boga/musaic/midigateway/converters/SequenceToModellConverterTest.java,c/7/c7f15ea4572e8ef7d6a883ac0a143cef35394c4f
 Ü
 Vcore/src/test/java/hu/boga/musaic/core/sequence/interactor/SequenceInteractorTest.java,6/9/6973877b063b571f28f4fcdaff883d87c46065d2
-Ü
-Vcore/src/main/java/hu/boga/musaic/core/track/interactor/TrackPropertiesInteractor.java,1/6/16c789cb5afa089db0aa9dca7b4b81139567626a
 ä
 Zcore/src/test/java/hu/boga/musaic/core/track/interactor/TrackPropertiesInteractorTest.java,c/a/cafa518a2cee35b6019c874deab5526669e33284
 n
@@ -107,5 +105,3 @@ Imidigateway/src/main/java/hu/boga/musaic/midigateway/utils/TempoUtil.java,e/c/
 Mgui/src/main/java/hu/boga/musaic/gui/trackeditor_old/SettingsContextMenu.java,4/b/4b76552330a5d7c4ad1399e8daaa565886702cb3
 Å
 Qgui/src/main/java/hu/boga/musaic/gui/trackeditor/TrackEditorPresenterFactory.java,f/6/f65c43f68525f47c94cd6ccb9598eddf32dab902
-R
-"gui/src/main/java/module-info.java,7/e/7eb51de7783f19d325cce8c4c0170ca79a02ba70

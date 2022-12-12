@@ -18,7 +18,7 @@ public class EditorBasePanel extends ZoomablePanel {
 
     private static final Logger LOG = LoggerFactory.getLogger(EditorBasePanel.class);
 
-    private final IntegerProperty octaveNum;
+    protected final IntegerProperty octaveNum;
     private Optional<Rectangle> border = Optional.empty();
 
     public EditorBasePanel(DoubleProperty zoom,
@@ -31,9 +31,6 @@ public class EditorBasePanel extends ZoomablePanel {
         this.octaveNum = octaveNum;
         this.octaveNum.addListener((observable, oldValue, newValue) -> updateGui());
 
-        this.addEventHandler(MouseEvent.MOUSE_CLICKED, ev -> {
-            LOG.debug("tick: {}, pitch: {}", getTickAtX(ev.getX()), getPitchByY(ev.getY()));
-        });
     }
 
     @Override
@@ -79,5 +76,10 @@ public class EditorBasePanel extends ZoomablePanel {
     protected int getYByPitch(final int midiCode) {
         return (octaveNum.intValue() * 12 - 1 - midiCode) * GuiConstants.NOTE_LINE_HEIGHT;
     }
+
+    protected double getTickWidth() {
+        return measureWidth * zoom.doubleValue() / (this.resolution.intValue() * fourthInBar.intValue());
+    }
+
 
 }

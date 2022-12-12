@@ -28,7 +28,6 @@ public class Cursor extends Pane {
         if(chordType != ChordType.NONE){
             Chord chord = Chord.getChord(new Pitch(0), chordType);
             Arrays.stream(chord.getPitches()).sorted(Comparator.comparingInt(p -> p.getMidiCode())).forEach(pitch -> {
-                LOG.debug("Pitch: {}", pitch.getMidiCode());
                 createRectangle(pitch.getMidiCode());
             });
         } else {

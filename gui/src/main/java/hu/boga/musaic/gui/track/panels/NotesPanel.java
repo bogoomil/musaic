@@ -16,7 +16,6 @@ public final class NotesPanel extends NotesPanelBase {
 
     public NotesPanel(int height, DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNum, TrackModell trackModell) {
         super(height, zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
-        LOG.debug("track modell: {}", trackModell.id);
         this.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             LOG.debug("event x: {}, tick: {}", event.getX(), getTickAtX(event.getX()));
         });

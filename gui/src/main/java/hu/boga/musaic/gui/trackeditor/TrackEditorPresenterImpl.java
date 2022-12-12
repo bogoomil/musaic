@@ -8,10 +8,7 @@ import hu.boga.musaic.gui.controls.ModeCombo;
 import hu.boga.musaic.gui.controls.NoteLengthCombo;
 import hu.boga.musaic.gui.controls.NoteNameCombo;
 import hu.boga.musaic.gui.track.TrackModell;
-import hu.boga.musaic.gui.trackeditor.panels.CursorLayer;
-import hu.boga.musaic.gui.trackeditor.panels.EditorBasePanel;
-import hu.boga.musaic.gui.trackeditor.panels.GridPanel;
-import hu.boga.musaic.gui.trackeditor.panels.MyObservable;
+import hu.boga.musaic.gui.trackeditor.panels.*;
 import hu.boga.musaic.musictheory.enums.ChordType;
 import hu.boga.musaic.musictheory.enums.NoteLength;
 import javafx.beans.property.IntegerProperty;
@@ -117,6 +114,7 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
 
     private void initPanels() {
         panelGroup.getChildren().add(new GridPanel(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, trackModell, new SimpleIntegerProperty(10)));
-        panelGroup.getChildren().add(new CursorLayer(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, trackModell, new SimpleIntegerProperty(10), noteLengthProperty, chordtTypeProperty));
+//        panelGroup.getChildren().add(new NotesLayer(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, trackModell, new SimpleIntegerProperty(10), eventBus));
+        panelGroup.getChildren().add(new NotesLayer(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, trackModell, new SimpleIntegerProperty(10), noteLengthProperty, chordtTypeProperty, eventBus));
     }
 }

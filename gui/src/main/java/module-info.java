@@ -27,7 +27,7 @@ module gui {
     opens hu.boga.musaic.gui.sequence to javafx.fxml, com.google.guice, com.google.inject, com.google.common;
     exports hu.boga.musaic.gui.sequence to com.google.guice, com.google.inject;
     exports hu.boga.musaic.gui.track to javafx.fxml, com.google.guice;
-    opens hu.boga.musaic.gui.track to javafx.fxml;
+    opens hu.boga.musaic.gui.track to javafx.fxml, com.google.common;
     exports hu.boga.musaic.gui.track.events to com.google.guice, javafx.fxml;
     opens hu.boga.musaic.gui.track.events to javafx.fxml;
     opens hu.boga.musaic.gui.track.panels to com.google.common;

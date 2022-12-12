@@ -212,12 +212,6 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         cursor.setPrefWidth(currentNoteLength.getErtek() * get32ndsWidth());
     }
 
-    @Subscribe
-    private void handleNoteMovedEvent(NoteRectangle.NoteMovedEvent even){
-        if(!movedNoteIds.contains(even.getId())){
-            movedNoteIds.add(even.getId());
-        }
-    }
 
     @Subscribe
     private void handleLoopStartEvent(SettingsContextMenu.LoopStartEvent event){
@@ -291,7 +285,7 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
     private NoteRectangle addNoteRectangle(final NoteDto noteDto) {
 
         final int x = (int) (noteDto.tick * getTickWidth());
-        final NoteRectangle noteRectangle = new NoteRectangle(null, eventBus, noteColor, noteBoundaryIn);
+        final NoteRectangle noteRectangle = new NoteRectangle(null, eventBus, noteColor);
         noteRectangle.setX(x);
         noteRectangle.setY(this.getYByPitch((int) noteDto.midiCode));
         noteRectangle.setWidth(getTickWidth() * noteDto.length);
@@ -300,12 +294,6 @@ public class TrackEditorPanel extends TrackEditorBasePanel {
         return noteRectangle;
     }
 
-    @Subscribe
-    private void handleMouseReleasedOnNoteEvent(NoteRectangle.MouseReleasedEvent event) {
-        if(movedNoteIds.size() > 0){
-            performNotesMove();
-        }
-    }
 
     private void performNotesMove() {
         List<NoteMovedEvent> events = new ArrayList<>();

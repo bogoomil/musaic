@@ -1,10 +1,12 @@
 package hu.boga.musaic.gui.track;
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import hu.boga.musaic.gui.constants.GuiConstants;
 import hu.boga.musaic.gui.sequence.SequenceModell;
+import hu.boga.musaic.gui.track.events.TrackEditingFinishedEvent;
 import hu.boga.musaic.gui.track.panels.CursorPanel;
 import hu.boga.musaic.gui.track.panels.GridPanel;
 import hu.boga.musaic.gui.track.panels.NotesPanel;
@@ -143,7 +145,6 @@ public class TrackPresenterImpl implements TrackPresenter{
 
     @FXML
     private void onChannelChanged(int newValue) {
-        LOG.debug("channel changed: {}", newValue);
         trackService.updateChannel(trackModell.id, newValue);
         updateGui();
     }
@@ -159,5 +160,14 @@ public class TrackPresenterImpl implements TrackPresenter{
         LOG.debug("mute");
         boolean muted = chxbMute.isSelected();
         trackService.mute(trackModell.id, muted);
+    }
+
+    @Subscribe
+    private void handleTrackEditingFnishedEvent(TrackEditingFinishedEvent event){
+        if(trackModell.id.equals(event.getTrackId())){
+            LOG.debug("track editing finished: {}", event.getTrackId());
+            trackService.load(event.getTrackId());
+            updateGui();
+        }
     }
 }
