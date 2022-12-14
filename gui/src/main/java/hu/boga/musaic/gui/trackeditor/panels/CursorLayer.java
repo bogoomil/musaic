@@ -1,6 +1,5 @@
 package hu.boga.musaic.gui.trackeditor.panels;
 
-import hu.boga.musaic.gui.track.TrackModell;
 import hu.boga.musaic.musictheory.enums.ChordType;
 import hu.boga.musaic.musictheory.enums.NoteLength;
 import javafx.beans.property.DoubleProperty;
@@ -16,11 +15,10 @@ public class CursorLayer extends EditorBasePanel {
                        IntegerProperty resolution,
                        IntegerProperty fourthInBar,
                        IntegerProperty measureNumProperty,
-                       TrackModell trackModell,
                        IntegerProperty octaveNum,
                        Observable<NoteLength> noteLengthObservable,
                        Observable<ChordType> chordTypeObservable) {
-        super(zoom, resolution, fourthInBar, measureNumProperty, trackModell, octaveNum);
+        super(zoom, resolution, fourthInBar, measureNumProperty, octaveNum);
         this.getChildren().add(cursor);
         noteLengthObservable.addPropertyChangeListener(this::noteLengthPropertyChange);
         chordTypeObservable.addPropertyChangeListener(this::chordTypePropertyChange);

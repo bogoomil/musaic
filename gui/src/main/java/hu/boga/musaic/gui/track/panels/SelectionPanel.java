@@ -8,6 +8,7 @@ import hu.boga.musaic.gui.track.events.MeasureSelectedEvent;
 import hu.boga.musaic.gui.track.events.TrackEditingFinishedEvent;
 import hu.boga.musaic.gui.trackeditor.TrackEditorPresenter;
 import hu.boga.musaic.gui.trackeditor.TrackEditorPresenterFactory;
+import hu.boga.musaic.gui.trackeditor.panels.Observable;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -25,6 +26,7 @@ import javafx.stage.WindowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 
 public final class SelectionPanel extends NotesPanelBase {
@@ -34,6 +36,7 @@ public final class SelectionPanel extends NotesPanelBase {
     private int selectionStartInTicks, selectionEndInTicks;
     private final TrackEditorPresenterFactory trackEditorPresenterFactory;
     private int currentMeasureIndex;
+    private final Observable<TrackModell> trackModellObservable;
 
     public SelectionPanel(int height,
                           DoubleProperty zoom,
@@ -41,14 +44,19 @@ public final class SelectionPanel extends NotesPanelBase {
                           IntegerProperty resolution,
                           IntegerProperty fourthInBar,
                           IntegerProperty measureNum,
-                          TrackModell trackModell,
+                          Observable<TrackModell> trackModellObservable,
                           EventBus eventBus,
                           TrackEditorPresenterFactory trackEditorPresenterFactory) {
-        super(height, zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
+        super(height, zoom, scroll, resolution, fourthInBar, measureNum);
         this.eventBus = eventBus;
         this.eventBus.register(this);
         this.trackEditorPresenterFactory = trackEditorPresenterFactory;
+        this.trackModellObservable = trackModellObservable;
+        trackModellObservable.addPropertyChangeListener(propertyChangeEvent -> trackModellChanged(propertyChangeEvent));
         addEventHandler(MouseEvent.MOUSE_CLICKED, event -> mouseClicked(event));
+    }
+
+    private void trackModellChanged(PropertyChangeEvent propertyChangeEvent) {
     }
 
     @Override
@@ -75,7 +83,6 @@ public final class SelectionPanel extends NotesPanelBase {
     }
 
     private void openTrackEditor() {
-        LOG.debug("creating editor: {}", trackModell.id);
         createTrackEditor();
     }
 
@@ -89,7 +96,7 @@ public final class SelectionPanel extends NotesPanelBase {
     private void createTrackEditor() {
         FXMLLoader loader = new FXMLLoader(TrackEditorPresenter.class.getResource("track-editor.fxml"));
         loader.setControllerFactory(c -> trackEditorPresenterFactory.create(
-                trackModell.id,
+                trackModellObservable,
                 resolution,
                 fourthInBar,
                 new SimpleIntegerProperty(measureNum.intValue()),
@@ -117,7 +124,7 @@ public final class SelectionPanel extends NotesPanelBase {
             @Override
             public void handle(WindowEvent event) {
                 LOG.debug("track editor closing");
-                eventBus.post(new TrackEditingFinishedEvent(trackModell.id));
+                eventBus.post(new TrackEditingFinishedEvent(trackModellObservable.getName()));
             }
         });
         newWindow.show();

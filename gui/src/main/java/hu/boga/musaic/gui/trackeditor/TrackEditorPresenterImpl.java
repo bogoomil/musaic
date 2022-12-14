@@ -8,6 +8,7 @@ import hu.boga.musaic.gui.controls.ModeCombo;
 import hu.boga.musaic.gui.controls.NoteLengthCombo;
 import hu.boga.musaic.gui.controls.NoteNameCombo;
 import hu.boga.musaic.gui.track.TrackModell;
+import hu.boga.musaic.gui.track.TrackService;
 import hu.boga.musaic.gui.trackeditor.panels.*;
 import hu.boga.musaic.musictheory.enums.ChordType;
 import hu.boga.musaic.musictheory.enums.NoteLength;
@@ -22,6 +23,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.beans.PropertyChangeEvent;
 
 public class TrackEditorPresenterImpl implements TrackEditorPresenter{
     private static final Logger LOG = LoggerFactory.getLogger(TrackEditorPresenterImpl.class);
@@ -48,25 +51,23 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
     @FXML
     private Button btnMoveDown;
 
-    private final TrackEditorService service;
-    private final String trackId;
+    private final TrackService service;
     private final EventBus eventBus;
     private final IntegerProperty resolution, fourthInBar, measureNum, currentMeasure;
 
     private final Observable<NoteLength> noteLengthProperty;
     private final Observable<ChordType> chordtTypeProperty;
 
-    private TrackModell trackModell;
+    private final Observable<TrackModell> trackModellObservable;
 
     @AssistedInject
-    public TrackEditorPresenterImpl(TrackEditorService service, @Assisted String trackId,
+    public TrackEditorPresenterImpl(TrackService service, @Assisted Observable<TrackModell> observable,
                                     @Assisted("resolution") IntegerProperty resolution,
                                     @Assisted("fourthInBar") IntegerProperty fourthInBar,
                                     @Assisted("measureNum") IntegerProperty measureNum,
                                     @Assisted("currentMeasure") IntegerProperty currentMeasure,
                                     @Assisted("eventBus") EventBus eventBus) {
         this.service = service;
-        this.trackId = trackId;
         this.eventBus = eventBus;
         this.resolution = resolution;
         this.fourthInBar = fourthInBar;
@@ -78,15 +79,14 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
 
         chordtTypeProperty.setValue(ChordType.NONE);
         noteLengthProperty.setValue(NoteLength.HARMICKETTED);
+        this.trackModellObservable = observable;
 
-        LOG.debug("service: {}, modell: {}, measure: {}", service, trackId, measureNum.intValue());
+        LOG.debug("service: {}, modell: {}, measure: {}", service, trackModellObservable.getName(), measureNum.intValue());
     }
 
     public void initialize(){
         zoomSlider.setMin(1);
         zoomSlider.setValue(10);
-        service.load(trackId);
-
         noteLength.setValue(NoteLength.HARMICKETTED);
         noteLength.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
@@ -101,19 +101,15 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
                 chordtTypeProperty.setValue(chordType.getSelectedChordType());
             }
         });
-        updateGui();
 
-    }
-
-    @Override
-    public void updateGui() {
-        this.trackModell = service.getModell();
         initPanels();
+        service.load(trackModellObservable.getName());
+
     }
+
 
     private void initPanels() {
-        panelGroup.getChildren().add(new GridPanel(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, trackModell, new SimpleIntegerProperty(10)));
-//        panelGroup.getChildren().add(new NotesLayer(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, trackModell, new SimpleIntegerProperty(10), eventBus));
-        panelGroup.getChildren().add(new NotesLayer(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, trackModell, new SimpleIntegerProperty(10), noteLengthProperty, chordtTypeProperty, eventBus));
+        panelGroup.getChildren().add(new GridPanel(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, new SimpleIntegerProperty(10)));
+        panelGroup.getChildren().add(new NotesLayer(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, trackModellObservable, new SimpleIntegerProperty(10), noteLengthProperty, chordtTypeProperty, eventBus));
     }
 }

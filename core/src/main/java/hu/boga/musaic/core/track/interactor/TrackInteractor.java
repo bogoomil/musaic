@@ -7,6 +7,7 @@ import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
+import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.core.track.interactor.converters.TrackModelltoDtoConverter;
 import hu.boga.musaic.musictheory.Chord;
 import hu.boga.musaic.musictheory.Pitch;
@@ -21,13 +22,67 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class TrackInteractor implements TrackBoundaryIn {
+    private static final Logger LOG = LoggerFactory.getLogger(TrackInteractor.class);
 
-    TrackBoundaryOut boundaryOut;
+    private TrackBoundaryOut boundaryOut;
 
     @Inject
     public TrackInteractor(TrackBoundaryOut boundaryOut) {
         this.boundaryOut = boundaryOut;
     }
+
+    @Override
+    public void setMuted(String id, boolean muted) {
+        InMemorySequenceModellStore.getSequenceByTrackId(id).ifPresent(sequenceModell -> {
+            sequenceModell.getTrackById(id).ifPresent(trackModell -> {
+                trackModell.muted = muted;
+                LOG.debug("track muted: {}", id);
+            });
+        });
+    }
+
+    @Override
+    public void load(String trackId) {
+        InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
+            boundaryOut.displayTrack(new TrackModelltoDtoConverter(trackModell).convert());
+        });
+    }
+
+    @Override
+    public void updateTrackChannel(String trackId, int channel) {
+        InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
+            trackModell.channel = channel;
+            boundaryOut.displayTrack(new TrackModelltoDtoConverter(trackModell).convert());
+        });
+    }
+
+    @Override
+    public void updateTrackName(TrackDto trackDto) {
+        InMemorySequenceModellStore.getTrackById(trackDto.id).ifPresent(trackModell -> {
+            LOG.debug("updating track name: {}", trackDto.name);
+            trackModell.setName(trackDto.name);
+            boundaryOut.displayTrack(new TrackModelltoDtoConverter(trackModell).convert());
+        });
+    }
+
+    @Override
+    public void updateVolume(String trackId, double velocityPercent) {
+        InMemorySequenceModellStore.getTrackById(trackId).ifPresent(trackModell -> {
+            trackModell.getNotes().forEach(noteModell -> noteModell.velocity = calcNewVelocity(noteModell.velocity, velocityPercent));
+            LOG.debug("updating volume: {}, vol: {}", trackId, velocityPercent);
+            boundaryOut.displayTrack(new TrackModelltoDtoConverter(trackModell).convert());
+        });
+    }
+
+    private double calcNewVelocity(double current, double percent){
+        double velocity = current + percent;
+        return isVelocityOutOfBounds(velocity) ? current : velocity;
+    }
+
+    private boolean isVelocityOutOfBounds(double velocity){
+        return velocity < 0 || velocity > 1;
+    }
+
 
     @Override
     public void addChord(String trackId, int tick, int pitch, int length, ChordType chordType) {
@@ -36,7 +91,7 @@ public class TrackInteractor implements TrackBoundaryIn {
                 addNotesToTrack(tick, pitch, length, chordType, sequenceModell, trackModell);
             });
         });
-        showTrack(trackId);
+        load(trackId);
     }
 
     @Override
@@ -48,7 +103,7 @@ public class TrackInteractor implements TrackBoundaryIn {
                 });
             });
         });
-        showTrack(trackId);
+        load(trackId);
     }
 
     @Override
@@ -57,7 +112,7 @@ public class TrackInteractor implements TrackBoundaryIn {
             trackModell.getNoteModellById(noteId).ifPresent(noteModell -> {
                 noteModell.tick = newTick;
             });
-            showTrack(trackModell.getId());
+            load(trackModell.getId());
         });
     }
 
@@ -89,15 +144,6 @@ public class TrackInteractor implements TrackBoundaryIn {
         });
     }
 
-    @Override
-    public void showTrack(String id) {
-        InMemorySequenceModellStore.getSequenceByTrackId(id).ifPresent(sequenceModell -> {
-            sequenceModell.getTrackById(id).ifPresent(trackModell -> {
-                boundaryOut.displayTrack(new TrackModelltoDtoConverter(trackModell).convert());
-            });
-        });
-    }
-
     private void addNotesToTrack(int tick, int pitch, int length, ChordType chordType, SequenceModell sequenceModell, TrackModell trackModell) {
         final int computedLength = length * sequenceModell.getTicksIn32nds();
         List<NoteModell> notes = prepareNotesToAdd(tick, pitch, chordType, computedLength, trackModell.channel);
@@ -118,4 +164,5 @@ public class TrackInteractor implements TrackBoundaryIn {
         }
         return notes;
     }
+
 }

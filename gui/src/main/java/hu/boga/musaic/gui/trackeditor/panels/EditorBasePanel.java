@@ -2,11 +2,9 @@ package hu.boga.musaic.gui.trackeditor.panels;
 
 import hu.boga.musaic.gui.constants.GuiConstants;
 import hu.boga.musaic.gui.panels.ZoomablePanel;
-import hu.boga.musaic.gui.track.TrackModell;
 import hu.boga.musaic.musictheory.Pitch;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.slf4j.Logger;
@@ -25,9 +23,8 @@ public class EditorBasePanel extends ZoomablePanel {
                            IntegerProperty resolution,
                            IntegerProperty fourthInBar,
                            IntegerProperty measureNumProperty,
-                           TrackModell trackModell,
                            IntegerProperty octaveNum) {
-        super(zoom, resolution, fourthInBar, measureNumProperty, trackModell);
+        super(zoom, resolution, fourthInBar, measureNumProperty);
         this.octaveNum = octaveNum;
         this.octaveNum.addListener((observable, oldValue, newValue) -> updateGui());
 

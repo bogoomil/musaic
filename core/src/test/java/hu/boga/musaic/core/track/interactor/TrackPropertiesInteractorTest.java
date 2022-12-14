@@ -5,14 +5,11 @@ import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
-import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryOut;
+import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
@@ -20,10 +17,10 @@ import static org.mockito.ArgumentMatchers.eq;
 class TrackPropertiesInteractorTest {
     public static final String NEW_NAME = "NEW_NAME";
     public static final String TRACK_ID = "TRACK_ID";
-    TrackPropertiesInteractor trackPropertiesInteractor;
+    TrackInteractor trackPropertiesInteractor;
     private SequenceModell modell;
     private TrackModell trackModell;
-    private TrackPropertiesBoundaryOut boundaryOut;
+    private TrackBoundaryOut boundaryOut;
     private NoteModell noteModell;
 
 
@@ -32,10 +29,10 @@ class TrackPropertiesInteractorTest {
 
         InMemorySequenceModellStore.clear();
 
-        boundaryOut = Mockito.mock(TrackPropertiesBoundaryOut.class);
+        boundaryOut = Mockito.mock(TrackBoundaryOut.class);
         TrackBoundaryIn boundaryIn = Mockito.mock(TrackBoundaryIn.class);
 
-        trackPropertiesInteractor = new TrackPropertiesInteractor(boundaryOut);
+        trackPropertiesInteractor = new TrackInteractor(boundaryOut);
 
         modell = new SequenceModell();
         trackModell = new TrackModell();

@@ -1,10 +1,12 @@
 package hu.boga.musaic.gui.track;
 
+import hu.boga.musaic.gui.trackeditor.panels.Observable;
+
 public interface TrackService {
-    TrackModell getModell();
     void updateVolume(String id, double v);
     void updateName(String id, String newName);
     void updateChannel(String id, int newValue);
     void mute(String id, boolean value);
     void load(String trackId);
+    void addObservable(Observable<TrackModell> observable);
 }

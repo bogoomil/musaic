@@ -18,7 +18,7 @@ public final class CursorPanel extends NotesPanelBase{
     private Line cursor;
 
     public CursorPanel(int height, DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNum, TrackModell trackModell) {
-        super(height, zoom, scroll, resolution, fourthInBar, measureNum, trackModell);
+        super(height, zoom, scroll, resolution, fourthInBar, measureNum);
         EventSystem.EVENT_BUS.register(this);
     }
 

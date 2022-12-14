@@ -8,15 +8,13 @@ import javafx.scene.layout.Pane;
 public abstract class ZoomablePanel extends Pane {
     protected final DoubleProperty zoom;
     protected final IntegerProperty resolution, fourthInBar, measureNum;
-    protected TrackModell trackModell;
 
     protected final static int measureWidth = 10;
 
-    public ZoomablePanel(DoubleProperty zoom, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNumProperty, TrackModell trackModell) {
+    public ZoomablePanel(DoubleProperty zoom, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNumProperty) {
         this.zoom = zoom;
         this.resolution = resolution;
         this.fourthInBar = fourthInBar;
-        this.trackModell = trackModell;
         this.measureNum = measureNumProperty;
         zoom.addListener((observable, oldValue, newValue) -> updateGui());
     }

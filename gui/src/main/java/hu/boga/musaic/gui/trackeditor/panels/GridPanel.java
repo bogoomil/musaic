@@ -2,7 +2,6 @@ package hu.boga.musaic.gui.trackeditor.panels;
 
 import hu.boga.musaic.gui.constants.GuiConstants;
 import hu.boga.musaic.gui.track.TrackModell;
-import hu.boga.musaic.gui.trackeditor_old.TrackEditorPanel;
 import hu.boga.musaic.musictheory.enums.NoteName;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -27,8 +26,8 @@ public final class GridPanel extends EditorBasePanel {
 
     Group shapes = new Group();
 
-    public GridPanel(DoubleProperty zoom, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNumProperty, TrackModell trackModell, IntegerProperty octaveNum) {
-        super(zoom, resolution, fourthInBar, measureNumProperty, trackModell, octaveNum);
+    public GridPanel(DoubleProperty zoom, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNumProperty, IntegerProperty octaveNum) {
+        super(zoom, resolution, fourthInBar, measureNumProperty, octaveNum);
         getChildren().add(shapes);
         updateGui();
     }
@@ -54,7 +53,7 @@ public final class GridPanel extends EditorBasePanel {
                 final Text text = new Text(noteNames.get(j) + " " + (octaveNum.intValue() - i));
                 text.setX(5);
                 text.setY(y - 3);
-                text.setStroke(TrackEditorPanel.TEXT_COLOR);
+                text.setStroke(Color.WHITE);
                 text.setFont(Font.font("arial", FontWeight.LIGHT, 8));
                 y += increment;
                 shapes.getChildren().add(text);

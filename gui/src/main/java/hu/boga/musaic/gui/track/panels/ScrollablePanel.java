@@ -10,8 +10,8 @@ public abstract class ScrollablePanel extends ZoomablePanel {
     protected final int height;
 
 
-    public ScrollablePanel(int height, DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNumProperty, TrackModell trackModell) {
-        super(zoom, resolution, fourthInBar, measureNumProperty, trackModell);
+    public ScrollablePanel(int height, DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNumProperty) {
+        super(zoom, resolution, fourthInBar, measureNumProperty);
         this.height = height;
         this.scroll = scroll;
         scroll.addListener((observable, oldValue, newValue) -> scrollGrid(newValue));

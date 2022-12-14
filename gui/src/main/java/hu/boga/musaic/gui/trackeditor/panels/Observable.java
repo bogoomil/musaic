@@ -25,4 +25,8 @@ public class Observable<T> {
         support.firePropertyChange(name, this.value, value);
         this.value = value;
     }
+
+    public String getName() {
+        return name;
+    }
 }

@@ -12,6 +12,7 @@ import hu.boga.musaic.gui.track.panels.GridPanel;
 import hu.boga.musaic.gui.track.panels.NotesPanel;
 import hu.boga.musaic.gui.track.panels.SelectionPanel;
 import hu.boga.musaic.gui.trackeditor.TrackEditorPresenterFactory;
+import hu.boga.musaic.gui.trackeditor.panels.Observable;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.value.ChangeListener;
@@ -22,20 +23,18 @@ import javafx.scene.Group;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.beans.PropertyChangeEvent;
+
 public class TrackPresenterImpl implements TrackPresenter{
 
     private static final Logger LOG = LoggerFactory.getLogger(TrackPresenterImpl.class);
-
     @FXML
-    private Group panelGroup;
+    private AnchorPane panelGroupAnchor;
     @FXML
     private BorderPane mainPanel;
     @FXML
@@ -54,6 +53,7 @@ public class TrackPresenterImpl implements TrackPresenter{
     private ChangeListener channelListener = (observable, oldValue, newValue) -> onChannelChanged(Integer.parseInt("" + newValue));
     private ChangeListener<String> nameChangeListener = (observable, oldValue, newValue) -> onNameChanged(newValue);
     private final TrackEditorPresenterFactory trackEditorPresenterFactory;
+    private final Observable<TrackModell> trackModellObservable;
 
     @AssistedInject
     public TrackPresenterImpl(TrackService trackService,
@@ -76,6 +76,19 @@ public class TrackPresenterImpl implements TrackPresenter{
         this.eventBus = eventBus;
         this.eventBus.register(this);
         this.trackEditorPresenterFactory = trackEditorPresenterFactory;
+
+        trackModellObservable = new Observable<>(trackId);
+        trackService.addObservable(trackModellObservable);
+        trackModellObservable.addPropertyChangeListener(propertyChangeEvent -> trackModellChanged(propertyChangeEvent));
+    }
+
+    private void trackModellChanged(PropertyChangeEvent propertyChangeEvent) {
+        this.trackModell = (TrackModell) propertyChangeEvent.getNewValue();
+        updateMainPanelColor(SequenceModell.COLOR_MAPPING[trackModell.channel]);
+        trackName.setText(trackModell.name);
+        cbChannel.getSelectionModel().select(trackModell.channel);
+        chxbMute.setSelected(trackModell.muted);
+
     }
 
     private void updateScroll(Number newValue) {
@@ -87,10 +100,10 @@ public class TrackPresenterImpl implements TrackPresenter{
     }
 
     public void initialize(){
+        panelGroupAnchor.getChildren().add(initPanels());
         cbChannel.getItems().addAll(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15);
         removeListeners();
         trackService.load(trackId);
-        updateGui();
         initListeners();
     }
 
@@ -105,21 +118,13 @@ public class TrackPresenterImpl implements TrackPresenter{
 
     }
 
-    @Override
-    public void updateGui(){
-        this.trackModell = trackService.getModell();
-        updateMainPanelColor(SequenceModell.COLOR_MAPPING[trackModell.channel]);
-        trackName.setText(trackModell.name);
-        cbChannel.getSelectionModel().select(trackModell.channel);
-        chxbMute.setSelected(trackModell.muted);
-        initPanels();
-    }
-
-    private void initPanels() {
+    private Group initPanels() {
+        Group panelGroup = new Group();
         panelGroup.getChildren().add(new GridPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum));
-        panelGroup.getChildren().add(new NotesPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModell));
+        panelGroup.getChildren().add(new NotesPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModellObservable));
         panelGroup.getChildren().add(new CursorPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModell));
-        panelGroup.getChildren().add(new SelectionPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModell, eventBus, trackEditorPresenterFactory));
+        panelGroup.getChildren().add(new SelectionPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModellObservable, eventBus, trackEditorPresenterFactory));
+        return panelGroup;
     }
 
     private void updateMainPanelColor(String color) {
@@ -146,7 +151,6 @@ public class TrackPresenterImpl implements TrackPresenter{
     @FXML
     private void onChannelChanged(int newValue) {
         trackService.updateChannel(trackModell.id, newValue);
-        updateGui();
     }
 
     @FXML
@@ -167,7 +171,6 @@ public class TrackPresenterImpl implements TrackPresenter{
         if(trackModell.id.equals(event.getTrackId())){
             LOG.debug("track editing finished: {}", event.getTrackId());
             trackService.load(event.getTrackId());
-            updateGui();
         }
     }
 }

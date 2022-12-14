@@ -104,11 +104,6 @@ class TrackInteractorTest {
         assertEquals(100, noteModell.tick);
     }
 
-    @Test
-    void showTrack(){
-        trackInteractor.showTrack(trackModell.getId());
-        Mockito.verify(boundaryOut).displayTrack(Mockito.any());
-    }
 
     @Test
     void duplicate(){

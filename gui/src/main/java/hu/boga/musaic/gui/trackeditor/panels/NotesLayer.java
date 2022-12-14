@@ -13,31 +13,44 @@ import javafx.scene.paint.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.beans.PropertyChangeEvent;
+
 public final class NotesLayer extends CursorLayer{
 
     private static final Logger LOG = LoggerFactory.getLogger(NotesLayer.class);
 
     final Group notesGroup = new Group();
     final EventBus eventBus;
+    final Observable<TrackModell> trackModellObservable;
+    private TrackModell trackModell;
 
-    public NotesLayer(DoubleProperty zoom, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNumProperty, TrackModell trackModell, IntegerProperty octaveNum, Observable<NoteLength> noteLengthObservable, Observable<ChordType> chordTypeObservable, EventBus eventBus) {
-        super(zoom, resolution, fourthInBar, measureNumProperty, trackModell, octaveNum, noteLengthObservable, chordTypeObservable);
+    public NotesLayer(DoubleProperty zoom, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNumProperty, Observable<TrackModell> trackModellObservable, IntegerProperty octaveNum, Observable<NoteLength> noteLengthObservable, Observable<ChordType> chordTypeObservable, EventBus eventBus) {
+        super(zoom, resolution, fourthInBar, measureNumProperty, octaveNum, noteLengthObservable, chordTypeObservable);
          getChildren().add(notesGroup);
         this.eventBus = eventBus;
-        updateGui();
+        this.trackModellObservable = trackModellObservable;
+        this.trackModellObservable.addPropertyChangeListener(propertyChangeEvent -> trackModellChanged(propertyChangeEvent));
    }
 
     @Override
     protected void updateGui() {
         super.updateGui();
         notesGroup.getChildren().clear();
-        trackModell.notes.forEach(noteModell -> {
-            NoteRectangle noteRectangle = new NoteRectangle(noteModell, eventBus, Color.BLACK);
-            noteRectangle.setX(getXByTick((int) noteModell.tick));
-            noteRectangle.setY(getYByPitch(noteModell.midiCode));
-            noteRectangle.setHeight(GuiConstants.NOTE_LINE_HEIGHT);
-            noteRectangle.setWidth(getTickWidth() * noteModell.length);
-            notesGroup.getChildren().add(noteRectangle);
-        });
+        if(trackModell != null){
+            trackModell.notes.forEach(noteModell -> {
+                NoteRectangle noteRectangle = new NoteRectangle(noteModell, eventBus, Color.BLACK);
+                noteRectangle.setX(getXByTick((int) noteModell.tick));
+                noteRectangle.setY(getYByPitch(noteModell.midiCode));
+                noteRectangle.setHeight(GuiConstants.NOTE_LINE_HEIGHT);
+                noteRectangle.setWidth(getTickWidth() * noteModell.length);
+                notesGroup.getChildren().add(noteRectangle);
+            });
+        }
     }
+
+    private void trackModellChanged(PropertyChangeEvent propertyChangeEvent) {
+        trackModell = (TrackModell) propertyChangeEvent.getNewValue();
+        updateGui();
+    }
+
 }

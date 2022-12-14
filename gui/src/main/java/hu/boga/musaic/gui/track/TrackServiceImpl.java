@@ -1,29 +1,29 @@
 package hu.boga.musaic.gui.track;
 
-import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryIn;
-import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryOut;
+import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
+import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
+import hu.boga.musaic.gui.trackeditor.panels.Observable;
 
 import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 
-public class TrackServiceImpl implements TrackService, TrackPropertiesBoundaryOut {
+public class TrackServiceImpl implements TrackService, TrackBoundaryOut {
 
-    TrackPropertiesBoundaryIn boundaryIn;
+    TrackBoundaryIn boundaryIn;
     TrackDto dto;
 
+    private final Map<String, Observable<TrackModell>> observableMap = new HashMap<>();
+
     @Inject
-    public TrackServiceImpl(TrackPropertiesBoundaryIn boundaryIn) {
+    public TrackServiceImpl(TrackBoundaryIn boundaryIn) {
         this.boundaryIn = boundaryIn;
     }
 
     @Override
     public void displayTrack(TrackDto trackDto) {
-        this.dto = trackDto;
-    }
-
-    @Override
-    public TrackModell getModell() {
-        return new TrackModell(dto);
+        observableMap.get(trackDto.id).setValue(new TrackModell(trackDto));
     }
 
     @Override
@@ -52,5 +52,10 @@ public class TrackServiceImpl implements TrackService, TrackPropertiesBoundaryOu
     @Override
     public void load(String trackId) {
         boundaryIn.load(trackId);
+    }
+
+    @Override
+    public void addObservable(Observable<TrackModell> observable) {
+        observableMap.put(observable.getName(), observable);
     }
 }

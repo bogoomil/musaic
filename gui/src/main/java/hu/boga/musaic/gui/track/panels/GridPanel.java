@@ -9,7 +9,7 @@ import javafx.scene.shape.Rectangle;
 public class GridPanel extends ScrollablePanel {
 
     public GridPanel(int height, DoubleProperty zoom, DoubleProperty scroll, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNum) {
-        super(height, zoom, scroll, resolution, fourthInBar, measureNum, null);
+        super(height, zoom, scroll, resolution, fourthInBar, measureNum);
         fourthInBar.addListener((observable, oldValue, newValue) -> {
             updateGui();
         });
