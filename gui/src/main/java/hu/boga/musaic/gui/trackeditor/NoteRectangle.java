@@ -113,7 +113,7 @@ public class NoteRectangle extends Rectangle {
         this.selected = !selected;
         if(selected){
             selectedIds.add(noteModell.id);
-            setFill(SELECTED_COLOR);
+            setFill(Color.color(SELECTED_COLOR.getRed(), SELECTED_COLOR.getGreen(), SELECTED_COLOR.getBlue(), noteModell.velocity));
         }else{
             selectedIds.remove(noteModell.id);
             Color origColor = (Color) getStroke();

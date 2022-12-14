@@ -20,7 +20,7 @@ public final class NotesLayer extends CursorLayer{
     final Group notesGroup = new Group();
     final EventBus eventBus;
 
-    public NotesLayer(DoubleProperty zoom, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNumProperty, TrackModell trackModell, IntegerProperty octaveNum, MyObservable<NoteLength> noteLengthObservable, MyObservable<ChordType> chordTypeObservable, EventBus eventBus) {
+    public NotesLayer(DoubleProperty zoom, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNumProperty, TrackModell trackModell, IntegerProperty octaveNum, Observable<NoteLength> noteLengthObservable, Observable<ChordType> chordTypeObservable, EventBus eventBus) {
         super(zoom, resolution, fourthInBar, measureNumProperty, trackModell, octaveNum, noteLengthObservable, chordTypeObservable);
          getChildren().add(notesGroup);
         this.eventBus = eventBus;

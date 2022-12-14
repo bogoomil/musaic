@@ -80,6 +80,4 @@ public class EditorBasePanel extends ZoomablePanel {
     protected double getTickWidth() {
         return measureWidth * zoom.doubleValue() / (this.resolution.intValue() * fourthInBar.intValue());
     }
-
-
 }

@@ -3,12 +3,12 @@ package hu.boga.musaic.gui.trackeditor.panels;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public class MyObservable<T> {
+public class Observable<T> {
     private PropertyChangeSupport support;
     T value;
     String name;
 
-    public MyObservable(String name) {
+    public Observable(String name) {
         this.name = name;
         support = new PropertyChangeSupport(this);
     }

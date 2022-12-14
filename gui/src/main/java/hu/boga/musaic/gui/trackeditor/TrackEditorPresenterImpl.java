@@ -20,7 +20,6 @@ import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.input.MouseEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,8 +53,8 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
     private final EventBus eventBus;
     private final IntegerProperty resolution, fourthInBar, measureNum, currentMeasure;
 
-    private final MyObservable<NoteLength> noteLengthProperty;
-    private final MyObservable<ChordType> chordtTypeProperty;
+    private final Observable<NoteLength> noteLengthProperty;
+    private final Observable<ChordType> chordtTypeProperty;
 
     private TrackModell trackModell;
 
@@ -74,8 +73,8 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
         this.measureNum = measureNum;
         this.currentMeasure = currentMeasure;
 
-        noteLengthProperty = new MyObservable<>("noteLength");
-        chordtTypeProperty = new MyObservable<>("chordType");
+        noteLengthProperty = new Observable<>("noteLength");
+        chordtTypeProperty = new Observable<>("chordType");
 
         chordtTypeProperty.setValue(ChordType.NONE);
         noteLengthProperty.setValue(NoteLength.HARMICKETTED);

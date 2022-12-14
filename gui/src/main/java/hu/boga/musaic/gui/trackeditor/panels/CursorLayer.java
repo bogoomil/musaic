@@ -18,8 +18,8 @@ public class CursorLayer extends EditorBasePanel {
                        IntegerProperty measureNumProperty,
                        TrackModell trackModell,
                        IntegerProperty octaveNum,
-                       MyObservable<NoteLength> noteLengthObservable,
-                       MyObservable<ChordType> chordTypeObservable) {
+                       Observable<NoteLength> noteLengthObservable,
+                       Observable<ChordType> chordTypeObservable) {
         super(zoom, resolution, fourthInBar, measureNumProperty, trackModell, octaveNum);
         this.getChildren().add(cursor);
         noteLengthObservable.addPropertyChangeListener(this::noteLengthPropertyChange);
