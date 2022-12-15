@@ -58,7 +58,7 @@ class TrackInteractorTest {
 
     @Test
     void addSingleNote() {
-        trackInteractor.addChord(trackModell.getId(), 0, 12, 32, null);
+        trackInteractor.addChord(trackModell.getId(), 0, 12, 32, ChordType.NONE);
         ArgumentCaptor<TrackDto> captor = ArgumentCaptor.forClass(TrackDto.class);
         Mockito.verify(boundaryOut).displayTrack(captor.capture());
         assertEquals(3, captor.getValue().notes.size());
@@ -77,7 +77,7 @@ class TrackInteractorTest {
 
     @Test
     void deleteNotes() {
-        trackInteractor.addChord(trackModell.getId(), 345, 23, 512, null);
+        trackInteractor.addChord(trackModell.getId(), 345, 23, 512, ChordType.NONE);
 
         NoteDto[] dtos = getNoteDtos(trackModell.eventModells.get(0).getId());
 

@@ -152,7 +152,7 @@ public class TrackInteractor implements TrackBoundaryIn {
 
     private List<NoteModell> prepareNotesToAdd(int tick, int pitch, ChordType chordType, int computedLength, int channel) {
         List<NoteModell> notes = new ArrayList<>();
-        if(chordType == null){
+        if(chordType == ChordType.NONE){
             NoteModell note = new NoteModell(pitch, tick, computedLength, 1, channel);
             notes.add(note);
         } else {

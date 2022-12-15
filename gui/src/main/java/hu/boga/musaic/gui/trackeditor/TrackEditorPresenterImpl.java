@@ -110,6 +110,6 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
 
     private void initPanels() {
         panelGroup.getChildren().add(new GridPanel(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, new SimpleIntegerProperty(10)));
-        panelGroup.getChildren().add(new NotesLayer(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, trackModellObservable, new SimpleIntegerProperty(10), noteLengthProperty, chordtTypeProperty, eventBus));
+        panelGroup.getChildren().add(new NotesLayer(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, trackModellObservable, new SimpleIntegerProperty(10), noteLengthProperty, chordtTypeProperty, eventBus, service));
     }
 }

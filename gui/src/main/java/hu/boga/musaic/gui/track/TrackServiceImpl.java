@@ -4,6 +4,7 @@ import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import hu.boga.musaic.gui.trackeditor.panels.Observable;
+import hu.boga.musaic.musictheory.enums.ChordType;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -57,5 +58,10 @@ public class TrackServiceImpl implements TrackService, TrackBoundaryOut {
     @Override
     public void addObservable(Observable<TrackModell> observable) {
         observableMap.put(observable.getName(), observable);
+    }
+
+    @Override
+    public void addChord(String trackId, int tick, int pitch, int length, ChordType chordType) {
+        boundaryIn.addChord(trackId, tick, pitch, length, chordType);
     }
 }
