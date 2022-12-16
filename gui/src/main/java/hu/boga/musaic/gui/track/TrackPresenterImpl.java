@@ -12,7 +12,7 @@ import hu.boga.musaic.gui.track.panels.GridPanel;
 import hu.boga.musaic.gui.track.panels.NotesPanel;
 import hu.boga.musaic.gui.track.panels.SelectionPanel;
 import hu.boga.musaic.gui.trackeditor.TrackEditorPresenterFactory;
-import hu.boga.musaic.gui.trackeditor.panels.Observable;
+import hu.boga.musaic.gui.logic.Observable;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.value.ChangeListener;

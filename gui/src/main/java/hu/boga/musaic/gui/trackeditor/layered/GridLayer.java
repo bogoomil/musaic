@@ -1,7 +1,6 @@
-package hu.boga.musaic.gui.trackeditor.panels;
+package hu.boga.musaic.gui.trackeditor.layered;
 
 import hu.boga.musaic.gui.constants.GuiConstants;
-import hu.boga.musaic.gui.track.TrackModell;
 import hu.boga.musaic.musictheory.enums.NoteName;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -12,30 +11,23 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class GridPanel extends EditorBasePanel {
+public class GridLayer extends Group implements Layer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GridPanel.class);
+    LayeredPane parent;
 
-    Group shapes = new Group();
-
-    public GridPanel(DoubleProperty zoom, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNumProperty, IntegerProperty octaveNum) {
-        super(zoom, resolution, fourthInBar, measureNumProperty, octaveNum);
-        getChildren().add(shapes);
-        updateGui();
+    public GridLayer(LayeredPane parent) {
+        this.parent = parent;
     }
 
     @Override
-    protected void updateGui() {
-        super.updateGui();
-        shapes.getChildren().clear();
+    public void updateGui() {
+        getChildren().clear();
         createMeasures();
         createVerticalLines();
         createHorizontalLines();
@@ -48,22 +40,22 @@ public final class GridPanel extends EditorBasePanel {
                 .map(noteName -> noteName.name()).collect(Collectors.toList());
         final int increment = GuiConstants.NOTE_LINE_HEIGHT;
         int y = increment;
-        for (int i = 0; i <= octaveNum.intValue(); i++) {
+        for (int i = 0; i < parent.octaveNum.intValue(); i++) {
             for (int j = 0; j < 12; j++) {
-                final Text text = new Text(noteNames.get(j) + " " + (octaveNum.intValue() - i));
+                final Text text = new Text(noteNames.get(j) + " " + (parent.octaveNum.intValue() - i));
                 text.setX(5);
                 text.setY(y - 3);
                 text.setStroke(Color.WHITE);
                 text.setFont(Font.font("arial", FontWeight.LIGHT, 8));
                 y += increment;
-                shapes.getChildren().add(text);
+                getChildren().add(text);
             }
         }
     }
 
     private void createHorizontalLines() {
-        double width = getFullWidth();
-        double height = getFullHeight();
+        double width = parent.getFullWidth();
+        double height = parent.getFullHeight();
         for (int y = 0; y < height; y += GuiConstants.NOTE_LINE_HEIGHT) {
             createHorizontalLine(width, y);
         }
@@ -77,13 +69,13 @@ public final class GridPanel extends EditorBasePanel {
         line.setStartY(y);
         line.setEndX(width);
         line.setEndY(y);
-        shapes.getChildren().add(line);
+        getChildren().add(line);
     }
 
     private void createVerticalLines() {
-        int countOf32ndsInBar = this.get32ndsCountInBar();
-        int countOf32nds = countOf32ndsInBar * measureNum.intValue();
-        final double w32nds = this.get32ndsWidth();
+        int countOf32ndsInBar = parent.get32ndsCountInBar();
+        int countOf32nds = countOf32ndsInBar * parent.getMeasureNum().intValue();
+        final double w32nds = parent.get32ndsWidth();
         double x = 0;
         for (int i = 0; i < countOf32nds; i++) {
             createVerticalLine(countOf32ndsInBar, x, i);
@@ -96,7 +88,7 @@ public final class GridPanel extends EditorBasePanel {
         line.setStartX(x);
         line.setStartY(0);
         line.setEndX(x);
-        line.setEndY(getFullHeight());
+        line.setEndY(parent.getFullHeight());
         if (i % countOf32ndsInBar == 0) {
             line.setStrokeWidth(1);
             line.setStroke(Color.BLACK);
@@ -104,24 +96,25 @@ public final class GridPanel extends EditorBasePanel {
             line.setStrokeWidth(0.5);
             line.setStroke(Color.RED);
         }
-        shapes.getChildren().addAll(line);
+        getChildren().addAll(line);
     }
 
     private void createMeasures() {
-        for (int i = 0; i < measureNum.intValue(); i++) {
+        for (int i = 0; i < parent.getMeasureNum().intValue(); i++) {
             createMeasure(i);
         }
     }
 
     private void createMeasure(int i) {
-        double height = getFullHeight();
-        double barW = measureWidth * zoom.doubleValue();
-        double rectW = barW / fourthInBar.intValue();
-        for (int j = 0; j < fourthInBar.intValue(); j++) {
+        double height = parent.getFullHeight();
+        double barW = parent.getMeasureWidth();
+        double rectW =  parent.getFourthWidth();
+        for (int j = 0; j < parent.fourthInBarProperty().intValue(); j++) {
             double rectX = i * barW + j * rectW;
             Rectangle rectangle = new Rectangle(rectX, 0, rectW, height);
             rectangle.setFill(j % 2 == 0 ? Color.LIGHTSKYBLUE : Color.DEEPSKYBLUE);
-            shapes.getChildren().add(rectangle);
+            getChildren().add(rectangle);
         }
     }
+
 }

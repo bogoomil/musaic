@@ -7,9 +7,11 @@ import javafx.scene.layout.Pane;
 
 public abstract class ZoomablePanel extends Pane {
     protected final DoubleProperty zoom;
-    protected final IntegerProperty resolution, fourthInBar, measureNum;
+    protected final IntegerProperty resolution;
+    protected final IntegerProperty fourthInBar;
+    protected final IntegerProperty measureNum;
 
-    protected final static int measureWidth = 10;
+    public final static int measureWidth = 10;
 
     public ZoomablePanel(DoubleProperty zoom, IntegerProperty resolution, IntegerProperty fourthInBar, IntegerProperty measureNumProperty) {
         this.zoom = zoom;
@@ -21,28 +23,40 @@ public abstract class ZoomablePanel extends Pane {
 
     protected abstract void updateGui();
 
-    protected int getTickAtX(double x) {
+    public int getTickAtX(double x) {
         return (int) (x / getTickWith());
     }
 
-    protected double getTickWith() {
+    public double getTickWith() {
         return getFourthWidth() / resolution.intValue();
     }
 
-    protected double getFullWidth() {
+    public double getFullWidth() {
         return measureWidth * measureNum.intValue() * zoom.doubleValue();
     }
 
-    protected double getMeasureWidth() {
+    public double getMeasureWidth() {
         return getFullWidth() / measureNum.intValue();
     }
 
-    protected double getFourthWidth() {
+    public double getFourthWidth() {
         return getMeasureWidth() / fourthInBar.intValue();
     }
 
-    protected double getXByTick(int tick) {
+    public double getXByTick(int tick) {
         return getTickWith() * tick;
     }
 
+    public IntegerProperty getMeasureNum() {
+        return measureNum;
+    }
+
+    public IntegerProperty measureNumProperty() {
+        return measureNum;
+    }
+
+
+    public IntegerProperty fourthInBarProperty() {
+        return fourthInBar;
+    }
 }

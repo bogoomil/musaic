@@ -1,4 +1,4 @@
-package hu.boga.musaic.gui.trackeditor.panels;
+package hu.boga.musaic.gui.logic;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

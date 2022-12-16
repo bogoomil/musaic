@@ -2,7 +2,7 @@ package hu.boga.musaic.gui.track.panels;
 
 import hu.boga.musaic.gui.trackeditor.NoteModell;
 import hu.boga.musaic.gui.track.TrackModell;
-import hu.boga.musaic.gui.trackeditor.panels.Observable;
+import hu.boga.musaic.gui.logic.Observable;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.scene.input.MouseEvent;

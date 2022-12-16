@@ -1,6 +1,6 @@
 package hu.boga.musaic.gui.track;
 
-import hu.boga.musaic.gui.trackeditor.panels.Observable;
+import hu.boga.musaic.gui.logic.Observable;
 import hu.boga.musaic.musictheory.enums.ChordType;
 
 public interface TrackService {

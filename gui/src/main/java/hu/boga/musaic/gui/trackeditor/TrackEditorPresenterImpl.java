@@ -7,9 +7,10 @@ import hu.boga.musaic.gui.controls.ChordTypeCombo;
 import hu.boga.musaic.gui.controls.ModeCombo;
 import hu.boga.musaic.gui.controls.NoteLengthCombo;
 import hu.boga.musaic.gui.controls.NoteNameCombo;
+import hu.boga.musaic.gui.logic.Observable;
 import hu.boga.musaic.gui.track.TrackModell;
 import hu.boga.musaic.gui.track.TrackService;
-import hu.boga.musaic.gui.trackeditor.panels.*;
+import hu.boga.musaic.gui.trackeditor.layered.LayeredPane;
 import hu.boga.musaic.musictheory.enums.ChordType;
 import hu.boga.musaic.musictheory.enums.NoteLength;
 import javafx.beans.property.IntegerProperty;
@@ -23,8 +24,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.beans.PropertyChangeEvent;
 
 public class TrackEditorPresenterImpl implements TrackEditorPresenter{
     private static final Logger LOG = LoggerFactory.getLogger(TrackEditorPresenterImpl.class);
@@ -107,9 +106,9 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
 
     }
 
-
     private void initPanels() {
-        panelGroup.getChildren().add(new GridPanel(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, new SimpleIntegerProperty(10)));
-        panelGroup.getChildren().add(new NotesLayer(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, trackModellObservable, new SimpleIntegerProperty(10), noteLengthProperty, chordtTypeProperty, eventBus, service));
+        panelGroup.getChildren().add(new LayeredPane(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, new SimpleIntegerProperty(10), noteLengthProperty, chordtTypeProperty));
+//        panelGroup.getChildren().add(new GridPanel(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, new SimpleIntegerProperty(10)));
+//        panelGroup.getChildren().add(new NotesLayer(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, trackModellObservable, new SimpleIntegerProperty(10), noteLengthProperty, chordtTypeProperty, eventBus, service));
     }
 }
