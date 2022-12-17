@@ -8,8 +8,8 @@ import hu.boga.musaic.musictheory.enums.ChordType;
 import hu.boga.musaic.musictheory.enums.NoteLength;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.slf4j.Logger;
@@ -19,7 +19,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class CursorLayer extends Pane implements Layer, EventHandler<MouseEvent> {
+public class CursorLayer extends Group implements Layer, EventHandler<MouseEvent> {
     private static final Logger LOG = LoggerFactory.getLogger(CursorLayer.class);
     public static final Color FILL_COLOR = Color.color(Color.MAGENTA.getRed(), Color.MAGENTA.getGreen(), Color.MAGENTA.getBlue(), 0.3);
     public static final Color STROKE_COLOR = Color.RED;
@@ -32,7 +32,6 @@ public class CursorLayer extends Pane implements Layer, EventHandler<MouseEvent>
         this.parent = parent;
         noteLengthObservable.addPropertyChangeListener(this::noteLengthPropertyChange);
         chordTypeObservable.addPropertyChangeListener(this::chordTypePropertyChange);
-
         currentNoteLength = NoteLength.HARMICKETTED;
         currentChordType = ChordType.NONE;
         createRectangle(0);
@@ -57,12 +56,10 @@ public class CursorLayer extends Pane implements Layer, EventHandler<MouseEvent>
         getChildren().add(rectangle);
         rectangle.setFill(FILL_COLOR);
         rectangle.setStroke(STROKE_COLOR);
-
-        double width = calculateWidth(currentNoteLength);
-        LOG.debug("cursor width: {}", width);
-        rectangle.setWidth(width);
+        rectangle.setWidth(calculateWidth(currentNoteLength));
         rectangle.setHeight(GuiConstants.NOTE_LINE_HEIGHT);
         rectangle.setY(-midiCode * GuiConstants.NOTE_LINE_HEIGHT);
+        rectangle.setMouseTransparent(true);
     }
 
     private void chordTypePropertyChange(PropertyChangeEvent event) {

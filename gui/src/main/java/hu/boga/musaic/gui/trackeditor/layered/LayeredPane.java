@@ -8,6 +8,8 @@ import hu.boga.musaic.gui.trackeditor.TrackEditorPresenterImpl;
 import hu.boga.musaic.musictheory.Pitch;
 import hu.boga.musaic.musictheory.enums.ChordType;
 import hu.boga.musaic.musictheory.enums.NoteLength;
+import hu.boga.musaic.musictheory.enums.NoteName;
+import hu.boga.musaic.musictheory.enums.Tone;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.scene.input.MouseEvent;
@@ -20,8 +22,10 @@ public class LayeredPane extends ZoomablePanel implements NoteChangedListener {
     private final List<Layer> layers = new ArrayList<>();
     private final NotesLayer notesLayer;
     private final GridLayer gridLayer;
-    private CursorLayer cursor;
     private final TrackEditorPresenterImpl presenter;
+
+    private CursorLayer cursor;
+    private MaskLayer maskLayer;
 
     public LayeredPane(TrackEditorPresenterImpl presenter,
                        DoubleProperty zoom,
@@ -31,7 +35,9 @@ public class LayeredPane extends ZoomablePanel implements NoteChangedListener {
                        IntegerProperty octaveNum,
                        Observable<NoteLength> noteLengthObservable,
                        Observable<ChordType> chordTypeObservable,
-                       Observable<TrackModell> trackModellObservable) {
+                       Observable<TrackModell> trackModellObservable,
+                       Observable<NoteName> rootObservable,
+                       Observable<Tone> modeObservable) {
         super(zoom, resolution, fourthInBar, measureNumProperty);
         this.octaveNum = octaveNum;
         this.presenter = presenter;
@@ -39,9 +45,27 @@ public class LayeredPane extends ZoomablePanel implements NoteChangedListener {
         gridLayer = new GridLayer(this);
         cursor = new CursorLayer(this, noteLengthObservable, chordTypeObservable, zoom);
         notesLayer = new NotesLayer(this, trackModellObservable, zoom);
+        maskLayer = new MaskLayer(this, rootObservable, modeObservable);
 
         initLayers();
         updateGui();
+    }
+
+    private void initLayers() {
+        initGridLayer();
+        initNotesLayer();
+        initCursor();
+        initMaskLayer();
+    }
+
+    private void initGridLayer() {
+        layers.add(gridLayer);
+        this.getChildren().add(gridLayer);
+    }
+
+    private void initNotesLayer() {
+        layers.add(notesLayer);
+        this.getChildren().add(notesLayer);
     }
 
     private void initCursor() {
@@ -50,20 +74,9 @@ public class LayeredPane extends ZoomablePanel implements NoteChangedListener {
         this.addEventHandler(MouseEvent.ANY, cursor);
     }
 
-    private void initLayers() {
-        initGridLayer();
-        initCursor();
-        initNotesLayer();
-    }
-
-    private void initNotesLayer() {
-        layers.add(notesLayer);
-        this.getChildren().add(notesLayer);
-    }
-
-    private void initGridLayer() {
-        layers.add(gridLayer);
-        this.getChildren().add(gridLayer);
+    private void initMaskLayer() {
+        layers.add(maskLayer);
+        this.getChildren().add(maskLayer);
     }
 
     @Override

@@ -14,6 +14,8 @@ import hu.boga.musaic.gui.track.TrackService;
 import hu.boga.musaic.gui.trackeditor.layered.LayeredPane;
 import hu.boga.musaic.musictheory.enums.ChordType;
 import hu.boga.musaic.musictheory.enums.NoteLength;
+import hu.boga.musaic.musictheory.enums.NoteName;
+import hu.boga.musaic.musictheory.enums.Tone;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
@@ -57,6 +59,10 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
     private final Observable<NoteLength> noteLengthProperty;
     private final Observable<ChordType> chordtTypeProperty;
 
+    private final Observable<Tone> modeObservable;
+
+    private final Observable<NoteName> rootObservable;
+
     private final Observable<TrackModell> trackModellObservable;
     private LayeredPane layeredPane;
 
@@ -77,6 +83,10 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
         chordtTypeProperty = new Observable<>("chordType");
         chordtTypeProperty.setValue(ChordType.NONE);
         noteLengthProperty.setValue(NoteLength.HARMICKETTED);
+
+        modeObservable = new Observable<Tone>("tone");
+        rootObservable = new Observable<>("noteName");
+
         this.trackModellObservable = observable;
     }
 
@@ -87,7 +97,15 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
         noteLength.addEventHandler(ActionEvent.ACTION, event -> noteLengthProperty.setValue(noteLength.getSelectedNoteLength()));
         chordType.setValue(ChordType.NONE);
         chordType.addEventHandler(ActionEvent.ACTION, event -> chordtTypeProperty.setValue(chordType.getSelectedChordType()));
-        layeredPane = new LayeredPane(this, zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, new SimpleIntegerProperty(10), noteLengthProperty, chordtTypeProperty, trackModellObservable);
+        layeredPane = new LayeredPane(this,
+                zoomSlider.valueProperty(),
+                resolution,
+                fourthInBar,
+                measureNum,
+                new SimpleIntegerProperty(10),
+                noteLengthProperty,
+                chordtTypeProperty,
+                trackModellObservable, rootObservable, modeObservable );
         panelGroup.getChildren().add(layeredPane);
         service.load(trackModellObservable.getName());
     }
