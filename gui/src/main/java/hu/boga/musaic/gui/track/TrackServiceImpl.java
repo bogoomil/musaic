@@ -64,4 +64,10 @@ public class TrackServiceImpl implements TrackService, TrackBoundaryOut {
     public void addChord(String trackId, int tick, int pitch, int length, ChordType chordType) {
         boundaryIn.addChord(trackId, tick, pitch, length, chordType);
     }
+
+    @Override
+    public void noteVolumeChanged(String noteId, double v) {
+        boundaryIn.noteVolumeChanged(noteId, v);
+    }
+
 }

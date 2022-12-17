@@ -85,6 +85,8 @@ public class CursorLayer extends Pane implements Layer, EventHandler<MouseEvent>
             this.setVisible(false);
         } else if (event.getEventType().equals(MouseEvent.MOUSE_MOVED)){
             moveCursor(event);
+        } else if (event.getEventType().equals(MouseEvent.MOUSE_CLICKED)){
+            parent.addNotesToTrack(parent.getTickAtX(getCaculatedX(event.getX())), parent.getPitchByY(event.getY()).getMidiCode());
         }
     }
 

@@ -16,7 +16,6 @@ import hu.boga.musaic.musictheory.enums.NoteLength;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -87,8 +86,16 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
         noteLength.addEventHandler(ActionEvent.ACTION, event -> noteLengthProperty.setValue(noteLength.getSelectedNoteLength()));
         chordType.setValue(ChordType.NONE);
         chordType.addEventHandler(ActionEvent.ACTION, event -> chordtTypeProperty.setValue(chordType.getSelectedChordType()));
-        layeredPane = new LayeredPane(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, new SimpleIntegerProperty(10), noteLengthProperty, chordtTypeProperty);
+        layeredPane = new LayeredPane(this, zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, new SimpleIntegerProperty(10), noteLengthProperty, chordtTypeProperty, trackModellObservable);
         panelGroup.getChildren().add(layeredPane);
         service.load(trackModellObservable.getName());
+    }
+
+    public void noteVolumeChanged(String id, double newVolume){
+        service.noteVolumeChanged(id, newVolume);
+    }
+
+    public void addNotesToTrack(int tick, int pitch) {
+        service.addChord(trackModellObservable.getName(), tick, pitch, noteLength.getSelectedNoteLength().getErtek(), chordType.getSelectedChordType());
     }
 }

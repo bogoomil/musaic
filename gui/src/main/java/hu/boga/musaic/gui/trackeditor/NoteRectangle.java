@@ -1,7 +1,7 @@
 package hu.boga.musaic.gui.trackeditor;
 
-import com.google.common.eventbus.EventBus;
 import hu.boga.musaic.gui.trackeditor.events.DeleteNoteEvent;
+import hu.boga.musaic.gui.trackeditor.layered.NoteChangedListener;
 import javafx.geometry.Orientation;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -20,25 +20,23 @@ import java.util.List;
 
 public class NoteRectangle extends Rectangle {
     private static final Logger LOG = LoggerFactory.getLogger(NoteRectangle.class);
-    public static final Color SELECTED_COLOR = Color.color(Color.LAWNGREEN.getRed(), Color.LAWNGREEN.getGreen(), Color.LAWNGREEN.getBlue(), 0.8);
+    private static  final Color COLOR = Color.BLACK;
     private Color fill;
+    private Color selectedColor;
 
     private boolean selected;
 
-    private EventBus eventBus;
-    private double offset;
     private NoteModell noteModell;
     private static final List<String> selectedIds = new ArrayList<>();
+    private final NoteChangedListener noteChangedListener;
 
-    public NoteRectangle(NoteModell noteModell, EventBus eventBus, Color color) {
+    public NoteRectangle(NoteModell noteModell, NoteChangedListener noteChangedListener) {
         this.noteModell = noteModell;
-        this.eventBus = eventBus;
-
         this.selected = selectedIds.contains(noteModell.id);
-        fill = selected ? SELECTED_COLOR :Color.color(color.getRed(), color.getGreen(), color.getBlue(), noteModell.velocity);
-
-        eventBus.register(this);
-        this.setStroke(color);
+        this.noteChangedListener = noteChangedListener;
+        selectedColor = Color.color(Color.LAWNGREEN.getRed(), Color.LAWNGREEN.getGreen(), Color.LAWNGREEN.getBlue(), noteModell.velocity);
+        fill = selected ? selectedColor :  Color.color(COLOR.getRed(), COLOR.getGreen(), COLOR.getBlue(), noteModell.velocity);
+        this.setStroke(COLOR);
         this.setStrokeWidth(3);
         this.setFill(fill);
         this.setArcHeight(15);
@@ -51,8 +49,7 @@ public class NoteRectangle extends Rectangle {
         if(event.getButton() == MouseButton.SECONDARY){
             showContextMenu(event);
         }else if (event.getClickCount() == 2) {
-            eventBus.unregister(this);
-            eventBus.post(new DeleteNoteEvent(noteModell.id));
+            noteChangedListener.noteDeleted(noteModell.id);
         } else if (event.getClickCount() == 1) {
             toggleSlection();
         }
@@ -113,7 +110,7 @@ public class NoteRectangle extends Rectangle {
         this.selected = !selected;
         if(selected){
             selectedIds.add(noteModell.id);
-            setFill(Color.color(SELECTED_COLOR.getRed(), SELECTED_COLOR.getGreen(), SELECTED_COLOR.getBlue(), noteModell.velocity));
+            setFill(selectedColor);
         }else{
             selectedIds.remove(noteModell.id);
             Color origColor = (Color) getStroke();

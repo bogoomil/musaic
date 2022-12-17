@@ -11,4 +11,5 @@ public interface TrackService {
     void load(String trackId);
     void addObservable(Observable<TrackModell> observable);
     void addChord(String trackId, int tick, int pitch, int length, ChordType chordType);
+    void noteVolumeChanged(String noteId, double v);
 }

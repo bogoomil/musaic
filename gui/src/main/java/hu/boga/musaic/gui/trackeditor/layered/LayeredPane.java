@@ -3,39 +3,45 @@ package hu.boga.musaic.gui.trackeditor.layered;
 import hu.boga.musaic.gui.constants.GuiConstants;
 import hu.boga.musaic.gui.panels.ZoomablePanel;
 import hu.boga.musaic.gui.logic.Observable;
+import hu.boga.musaic.gui.track.TrackModell;
+import hu.boga.musaic.gui.trackeditor.TrackEditorPresenterImpl;
 import hu.boga.musaic.musictheory.Pitch;
 import hu.boga.musaic.musictheory.enums.ChordType;
 import hu.boga.musaic.musictheory.enums.NoteLength;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LayeredPane extends ZoomablePanel {
+public class LayeredPane extends ZoomablePanel implements NoteChangedListener {
     public final IntegerProperty octaveNum;
-    private final Rectangle border = new Rectangle();
     private final List<Layer> layers = new ArrayList<>();
-    private GridLayer gridLayer;
+    private final NotesLayer notesLayer;
+    private final GridLayer gridLayer;
     private CursorLayer cursor;
+    private final TrackEditorPresenterImpl presenter;
 
-    public LayeredPane(DoubleProperty zoom,
+    public LayeredPane(TrackEditorPresenterImpl presenter,
+                       DoubleProperty zoom,
                        IntegerProperty resolution,
                        IntegerProperty fourthInBar,
                        IntegerProperty measureNumProperty,
                        IntegerProperty octaveNum,
                        Observable<NoteLength> noteLengthObservable,
-                       Observable<ChordType> chordTypeObservable) {
+                       Observable<ChordType> chordTypeObservable,
+                       Observable<TrackModell> trackModellObservable) {
         super(zoom, resolution, fourthInBar, measureNumProperty);
         this.octaveNum = octaveNum;
-        this.getChildren().add(border);
+        this.presenter = presenter;
 
+        gridLayer = new GridLayer(this);
         cursor = new CursorLayer(this, noteLengthObservable, chordTypeObservable, zoom);
-        updateGui();
+        notesLayer = new NotesLayer(this, trackModellObservable, zoom);
+
         initLayers();
-        initCursor();
+        updateGui();
     }
 
     private void initCursor() {
@@ -45,10 +51,19 @@ public class LayeredPane extends ZoomablePanel {
     }
 
     private void initLayers() {
-        gridLayer = new GridLayer(this);
+        initGridLayer();
+        initCursor();
+        initNotesLayer();
+    }
+
+    private void initNotesLayer() {
+        layers.add(notesLayer);
+        this.getChildren().add(notesLayer);
+    }
+
+    private void initGridLayer() {
         layers.add(gridLayer);
         this.getChildren().add(gridLayer);
-        gridLayer.updateGui();
     }
 
     @Override
@@ -69,7 +84,7 @@ public class LayeredPane extends ZoomablePanel {
         return measureWidth * this.zoom.doubleValue() / get32ndsCountInBar();
     }
 
-    protected int get32ndsCountInBar(){
+    protected int get32ndsCountInBar() {
         return fourthInBar.intValue() * 8;
     }
 
@@ -81,4 +96,17 @@ public class LayeredPane extends ZoomablePanel {
         return measureWidth * zoom.doubleValue() / (this.resolution.intValue() * fourthInBar.intValue());
     }
 
+    public void addNotesToTrack(int tick, int pitch){
+        presenter.addNotesToTrack(tick, pitch);
+    }
+
+    @Override
+    public void volumeChanged(String noteId, double newVolume) {
+
+    }
+
+    @Override
+    public void noteDeleted(String noteId) {
+
+    }
 }

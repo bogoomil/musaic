@@ -144,6 +144,22 @@ public class TrackInteractor implements TrackBoundaryIn {
         });
     }
 
+    @Override
+    public void noteVolumeChanged(String noteId, double v) {
+        InMemorySequenceModellStore.getTrackByNoteId(noteId).ifPresent(trackModell -> {
+            trackModell
+                    .getNotes().stream()
+                    .filter(noteModell -> noteId.equals(noteModell.getId()))
+                    .findFirst()
+                    .ifPresent(noteModell -> {
+                        noteModell.velocity = v;
+                        LOG.debug("setting note {}, volume to: {}", noteId, v);
+                    });
+            boundaryOut.displayTrack(new TrackModelltoDtoConverter(trackModell).convert());
+        });
+
+    }
+
     private void addNotesToTrack(int tick, int pitch, int length, ChordType chordType, SequenceModell sequenceModell, TrackModell trackModell) {
         final int computedLength = length * sequenceModell.getTicksIn32nds();
         List<NoteModell> notes = prepareNotesToAdd(tick, pitch, chordType, computedLength, trackModell.channel);

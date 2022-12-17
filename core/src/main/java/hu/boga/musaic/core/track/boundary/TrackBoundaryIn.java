@@ -15,5 +15,5 @@ public interface TrackBoundaryIn {
     void moveNote(String noteId, int newTick);
     void duplicate(String trackId, String[] ids,  int fromTick, int toTick);
     void moveUpAndDownNotes(String trackId, String[] ids, int move);
-
+    void noteVolumeChanged(String noteId, double v);
 }
