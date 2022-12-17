@@ -37,7 +37,7 @@ public class NoteRectangle extends Rectangle {
         selectedColor = Color.color(Color.LAWNGREEN.getRed(), Color.LAWNGREEN.getGreen(), Color.LAWNGREEN.getBlue(), noteModell.velocity);
         fill = selected ? selectedColor :  Color.color(COLOR.getRed(), COLOR.getGreen(), COLOR.getBlue(), noteModell.velocity);
         this.setStroke(COLOR);
-        this.setStrokeWidth(3);
+        this.setStrokeWidth(1);
         this.setFill(fill);
         this.setArcHeight(15);
         this.setArcWidth(15);
@@ -83,6 +83,7 @@ public class NoteRectangle extends Rectangle {
             fill = Color.color(fill.getRed(), fill.getGreen(), fill.getBlue(), noteModell.velocity);
             label.setText(((int) (noteModell.velocity * 100)) + "%");
             setFill(fill);
+            noteChangedListener.volumeChanged(noteModell.id, newValue.doubleValue());
         });
 
         VBox hBox = new VBox();

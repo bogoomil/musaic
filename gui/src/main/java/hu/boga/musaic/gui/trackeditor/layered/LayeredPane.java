@@ -102,11 +102,12 @@ public class LayeredPane extends ZoomablePanel implements NoteChangedListener {
 
     @Override
     public void volumeChanged(String noteId, double newVolume) {
-
+        presenter.noteVolumeChanged(noteId, newVolume);
     }
 
     @Override
     public void noteDeleted(String noteId) {
+        presenter.deleteNote(noteId);
 
     }
 }

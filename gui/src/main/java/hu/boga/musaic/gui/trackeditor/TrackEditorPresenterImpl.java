@@ -3,6 +3,7 @@ package hu.boga.musaic.gui.trackeditor;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 import hu.boga.musaic.gui.controls.ChordTypeCombo;
 import hu.boga.musaic.gui.controls.ModeCombo;
 import hu.boga.musaic.gui.controls.NoteLengthCombo;
@@ -97,5 +98,12 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
 
     public void addNotesToTrack(int tick, int pitch) {
         service.addChord(trackModellObservable.getName(), tick, pitch, noteLength.getSelectedNoteLength().getErtek(), chordType.getSelectedChordType());
+    }
+
+    public void deleteNote(String noteId){
+        NoteDto noteDto = new NoteDto();
+        noteDto.id = noteId;
+        NoteDto[] notes = new NoteDto[]{noteDto};
+        service.noteDeleted(trackModellObservable.getName(), notes);
     }
 }

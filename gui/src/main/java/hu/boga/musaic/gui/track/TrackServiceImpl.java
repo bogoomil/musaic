@@ -1,5 +1,6 @@
 package hu.boga.musaic.gui.track;
 
+import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
@@ -68,6 +69,11 @@ public class TrackServiceImpl implements TrackService, TrackBoundaryOut {
     @Override
     public void noteVolumeChanged(String noteId, double v) {
         boundaryIn.noteVolumeChanged(noteId, v);
+    }
+
+    @Override
+    public void noteDeleted(String trackId, NoteDto[] notes) {
+        boundaryIn.deleteNotes(trackId, notes);
     }
 
 }

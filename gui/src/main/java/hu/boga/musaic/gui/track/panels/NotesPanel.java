@@ -6,6 +6,7 @@ import hu.boga.musaic.gui.logic.Observable;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,9 @@ public final class NotesPanel extends NotesPanelBase {
                     double y = height - (pitchHeight * noteModell.midiCode) - 10;
                     double x = getXByTick((int) noteModell.tick);
                     Rectangle r = new Rectangle(x, y, length, 3);
+                    Color color = new Color(Color.BLACK.getRed(), Color.BLACK.getGreen(), Color.BLACK.getBlue(), noteModell.velocity);
+                    r.setStroke(color);
+                    r.setFill(color);
                     getChildren().add(r);
                 });
             }
