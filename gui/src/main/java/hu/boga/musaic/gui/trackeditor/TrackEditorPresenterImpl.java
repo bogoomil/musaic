@@ -58,6 +58,7 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
     private final Observable<ChordType> chordtTypeProperty;
 
     private final Observable<TrackModell> trackModellObservable;
+    private LayeredPane layeredPane;
 
     @AssistedInject
     public TrackEditorPresenterImpl(TrackService service, @Assisted Observable<TrackModell> observable,
@@ -72,43 +73,22 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
         this.fourthInBar = fourthInBar;
         this.measureNum = measureNum;
         this.currentMeasure = currentMeasure;
-
         noteLengthProperty = new Observable<>("noteLength");
         chordtTypeProperty = new Observable<>("chordType");
-
         chordtTypeProperty.setValue(ChordType.NONE);
         noteLengthProperty.setValue(NoteLength.HARMICKETTED);
         this.trackModellObservable = observable;
-
-        LOG.debug("service: {}, modell: {}, measure: {}", service, trackModellObservable.getName(), measureNum.intValue());
     }
 
     public void initialize(){
         zoomSlider.setMin(1);
         zoomSlider.setValue(10);
         noteLength.setValue(NoteLength.HARMICKETTED);
-        noteLength.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                noteLengthProperty.setValue(noteLength.getSelectedNoteLength());
-            }
-        });
+        noteLength.addEventHandler(ActionEvent.ACTION, event -> noteLengthProperty.setValue(noteLength.getSelectedNoteLength()));
         chordType.setValue(ChordType.NONE);
-        chordType.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                chordtTypeProperty.setValue(chordType.getSelectedChordType());
-            }
-        });
-
-        initPanels();
+        chordType.addEventHandler(ActionEvent.ACTION, event -> chordtTypeProperty.setValue(chordType.getSelectedChordType()));
+        layeredPane = new LayeredPane(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, new SimpleIntegerProperty(10), noteLengthProperty, chordtTypeProperty);
+        panelGroup.getChildren().add(layeredPane);
         service.load(trackModellObservable.getName());
-
-    }
-
-    private void initPanels() {
-        panelGroup.getChildren().add(new LayeredPane(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, new SimpleIntegerProperty(10), noteLengthProperty, chordtTypeProperty));
-//        panelGroup.getChildren().add(new GridPanel(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, new SimpleIntegerProperty(10)));
-//        panelGroup.getChildren().add(new NotesLayer(zoomSlider.valueProperty(), resolution, fourthInBar, measureNum, trackModellObservable, new SimpleIntegerProperty(10), noteLengthProperty, chordtTypeProperty, eventBus, service));
     }
 }
