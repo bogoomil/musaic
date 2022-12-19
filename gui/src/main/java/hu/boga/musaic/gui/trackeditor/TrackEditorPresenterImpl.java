@@ -27,6 +27,8 @@ import javafx.scene.control.Slider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.stream.Collectors;
+
 public class TrackEditorPresenterImpl implements TrackEditorPresenter{
     private static final Logger LOG = LoggerFactory.getLogger(TrackEditorPresenterImpl.class);
     @FXML
@@ -45,12 +47,6 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
     private Button btnClearMode;
     @FXML
     private Slider zoomSlider;
-    @FXML
-    private Label zoomLabel;
-    @FXML
-    private Button btnMoveUp;
-    @FXML
-    private Button btnMoveDown;
 
     private final TrackService service;
     private final EventBus eventBus;
@@ -111,7 +107,7 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
     }
 
     private void createLayeredPane() {
-        panelGroup.getChildren().add(new LayeredPane(this,
+        layeredPane = new LayeredPane(this,
                 zoomSlider.valueProperty(),
                 resolution,
                 fourthInBar,
@@ -119,7 +115,8 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
                 new SimpleIntegerProperty(10),
                 noteLengthProperty,
                 chordtTypeProperty,
-                trackModellObservable, rootObservable, modeObservable ));
+                trackModellObservable, rootObservable, modeObservable );
+        panelGroup.getChildren().add(layeredPane);
     }
 
     public void noteVolumeChanged(String id, double newVolume){
@@ -135,5 +132,31 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
         noteDto.id = noteId;
         NoteDto[] notes = new NoteDto[]{noteDto};
         service.noteDeleted(trackModellObservable.getName(), notes);
+    }
+
+    public void moveUpSelected(ActionEvent actionEvent) {
+        String[] ids = layeredPane.getSelectedNoteIds().stream().map(noteModell -> noteModell.id).collect(Collectors.toList()).toArray(new String[0]);
+        service.updateNotePitch(trackModellObservable.getName(), ids, 1);
+    }
+
+    public void moveDownSelected(ActionEvent actionEvent) {
+        String[] ids = layeredPane.getSelectedNoteIds().stream().map(noteModell -> noteModell.id).collect(Collectors.toList()).toArray(new String[0]);
+        service.updateNotePitch(trackModellObservable.getName(), ids, -1);
+    }
+
+    public void moveRightSelected(ActionEvent actionEvent) {
+        layeredPane.getSelectedNoteIds().forEach(noteModell -> {
+            service.updateNoteTick(noteModell.id, (int) (noteModell.tick + getTicksIn32nds()));
+        });
+    }
+
+    public void moveLeftSelected(ActionEvent actionEvent) {
+        layeredPane.getSelectedNoteIds().forEach(noteModell -> {
+            service.updateNoteTick(noteModell.id, (int) (noteModell.tick - getTicksIn32nds()));
+        });
+    }
+
+    private int getTicksIn32nds(){
+        return resolution.get() * fourthInBar.intValue() / 32;
     }
 }

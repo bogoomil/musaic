@@ -5,25 +5,16 @@ import hu.boga.musaic.gui.logic.Observable;
 import hu.boga.musaic.gui.track.TrackModell;
 import hu.boga.musaic.gui.trackeditor.NoteModell;
 import hu.boga.musaic.gui.trackeditor.NoteRectangle;
-import hu.boga.musaic.musictheory.Chord;
-import hu.boga.musaic.musictheory.Pitch;
-import hu.boga.musaic.musictheory.enums.ChordType;
-import hu.boga.musaic.musictheory.enums.NoteLength;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.beans.PropertyChangeEvent;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,11 +74,11 @@ public class NotesLayer extends Group implements Layer, EventHandler<MouseEvent>
         return (x - (x % parent.get32ndsWidth()));
     }
 
-    public List<String> getSelectedNoteIds(){
+    public List<NoteModell> getSelectedNoteModells(){
         return this.getChildren().stream()
                 .map(node -> (NoteRectangle)node)
                 .filter(NoteRectangle::isSelected)
-                .map(NoteRectangle::getNoteId)
+                .map(NoteRectangle::getModell)
                 .collect(Collectors.toList());
     }
 

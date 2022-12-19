@@ -60,7 +60,7 @@
 
                     <VBox>
                         <children>
-                            <Button fx:id="btnMoveUp" mnemonicParsing="false">
+                            <Button mnemonicParsing="false" onAction="#moveUpSelected">
                                 <graphic>
                                     <FontIcon iconLiteral="mdi-arrow-up" />
                                 </graphic>
@@ -69,12 +69,12 @@
                                 </VBox.margin>
                             </Button>
                             <HBox>
-                                <Button fx:id="btnMoveLeft">
+                                <Button onAction="#moveLeftSelected">
                                     <graphic>
                                         <FontIcon iconLiteral="mdi-arrow-left" />
                                     </graphic>
                                 </Button>
-                                <Button fx:id="btnMoveRight">
+                                <Button onAction="#moveRightSelected">
                                     <graphic>
                                         <FontIcon iconLiteral="mdi-arrow-right" />
                                     </graphic>
@@ -83,7 +83,7 @@
                                     </HBox.margin>
                                 </Button>
                             </HBox>
-                            <Button fx:id="btnMoveDown" mnemonicParsing="false">
+                            <Button mnemonicParsing="false" onAction="#moveDownSelected">
                                 <graphic>
                                     <FontIcon iconLiteral="mdi-arrow-down" />
                                 </graphic>

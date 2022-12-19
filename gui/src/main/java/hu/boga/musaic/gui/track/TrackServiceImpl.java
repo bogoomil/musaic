@@ -76,4 +76,14 @@ public class TrackServiceImpl implements TrackService, TrackBoundaryOut {
         boundaryIn.deleteNotes(trackId, notes);
     }
 
+    @Override
+    public void updateNoteTick(String noteId, int increment) {
+        boundaryIn.moveNote(noteId, increment);
+    }
+
+    @Override
+    public void updateNotePitch(String trackId, String[] ids, int move){
+        boundaryIn.moveUpAndDownNotes(trackId, ids, move);
+    }
+
 }

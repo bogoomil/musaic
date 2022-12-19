@@ -4,6 +4,7 @@ import hu.boga.musaic.gui.constants.GuiConstants;
 import hu.boga.musaic.gui.panels.ZoomablePanel;
 import hu.boga.musaic.gui.logic.Observable;
 import hu.boga.musaic.gui.track.TrackModell;
+import hu.boga.musaic.gui.trackeditor.NoteModell;
 import hu.boga.musaic.gui.trackeditor.TrackEditorPresenterImpl;
 import hu.boga.musaic.musictheory.Pitch;
 import hu.boga.musaic.musictheory.enums.ChordType;
@@ -137,7 +138,7 @@ public class LayeredPane extends ZoomablePanel implements NoteChangedListener {
         notesLayer.selectNotes(startPoint, endPoint);
     }
 
-    public List<String> getSelectedNoteIds(){
-        return notesLayer.getSelectedNoteIds();
+    public List<NoteModell> getSelectedNoteIds(){
+        return notesLayer.getSelectedNoteModells();
     }
 }

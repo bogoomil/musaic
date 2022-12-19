@@ -123,4 +123,8 @@ public class NoteRectangle extends Rectangle {
         return noteModell.id;
     }
 
+    public NoteModell getModell(){
+        return noteModell;
+    }
+
 }
