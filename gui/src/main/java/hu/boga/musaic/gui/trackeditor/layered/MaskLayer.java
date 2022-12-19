@@ -6,40 +6,46 @@ import hu.boga.musaic.musictheory.Scale;
 import hu.boga.musaic.musictheory.enums.NoteName;
 import hu.boga.musaic.musictheory.enums.Tone;
 import javafx.scene.Group;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 public class MaskLayer extends Group implements Layer{
 
+    private static final Logger LOG = LoggerFactory.getLogger(MaskLayer.class);
+
     private final LayeredPane parent;
-    private final Observable<NoteName> rootObservable;
-    private final Observable<Tone> toneObservable;
 
     private Tone currentTone;
     private NoteName currentRoot;
 
     public MaskLayer(LayeredPane parent, Observable<NoteName> rootObservable, Observable<Tone> toneObservable) {
         this.parent = parent;
-
-        rootObservable.addPropertyChangeListener(propertyChangeEvent -> rootChanged(propertyChangeEvent));
-        toneObservable.addPropertyChangeListener(propertyChangeEvent -> tonehanged(propertyChangeEvent));
-
-        this.rootObservable = rootObservable;
-        this.toneObservable = toneObservable;
-
+        rootObservable.addPropertyChangeListener(this::rootChanged);
+        toneObservable.addPropertyChangeListener(this::toneChanged);
     }
 
     @Override
     public void updateGui() {
         getChildren().clear();
-
-
+        paintDisabled();
     }
 
-    private void tonehanged(PropertyChangeEvent propertyChangeEvent) {
+    private void paintDisabled() {
+        if (currentTone != null && currentRoot != null) {
+            List<NoteName> scale = Scale.getScale(currentRoot, currentTone);
+            LOG.debug("scale: {}", scale);
+            for (int y = 0; y < parent.getFullHeight(); y += GuiConstants.NOTE_LINE_HEIGHT) {
+                paintDisabledLines(scale, y);
+            }
+        }
+    }
+
+    private void toneChanged(PropertyChangeEvent propertyChangeEvent) {
         this.currentTone = (Tone) propertyChangeEvent.getNewValue();
         updateGui();
     }
@@ -49,19 +55,11 @@ public class MaskLayer extends Group implements Layer{
         updateGui();
     }
 
-    private void paintDisabled() {
-        if (currentTone != null && currentRoot != null) {
-            List<NoteName> scale = Scale.getScale(currentRoot, currentTone);
-            for (int y = 0; y < parent.getFullHeight(); y += GuiConstants.NOTE_LINE_HEIGHT) {
-                paintDisabledLines(scale, y);
-            }
-        }
-    }
-
-
     private void paintDisabledLines(List<NoteName> scale, int y) {
+        LOG.debug("paint mask: {}", y);
         NoteName currentNoteName = NoteName.byCode(parent.getPitchByY(y + 5).getMidiCode());
         if (!scale.contains(currentNoteName)) {
+            LOG.debug("disabled note: {}", currentNoteName.name());
             paintDisabledRectangle(y);
         }
         if (currentNoteName == currentRoot) {
@@ -69,17 +67,23 @@ public class MaskLayer extends Group implements Layer{
         }
     }
 
-
-    private void paintDisabledRectangle(int y) {
-        final Rectangle rectangle = new Rectangle();
-        rectangle.addEventHandler(MouseEvent.ANY, event -> event.consume());
-        rectangle.setFill(DISABLED_COLOR);
-        rectangle.setX(0);
-        rectangle.setY(y);
-        rectangle.setWidth(getPrefWidth());
-        rectangle.setHeight(getPitchHeight());
+    private void paintRootMarker(int y) {
+        Color highLight = Color.CYAN;
+        Rectangle rectangle = new Rectangle(0, y + 2, parent.getFullWidth(), GuiConstants.NOTE_LINE_HEIGHT - 2);
+        rectangle.setStroke(highLight);
+        rectangle.setFill(Color.color(highLight.getRed(), highLight.getGreen(), highLight.getBlue(), 0.4));
+        rectangle.setMouseTransparent(true);
         getChildren().add(rectangle);
     }
 
-
+    private void paintDisabledRectangle(int y) {
+        final Rectangle rectangle = new Rectangle();
+        rectangle.setMouseTransparent(false);
+        rectangle.setFill(Color.GRAY);
+        rectangle.setX(0);
+        rectangle.setY(y);
+        rectangle.setWidth(parent.getFullWidth());
+        rectangle.setHeight(GuiConstants.NOTE_LINE_HEIGHT);
+        getChildren().add(rectangle);
+    }
 }

@@ -14,15 +14,12 @@ module gui {
     requires midigateway;
     requires jsr305;
 
-
     exports hu.boga.musaic;
     exports hu.boga.musaic.gui;
-    exports hu.boga.musaic.gui.trackeditor_old;
     exports hu.boga.musaic.gui.controls;
 
     opens hu.boga.musaic to javafx.fxml, com.google.common;
     opens hu.boga.musaic.gui to com.google.common, javafx.fxml;
-
 
     opens hu.boga.musaic.gui.sequence to javafx.fxml, com.google.guice, com.google.inject, com.google.common;
     exports hu.boga.musaic.gui.sequence to com.google.guice, com.google.inject;

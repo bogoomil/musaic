@@ -41,7 +41,7 @@ public class CursorLayer extends Group implements Layer, EventHandler<MouseEvent
     @Override
     public void updateGui() {
         getChildren().clear();
-        if(currentChordType != ChordType.NONE){
+        if (currentChordType != ChordType.NONE) {
             Chord chord = Chord.getChord(new Pitch(0), currentChordType);
             Arrays.stream(chord.getPitches()).sorted(Comparator.comparingInt(p -> p.getMidiCode())).forEach(pitch -> {
                 createRectangle(pitch.getMidiCode());
@@ -78,11 +78,11 @@ public class CursorLayer extends Group implements Layer, EventHandler<MouseEvent
 
     @Override
     public void handle(MouseEvent event) {
-        if (event.getEventType().equals(MouseEvent.MOUSE_EXITED)){
+        if (event.getEventType().equals(MouseEvent.MOUSE_EXITED)) {
             this.setVisible(false);
-        } else if (event.getEventType().equals(MouseEvent.MOUSE_MOVED)){
+        } else if (event.getEventType().equals(MouseEvent.MOUSE_MOVED)) {
             moveCursor(event);
-        } else if (event.getEventType().equals(MouseEvent.MOUSE_CLICKED)){
+        } else if (event.getEventType().equals(MouseEvent.MOUSE_CLICKED) && event.getClickCount() == 2) {
             parent.addNotesToTrack(parent.getTickAtX(getCaculatedX(event.getX())), parent.getPitchByY(event.getY()).getMidiCode());
         }
     }

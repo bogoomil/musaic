@@ -10,6 +10,7 @@ import hu.boga.musaic.musictheory.enums.ChordType;
 import hu.boga.musaic.musictheory.enums.NoteLength;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -21,6 +22,8 @@ import org.slf4j.LoggerFactory;
 import java.beans.PropertyChangeEvent;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class NotesLayer extends Group implements Layer, EventHandler<MouseEvent> {
     private static final Logger LOG = LoggerFactory.getLogger(NotesLayer.class);
@@ -78,4 +81,18 @@ public class NotesLayer extends Group implements Layer, EventHandler<MouseEvent>
         return (x - (x % parent.get32ndsWidth()));
     }
 
+    public void selectNotes(Point2D startPoint, Point2D endPoint) {
+        List<NoteRectangle> rectangles = getNoteRectanglesBetween(startPoint, endPoint);
+        rectangles.forEach(NoteRectangle::toggleSlection);
+    }
+
+    private List<NoteRectangle> getNoteRectanglesBetween(Point2D startPoint, Point2D endPoint){
+        double width = endPoint.getX() - startPoint.getX();
+        double height = endPoint.getY() - startPoint.getY();
+        LOG.debug("selecting nodes between: {}, {}", startPoint, endPoint, width, height);
+        return this.getChildren().stream()
+                .filter(node -> node.intersects(startPoint.getX(), startPoint.getY(), width, height))
+                .map(node -> ((NoteRectangle)node))
+                .collect(Collectors.toList());
+    }
 }

@@ -12,6 +12,7 @@ import hu.boga.musaic.musictheory.enums.NoteName;
 import hu.boga.musaic.musictheory.enums.Tone;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
@@ -24,8 +25,9 @@ public class LayeredPane extends ZoomablePanel implements NoteChangedListener {
     private final GridLayer gridLayer;
     private final TrackEditorPresenterImpl presenter;
 
-    private CursorLayer cursor;
+    private CursorLayer cursorLayer;
     private MaskLayer maskLayer;
+    private SelectionLayer selectionLayer;
 
     public LayeredPane(TrackEditorPresenterImpl presenter,
                        DoubleProperty zoom,
@@ -43,9 +45,10 @@ public class LayeredPane extends ZoomablePanel implements NoteChangedListener {
         this.presenter = presenter;
 
         gridLayer = new GridLayer(this);
-        cursor = new CursorLayer(this, noteLengthObservable, chordTypeObservable, zoom);
+        cursorLayer = new CursorLayer(this, noteLengthObservable, chordTypeObservable, zoom);
         notesLayer = new NotesLayer(this, trackModellObservable, zoom);
         maskLayer = new MaskLayer(this, rootObservable, modeObservable);
+        selectionLayer = new SelectionLayer(this);
 
         initLayers();
         updateGui();
@@ -54,8 +57,9 @@ public class LayeredPane extends ZoomablePanel implements NoteChangedListener {
     private void initLayers() {
         initGridLayer();
         initNotesLayer();
-        initCursor();
+        initCursorLayer();
         initMaskLayer();
+        initSelectioLayer();
     }
 
     private void initGridLayer() {
@@ -68,15 +72,20 @@ public class LayeredPane extends ZoomablePanel implements NoteChangedListener {
         this.getChildren().add(notesLayer);
     }
 
-    private void initCursor() {
-        layers.add(cursor);
-        this.getChildren().add(cursor);
-        this.addEventHandler(MouseEvent.ANY, cursor);
+    private void initCursorLayer() {
+        layers.add(cursorLayer);
+        this.getChildren().add(cursorLayer);
+        this.addEventHandler(MouseEvent.ANY, cursorLayer);
     }
 
     private void initMaskLayer() {
         layers.add(maskLayer);
         this.getChildren().add(maskLayer);
+    }
+
+    private void initSelectioLayer(){
+        this.getChildren().add(selectionLayer);
+        this.addEventHandler(MouseEvent.ANY, selectionLayer);
     }
 
     @Override
@@ -122,5 +131,9 @@ public class LayeredPane extends ZoomablePanel implements NoteChangedListener {
     public void noteDeleted(String noteId) {
         presenter.deleteNote(noteId);
 
+    }
+
+    public void selectNotes(Point2D startPoint, Point2D endPoint) {
+        notesLayer.selectNotes(startPoint, endPoint);
     }
 }

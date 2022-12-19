@@ -34,12 +34,8 @@ class TrackInteractorTest {
 
     @BeforeEach
     void setUp() {
-
         InMemorySequenceModellStore.clear();
-
         boundaryOut = Mockito.mock(TrackBoundaryOut.class);
-        TrackBoundaryIn boundaryIn = Mockito.mock(TrackBoundaryIn.class);
-
         trackInteractor = new TrackInteractor(boundaryOut);
 
         modell = new SequenceModell();
@@ -125,6 +121,13 @@ class TrackInteractorTest {
     void moveUpAndDownNotes(){
         trackInteractor.moveUpAndDownNotes(trackModell.getId(), new String[]{noteModell.getId()}, 2);
         assertEquals(14, noteModell.midiCode);
+        Mockito.verify(boundaryOut).displayTrack(Mockito.any());
+    }
+
+    @Test
+    void updateNoteVolume(){
+        trackInteractor.noteVolumeChanged(noteId, 0.8);
+        assertEquals(0.8, trackModell.getNoteModellById(noteId).get().velocity);
         Mockito.verify(boundaryOut).displayTrack(Mockito.any());
     }
 }

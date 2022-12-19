@@ -60,7 +60,6 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
     private final Observable<ChordType> chordtTypeProperty;
 
     private final Observable<Tone> modeObservable;
-
     private final Observable<NoteName> rootObservable;
 
     private final Observable<TrackModell> trackModellObservable;
@@ -97,7 +96,22 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
         noteLength.addEventHandler(ActionEvent.ACTION, event -> noteLengthProperty.setValue(noteLength.getSelectedNoteLength()));
         chordType.setValue(ChordType.NONE);
         chordType.addEventHandler(ActionEvent.ACTION, event -> chordtTypeProperty.setValue(chordType.getSelectedChordType()));
-        layeredPane = new LayeredPane(this,
+        rootCombo.addEventHandler(ActionEvent.ACTION, event -> rootObservable.setValue(rootCombo.getSelectedNoteName()));
+        modeCombo.addEventHandler(ActionEvent.ACTION, event -> modeObservable.setValue(modeCombo.getSelectedTone()));
+        btnClearMode.setOnAction(event -> clearMode());
+        createLayeredPane();
+        service.load(trackModellObservable.getName());
+    }
+
+    private void clearMode() {
+        rootObservable.setValue(null);
+        modeObservable.setValue(null);
+        modeCombo.getSelectionModel().clearSelection();
+        rootCombo.getSelectionModel().clearSelection();
+    }
+
+    private void createLayeredPane() {
+        panelGroup.getChildren().add(new LayeredPane(this,
                 zoomSlider.valueProperty(),
                 resolution,
                 fourthInBar,
@@ -105,9 +119,7 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
                 new SimpleIntegerProperty(10),
                 noteLengthProperty,
                 chordtTypeProperty,
-                trackModellObservable, rootObservable, modeObservable );
-        panelGroup.getChildren().add(layeredPane);
-        service.load(trackModellObservable.getName());
+                trackModellObservable, rootObservable, modeObservable ));
     }
 
     public void noteVolumeChanged(String id, double newVolume){
