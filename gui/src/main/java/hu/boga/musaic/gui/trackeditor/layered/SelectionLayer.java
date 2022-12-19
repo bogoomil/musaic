@@ -41,17 +41,28 @@ public class SelectionLayer extends Group implements EventHandler<MouseEvent> {
     @Override
     public void handle(MouseEvent event) {
         if (event.getEventType().equals(MouseEvent.MOUSE_PRESSED)){
-            selection.setVisible(true);
             startPoint = new Point2D(event.getX(), event.getY());
-            selection.setX(event.getX());
-            selection.setY(event.getY());
+            endPoint = new Point2D(event.getX(), event.getY());
+            initSelection(event);
         } else if (event.getEventType().equals(MouseEvent.MOUSE_RELEASED)){
-            selection.setVisible(false);
+            resetSelection();
             parent.selectNotes(startPoint, endPoint);
         } else if (event.getEventType().equals(MouseEvent.MOUSE_DRAGGED)){
             endPoint = new Point2D(event.getX(), event.getY());
             updateSelectionRectangel();
         }
+    }
+
+    private void initSelection(MouseEvent event) {
+        selection.setVisible(true);
+        selection.setX(event.getX());
+        selection.setY(event.getY());
+    }
+
+    private void resetSelection() {
+        selection.setVisible(false);
+        selection.setWidth(0);
+        selection.setHeight(0);
     }
 
     private void updateSelectionRectangel() {

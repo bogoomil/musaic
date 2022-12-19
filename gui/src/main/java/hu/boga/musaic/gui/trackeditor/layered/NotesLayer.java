@@ -3,6 +3,7 @@ package hu.boga.musaic.gui.trackeditor.layered;
 import hu.boga.musaic.gui.constants.GuiConstants;
 import hu.boga.musaic.gui.logic.Observable;
 import hu.boga.musaic.gui.track.TrackModell;
+import hu.boga.musaic.gui.trackeditor.NoteModell;
 import hu.boga.musaic.gui.trackeditor.NoteRectangle;
 import hu.boga.musaic.musictheory.Chord;
 import hu.boga.musaic.musictheory.Pitch;
@@ -12,6 +13,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -81,6 +83,14 @@ public class NotesLayer extends Group implements Layer, EventHandler<MouseEvent>
         return (x - (x % parent.get32ndsWidth()));
     }
 
+    public List<String> getSelectedNoteIds(){
+        return this.getChildren().stream()
+                .map(node -> (NoteRectangle)node)
+                .filter(NoteRectangle::isSelected)
+                .map(NoteRectangle::getNoteId)
+                .collect(Collectors.toList());
+    }
+
     public void selectNotes(Point2D startPoint, Point2D endPoint) {
         List<NoteRectangle> rectangles = getNoteRectanglesBetween(startPoint, endPoint);
         rectangles.forEach(NoteRectangle::toggleSlection);
@@ -89,9 +99,10 @@ public class NotesLayer extends Group implements Layer, EventHandler<MouseEvent>
     private List<NoteRectangle> getNoteRectanglesBetween(Point2D startPoint, Point2D endPoint){
         double width = endPoint.getX() - startPoint.getX();
         double height = endPoint.getY() - startPoint.getY();
-        LOG.debug("selecting nodes between: {}, {}", startPoint, endPoint, width, height);
+
+        Rectangle rectangle = new Rectangle(startPoint.getX(), startPoint.getY(), width, height);
         return this.getChildren().stream()
-                .filter(node -> node.intersects(startPoint.getX(), startPoint.getY(), width, height))
+                .filter(node -> node.getBoundsInParent().intersects(rectangle.getLayoutBounds()))
                 .map(node -> ((NoteRectangle)node))
                 .collect(Collectors.toList());
     }

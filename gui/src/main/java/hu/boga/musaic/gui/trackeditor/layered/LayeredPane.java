@@ -56,10 +56,10 @@ public class LayeredPane extends ZoomablePanel implements NoteChangedListener {
 
     private void initLayers() {
         initGridLayer();
+        initSelectioLayer();
         initNotesLayer();
         initCursorLayer();
         initMaskLayer();
-        initSelectioLayer();
     }
 
     private void initGridLayer() {
@@ -135,5 +135,9 @@ public class LayeredPane extends ZoomablePanel implements NoteChangedListener {
 
     public void selectNotes(Point2D startPoint, Point2D endPoint) {
         notesLayer.selectNotes(startPoint, endPoint);
+    }
+
+    public List<String> getSelectedNoteIds(){
+        return notesLayer.getSelectedNoteIds();
     }
 }
