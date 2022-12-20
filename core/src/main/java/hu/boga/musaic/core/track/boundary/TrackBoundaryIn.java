@@ -13,7 +13,7 @@ public interface TrackBoundaryIn {
     void addChord(String trackId, int tick, int pitch, int length, ChordType chordType);
     void deleteNotes(String trackId, NoteDto[] notes);
     void moveNote(String noteId, int newTick);
-    void duplicate(String trackId, String[] ids,  int fromTick, int toTick);
+    void duplicate(String trackId, int fromTick, int toTick);
     void moveUpAndDownNotes(String trackId, String[] ids, int move);
     void noteVolumeChanged(String noteId, double v);
 }

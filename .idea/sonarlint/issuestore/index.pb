@@ -1,6 +1,4 @@
 
-z
-Jcore/src/main/java/hu/boga/musaic/core/track/boundary/TrackBoundaryIn.java,9/d/9d641c1e95125601adb8349aa1c7c4c69e0f8947
 R
 "gui/src/main/java/module-info.java,7/e/7eb51de7783f19d325cce8c4c0170ca79a02ba70
 o
@@ -9,8 +7,6 @@ s
 Ccore/src/test/java/hu/boga/musaic/core/note/NoteInteractorTest.java,7/9/792ebd9839e37144db2a908f828e6a439f03aba2
 Š
 Zcore/src/test/java/hu/boga/musaic/core/track/interactor/TrackPropertiesInteractorTest.java,c/a/cafa518a2cee35b6019c874deab5526669e33284
-€
-Pcore/src/test/java/hu/boga/musaic/core/track/interactor/TrackInteractorTest.java,5/b/5b691c4d47e9d32dc5456fd137729b1ce33851f4
 o
 ?core/src/main/java/hu/boga/musaic/core/note/NoteInteractor.java,a/4/a427dd25fc7ea74e6e68c5e20495fe89e794c8de
 h
@@ -23,5 +19,3 @@ k
 ;gui/src/main/java/hu/boga/musaic/gui/track/TrackModell.java,0/4/04c37150f7fe69cc024e3879f17664ef75e6bcda
 p
 @gui/src/main/java/hu/boga/musaic/gui/trackeditor/NoteModell.java,f/9/f9070c57cebde8653de5372fca81a8e29814d42d
-y
-Igui/src/main/java/hu/boga/musaic/gui/trackeditor/layered/CursorLayer.java,7/5/758797fc1840b6ea3fe67ac00d0313a22aecd2ac

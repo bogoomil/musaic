@@ -134,29 +134,29 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
         service.noteDeleted(trackModellObservable.getName(), notes);
     }
 
-    public void moveUpSelected(ActionEvent actionEvent) {
+    public void moveUpSelected(int amount) {
         String[] ids = layeredPane.getSelectedNoteIds().stream().map(noteModell -> noteModell.id).collect(Collectors.toList()).toArray(new String[0]);
-        service.updateNotePitch(trackModellObservable.getName(), ids, 1);
+        service.updateNotePitch(trackModellObservable.getName(), ids, amount);
     }
 
-    public void moveDownSelected(ActionEvent actionEvent) {
+    public void moveDownSelected(int amount) {
         String[] ids = layeredPane.getSelectedNoteIds().stream().map(noteModell -> noteModell.id).collect(Collectors.toList()).toArray(new String[0]);
-        service.updateNotePitch(trackModellObservable.getName(), ids, -1);
+        service.updateNotePitch(trackModellObservable.getName(), ids, amount);
     }
 
-    public void moveRightSelected(ActionEvent actionEvent) {
+    public void moveRightSelected(int amount) {
         layeredPane.getSelectedNoteIds().forEach(noteModell -> {
-            service.updateNoteTick(noteModell.id, (int) (noteModell.tick + getTicksIn32nds()));
+            service.updateNoteTick(noteModell.id, (int) (noteModell.tick + getTicksIn32nds() * amount));
         });
     }
 
-    public void moveLeftSelected(ActionEvent actionEvent) {
+    public void moveLeftSelected(int amount) {
         layeredPane.getSelectedNoteIds().forEach(noteModell -> {
-            service.updateNoteTick(noteModell.id, (int) (noteModell.tick - getTicksIn32nds()));
+            service.updateNoteTick(noteModell.id, (int) (noteModell.tick - getTicksIn32nds() * amount));
         });
     }
 
     private int getTicksIn32nds(){
-        return resolution.get() * fourthInBar.intValue() / 32;
+        return resolution.get() / 8;
     }
 }

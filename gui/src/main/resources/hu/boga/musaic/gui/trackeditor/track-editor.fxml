@@ -31,14 +31,14 @@
                     </padding>
                 </HBox>
                 <HBox spacing="10.0">
-                    <VBox spacing="5.0">
+                    <VBox prefHeight="65.0" prefWidth="613.0" spacing="5.0">
                         <HBox spacing="5.0">
                             <Label fx:id="zoomLabel">
                                 <graphic>
                                     <FontIcon iconLiteral="mdi-magnify-plus" scaleX="2.0" scaleY="2.0" />
                                 </graphic>
                             </Label>
-                            <Slider fx:id="zoomSlider" prefHeight="16.0" prefWidth="486.0" />
+                            <Slider fx:id="zoomSlider" prefHeight="16.0" prefWidth="581.0" />
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
@@ -53,45 +53,6 @@
                      </padding>
                         </HBox>
 
-                    </VBox>
-
-
-
-
-                    <VBox>
-                        <children>
-                            <Button mnemonicParsing="false" onAction="#moveUpSelected">
-                                <graphic>
-                                    <FontIcon iconLiteral="mdi-arrow-up" />
-                                </graphic>
-                                <VBox.margin>
-                                    <Insets left="30.0" />
-                                </VBox.margin>
-                            </Button>
-                            <HBox>
-                                <Button onAction="#moveLeftSelected">
-                                    <graphic>
-                                        <FontIcon iconLiteral="mdi-arrow-left" />
-                                    </graphic>
-                                </Button>
-                                <Button onAction="#moveRightSelected">
-                                    <graphic>
-                                        <FontIcon iconLiteral="mdi-arrow-right" />
-                                    </graphic>
-                                    <HBox.margin>
-                                        <Insets left="29.0" />
-                                    </HBox.margin>
-                                </Button>
-                            </HBox>
-                            <Button mnemonicParsing="false" onAction="#moveDownSelected">
-                                <graphic>
-                                    <FontIcon iconLiteral="mdi-arrow-down" />
-                                </graphic>
-                                <VBox.margin>
-                                    <Insets left="30.0" />
-                                </VBox.margin>
-                            </Button>
-                        </children>
                     </VBox>
                     <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

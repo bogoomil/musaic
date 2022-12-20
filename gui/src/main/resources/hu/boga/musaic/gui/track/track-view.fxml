@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.*?>
@@ -48,6 +47,7 @@
                                     </HBox.margin>
 
                                 </CheckBox>
+                                <Button mnemonicParsing="false" text="Duplicate sel." onAction="#duplicateSelection"/>
                             </children>
                             <padding>
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
@@ -60,6 +60,6 @@
         </AnchorPane>
     </center>
     <right>
-        <AnchorPane fx:id="panelGroupAnchor" style="-fx-view-order: 100;" />
+        <AnchorPane fx:id="panelGroupAnchor" style="-fx-view-order: 100;"/>
     </right>
 </BorderPane>

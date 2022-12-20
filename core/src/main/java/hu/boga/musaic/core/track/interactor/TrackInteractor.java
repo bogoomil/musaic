@@ -117,11 +117,10 @@ public class TrackInteractor implements TrackBoundaryIn {
     }
 
     @Override
-    public void duplicate(String trackId, String[] ids,  int fromTick, int toTick) {
-        List<String> idList = Arrays.asList(ids);
+    public void duplicate(String trackId,  int fromTick, int toTick) {
         InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
             sequenceModell.getTrackById(trackId).ifPresent(trackModell -> {
-                List<NoteModell> notesToCopy = trackModell.getNotesBetween(fromTick, toTick).stream().filter(noteModell -> idList.contains(noteModell.getId())).collect(Collectors.toList());
+                List<NoteModell> notesToCopy = trackModell.getNotesBetween(fromTick, toTick).stream().collect(Collectors.toList());
                 notesToCopy.forEach(noteModell -> {
                     NoteModell modellToAdd = noteModell.clone();
                     modellToAdd.tick = modellToAdd.tick + (toTick - fromTick);

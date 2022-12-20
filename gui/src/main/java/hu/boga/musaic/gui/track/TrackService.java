@@ -17,4 +17,6 @@ public interface TrackService {
 
     void updateNoteTick(String noteId, int increment);
     void updateNotePitch(String trackId, String[] ids, int move);
+
+    void duplicateSelection(String trackId, int start, int end);
 }

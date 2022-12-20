@@ -8,6 +8,7 @@ import hu.boga.musaic.gui.constants.GuiConstants;
 import hu.boga.musaic.gui.sequence.SequenceModell;
 import hu.boga.musaic.gui.track.events.TrackEditingFinishedEvent;
 import hu.boga.musaic.gui.track.events.TrackModellChangedEvent;
+import hu.boga.musaic.gui.track.events.TrackSelectionChangedEvent;
 import hu.boga.musaic.gui.track.panels.CursorPanel;
 import hu.boga.musaic.gui.track.panels.GridPanel;
 import hu.boga.musaic.gui.track.panels.NotesPanel;
@@ -55,6 +56,8 @@ public class TrackPresenterImpl implements TrackPresenter{
     private ChangeListener<String> nameChangeListener = (observable, oldValue, newValue) -> onNameChanged(newValue);
     private final TrackEditorPresenterFactory trackEditorPresenterFactory;
     private final Observable<TrackModell> trackModellObservable;
+    private int selectionStart;
+    private int selectionEnd;
 
     @AssistedInject
     public TrackPresenterImpl(TrackService trackService,
@@ -174,5 +177,15 @@ public class TrackPresenterImpl implements TrackPresenter{
             LOG.debug("track editing finished: {}", event.getTrackId());
             trackService.load(event.getTrackId());
         }
+    }
+
+    @Subscribe
+    void handleMeasureSelectedEvent(TrackSelectionChangedEvent event){
+        this.selectionStart = event.getSelectionStart();
+        this.selectionEnd = event.getSelectionEnd();
+    }
+
+    public void duplicateSelection(ActionEvent actionEvent) {
+        trackService.duplicateSelection(trackModell.id, selectionStart, selectionEnd);
     }
 }

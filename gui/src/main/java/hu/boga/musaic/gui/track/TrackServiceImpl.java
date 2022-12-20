@@ -86,4 +86,9 @@ public class TrackServiceImpl implements TrackService, TrackBoundaryOut {
         boundaryIn.moveUpAndDownNotes(trackId, ids, move);
     }
 
+    @Override
+    public void duplicateSelection(String trackId, int start, int end) {
+        boundaryIn.duplicate(trackId, start, end);
+    }
+
 }

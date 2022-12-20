@@ -103,13 +103,12 @@ class TrackInteractorTest {
 
     @Test
     void duplicate(){
-        String[] ids = {noteId};
         trackModell.eventModells.add(new NoteModell(0, 3, 100, 100, 0));
-        trackInteractor.duplicate(trackModell.getId(), ids, 1,512);
+        trackInteractor.duplicate(trackModell.getId(), 1,512);
 
         List<NoteModell> notes = trackModell.getNotes();
 
-        assertEquals(4, notes.size());
+        assertEquals(5, notes.size());
         assertEquals(1, notes.get(0).tick);
         assertEquals(600, notes.get(1).tick);
         assertEquals(3, notes.get(2).tick);
