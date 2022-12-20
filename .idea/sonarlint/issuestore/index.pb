@@ -25,8 +25,6 @@ y
 Imidigateway/src/main/java/hu/boga/musaic/midigateway/utils/TempoUtil.java,e/c/ece9a5f45bc8418433bb42fcc2a2e51f9ec4c469
 Å
 Qmidigateway/src/main/java/hu/boga/musaic/midigateway/sequence/SequenceReader.java,5/a/5a7c640806dd87f4a0763174edd7417229bc5419
-Ü
-Vmidigateway/src/main/java/hu/boga/musaic/midigateway/sequence/SequenceGatewayImpl.java,a/d/adf2cbfdc15ed0c1f27a8e83369641d22877e57f
 x
 Hmidigateway/src/main/java/hu/boga/musaic/midigateway/utils/MidiUtil.java,b/1/b1e998c13dcfbe6719863d0294a57c5a09e8e60d
 f
