@@ -3,7 +3,7 @@ package hu.boga.musaic.gui.track.panels;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import hu.boga.musaic.gui.track.TrackModell;
-import hu.boga.musaic.gui.track.events.MeasureSelectedEvent;
+import hu.boga.musaic.gui.track.events.TrackSelectionChangedEvent;
 import hu.boga.musaic.gui.track.events.TrackEditingFinishedEvent;
 import hu.boga.musaic.gui.trackeditor.TrackEditorPresenter;
 import hu.boga.musaic.gui.trackeditor.TrackEditorPresenterFactory;
@@ -25,7 +25,6 @@ import javafx.stage.WindowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 
 public final class SelectionPanel extends NotesPanelBase {
@@ -34,7 +33,6 @@ public final class SelectionPanel extends NotesPanelBase {
     private final EventBus eventBus;
     private int selectionStartInTicks, selectionEndInTicks;
     private final TrackEditorPresenterFactory trackEditorPresenterFactory;
-    private int currentMeasureIndex;
     private final Observable<TrackModell> trackModellObservable;
 
     public SelectionPanel(int height,
@@ -51,11 +49,7 @@ public final class SelectionPanel extends NotesPanelBase {
         this.eventBus.register(this);
         this.trackEditorPresenterFactory = trackEditorPresenterFactory;
         this.trackModellObservable = trackModellObservable;
-        trackModellObservable.addPropertyChangeListener(propertyChangeEvent -> trackModellChanged(propertyChangeEvent));
         addEventHandler(MouseEvent.MOUSE_CLICKED, event -> mouseClicked(event));
-    }
-
-    private void trackModellChanged(PropertyChangeEvent propertyChangeEvent) {
     }
 
     @Override
@@ -70,25 +64,20 @@ public final class SelectionPanel extends NotesPanelBase {
     }
 
     private void mouseClicked(MouseEvent event) {
-        currentMeasureIndex = getTickAtX(event.getX()) / (fourthInBar.intValue() * resolution.intValue());
-        int selectionStart = currentMeasureIndex * resolution.intValue() * fourthInBar.intValue();
-        int selectionEnd = selectionStart + (fourthInBar.intValue() * resolution.intValue());
+        int currentMeasureIndex = getTickAtX(event.getX()) / (fourthInBar.intValue() * resolution.intValue());
+        if(event.isControlDown()){
+            selectionStartInTicks = getMeasureStratTick(currentMeasureIndex);
+        }
+        selectionEndInTicks = getMeasureEndTick(currentMeasureIndex);
+        if(selectionStartInTicks > selectionEndInTicks){
+            selectionStartInTicks = getMeasureStratTick(currentMeasureIndex);
+        }
 
         if (event.getClickCount() == 2) {
-            openTrackEditor();
+            createTrackEditor();
         } else if (event.getClickCount() == 1) {
-            eventBus.post(new MeasureSelectedEvent(selectionStart, selectionEnd));
+            eventBus.post(new TrackSelectionChangedEvent(selectionStartInTicks, selectionEndInTicks));
         }
-    }
-
-    private void openTrackEditor() {
-        createTrackEditor();
-    }
-
-    @Subscribe
-    void handle(MeasureSelectedEvent event) {
-        this.selectionStartInTicks = event.getSelectionStart();
-        this.selectionEndInTicks = event.getSelectionEnd();
         updateGui();
     }
 
@@ -127,6 +116,14 @@ public final class SelectionPanel extends NotesPanelBase {
             }
         });
         newWindow.show();
+    }
+
+    private int getMeasureStratTick(int currentMeasureIndex){
+        return currentMeasureIndex * resolution.intValue() * fourthInBar.intValue();
+    }
+
+    private int getMeasureEndTick(int currentMesureIndex){
+        return getMeasureStratTick(currentMesureIndex) + (fourthInBar.intValue() * resolution.intValue());
     }
 
 }

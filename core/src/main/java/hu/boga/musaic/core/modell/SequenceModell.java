@@ -19,6 +19,7 @@ public class SequenceModell extends BaseModell{
     public int resolution = DEFAULT_RESOLUTION;
     public float division = DEFAULT_DIVISION;
     public float tempo = DEFAULT_TEMPO;
+    public String name;
 
     public int getTicksPerMeasure() {
         return 4 * resolution;
@@ -36,7 +37,6 @@ public class SequenceModell extends BaseModell{
         return 1 / getTicksPerSecond();
     }
 
-    public String name;
 
     public long getTickLength() {
         return tracks.stream().mapToLong(trackModell -> trackModell.getTickLength()).max().orElse(0);
@@ -73,5 +73,17 @@ public class SequenceModell extends BaseModell{
                 .flatMap(trackModell -> trackModell.getShortMessageEventsByCommand(CommandEnum.PROGRAM_CHANGE)
                         .stream())
                 .filter(shortMessageEventModell -> shortMessageEventModell.channel == channel).findFirst();
+    }
+
+    public SequenceModell clone(){
+        SequenceModell clone = new SequenceModell();
+        clone.tempo = tempo;
+        clone.tracks = new ArrayList<>();
+        clone.name = name;
+        clone.resolution = resolution;
+        clone.division = division;
+
+        tracks.forEach(trackModell -> clone.tracks.add(trackModell.clone()));
+        return clone;
     }
 }

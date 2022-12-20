@@ -9,7 +9,8 @@ import hu.boga.musaic.gui.sequence.components.ChannelMappingManager;
 import hu.boga.musaic.gui.track.TrackModell;
 import hu.boga.musaic.gui.track.TrackPresenter;
 import hu.boga.musaic.gui.track.TrackPresenterFactory;
-import hu.boga.musaic.gui.track.events.MeasureSelectedEvent;
+import hu.boga.musaic.gui.track.events.TrackModellChangedEvent;
+import hu.boga.musaic.gui.track.events.TrackSelectionChangedEvent;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
@@ -229,7 +230,7 @@ public class SequencePresenterImpl implements SequencePresenter, ChannelMappingC
     }
 
     @Subscribe
-    void handleMeasureSelectedEvent(MeasureSelectedEvent event){
+    void handleMeasureSelectedEvent(TrackSelectionChangedEvent event){
         this.selectionStart = event.getSelectionStart();
         this.selectionEnd = event.getSelectionEnd();
         if(isPlaying){
@@ -238,4 +239,11 @@ public class SequencePresenterImpl implements SequencePresenter, ChannelMappingC
         }
     }
 
+    @Subscribe
+    void handleTrackModellChangedEvent(TrackModellChangedEvent event){
+        if(isPlaying){
+            stop();
+            play();
+        }
+    }
 }

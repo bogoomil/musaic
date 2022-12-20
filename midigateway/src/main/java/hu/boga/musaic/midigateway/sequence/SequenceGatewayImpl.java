@@ -3,6 +3,7 @@ package hu.boga.musaic.midigateway.sequence;
 import hu.boga.musaic.core.exceptions.MusaicException;
 import hu.boga.musaic.core.gateway.sequence.SequenceGateway;
 import hu.boga.musaic.core.modell.SequenceModell;
+import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.midigateway.Player;
 import hu.boga.musaic.midigateway.Saver;
 import hu.boga.musaic.midigateway.converters.SequenceModellToSequenceConverter;
@@ -41,11 +42,15 @@ public class SequenceGatewayImpl implements SequenceGateway {
 
     @Override
     public void play(SequenceModell modell, long fromTick, long toTick) {
+
+        SequenceModell clone = modell.clone();
+
         removeMetaEventListener(metaEventListener);
-        createMetaEventListener(modell);
+        createMetaEventListener(clone);
+        clone.tracks.get(0).eventModells.add(new NoteModell(0, toTick + 1, 1, 1,0));
         Sequence sequence = null;
         try {
-            sequence = new SequenceModellToSequenceConverter(modell).convert();
+            sequence = new SequenceModellToSequenceConverter(clone).convert();
             if(toTick == 0){
                 toTick = sequence.getTickLength();
             }

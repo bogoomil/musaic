@@ -7,6 +7,7 @@ import com.google.inject.assistedinject.AssistedInject;
 import hu.boga.musaic.gui.constants.GuiConstants;
 import hu.boga.musaic.gui.sequence.SequenceModell;
 import hu.boga.musaic.gui.track.events.TrackEditingFinishedEvent;
+import hu.boga.musaic.gui.track.events.TrackModellChangedEvent;
 import hu.boga.musaic.gui.track.panels.CursorPanel;
 import hu.boga.musaic.gui.track.panels.GridPanel;
 import hu.boga.musaic.gui.track.panels.NotesPanel;
@@ -88,6 +89,7 @@ public class TrackPresenterImpl implements TrackPresenter{
         trackName.setText(trackModell.name);
         cbChannel.getSelectionModel().select(trackModell.channel);
         chxbMute.setSelected(trackModell.muted);
+        eventBus.post(new TrackModellChangedEvent());
 
     }
 

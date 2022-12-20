@@ -1,10 +1,10 @@
 package hu.boga.musaic.gui.track.events;
 
-public class MeasureSelectedEvent {
+public class TrackSelectionChangedEvent {
     int selectionStart;
     int selectionEnd;
 
-    public MeasureSelectedEvent(int selectionStart, int selectionEnd) {
+    public TrackSelectionChangedEvent(int selectionStart, int selectionEnd) {
         this.selectionStart = selectionStart;
         this.selectionEnd = selectionEnd;
     }
