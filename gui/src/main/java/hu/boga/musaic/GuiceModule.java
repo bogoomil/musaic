@@ -6,6 +6,8 @@ import com.google.inject.Injector;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import hu.boga.musaic.core.gateway.sequence.SequenceGateway;
 import hu.boga.musaic.core.gateway.synth.SynthGateway;
+import hu.boga.musaic.core.note.NoteBoundaryIn;
+import hu.boga.musaic.core.note.NoteInteractor;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.interactor.SequenceInteractor;
@@ -25,6 +27,8 @@ public class GuiceModule extends AbstractModule {
 
     @Override
     protected void configure() {
+
+        bind(NoteBoundaryIn.class).to(NoteInteractor.class).in(Singleton.class);
 
         bind(SequenceBoundaryIn.class).to(SequenceInteractor.class).in(Singleton.class);
         bind(TrackBoundaryIn.class).to(TrackInteractor.class).in(Singleton.class);

@@ -19,4 +19,6 @@ public interface TrackService {
     void updateNotePitch(String trackId, String[] ids, int move);
 
     void duplicateSelection(String trackId, int start, int end);
+
+    void playChord(String trackId, int midiCode, int ertek);
 }

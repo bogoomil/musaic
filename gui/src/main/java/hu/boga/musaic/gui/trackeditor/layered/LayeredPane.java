@@ -188,7 +188,6 @@ public class LayeredPane extends ZoomablePanel implements NoteChangedListener {
     @Override
     public void noteDeleted(String noteId) {
         presenter.deleteNote(noteId);
-
     }
 
     public void selectNotes(Point2D startPoint, Point2D endPoint) {
@@ -197,5 +196,9 @@ public class LayeredPane extends ZoomablePanel implements NoteChangedListener {
 
     public List<NoteModell> getSelectedNoteIds(){
         return notesLayer.getSelectedNoteModells();
+    }
+
+    public void playChord(int midiCode, int ertek, ChordType currentChordType) {
+        presenter.playChord(midiCode, ertek, currentChordType);
     }
 }

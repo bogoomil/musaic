@@ -12,6 +12,8 @@ import hu.boga.musaic.gui.logic.Observable;
 import hu.boga.musaic.gui.track.TrackModell;
 import hu.boga.musaic.gui.track.TrackService;
 import hu.boga.musaic.gui.trackeditor.layered.LayeredPane;
+import hu.boga.musaic.musictheory.Chord;
+import hu.boga.musaic.musictheory.Pitch;
 import hu.boga.musaic.musictheory.enums.ChordType;
 import hu.boga.musaic.musictheory.enums.NoteLength;
 import hu.boga.musaic.musictheory.enums.NoteName;
@@ -27,6 +29,8 @@ import javafx.scene.control.Slider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class TrackEditorPresenterImpl implements TrackEditorPresenter{
@@ -158,5 +162,17 @@ public class TrackEditorPresenterImpl implements TrackEditorPresenter{
 
     private int getTicksIn32nds(){
         return resolution.get() / 8;
+    }
+
+    public void playChord(int midiCode, int length, ChordType currentChordType) {
+        if(currentChordType == ChordType.NONE){
+            service.playChord(trackModellObservable.getName(), midiCode, length);
+        } else {
+            Chord chord = Chord.getChord(new Pitch(midiCode), currentChordType);
+            Arrays.stream(chord.getPitches()).sorted(Comparator.comparingInt(p -> p.getMidiCode())).forEach(pitch -> {
+                LOG.debug("playing: {}", pitch);
+                service.playChord(trackModellObservable.getName(), pitch.getMidiCode(), length);
+            });
+        }
     }
 }

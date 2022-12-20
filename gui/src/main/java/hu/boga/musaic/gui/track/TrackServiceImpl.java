@@ -1,5 +1,6 @@
 package hu.boga.musaic.gui.track;
 
+import hu.boga.musaic.core.note.NoteBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.NoteDto;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
@@ -14,13 +15,15 @@ import java.util.Map;
 public class TrackServiceImpl implements TrackService, TrackBoundaryOut {
 
     TrackBoundaryIn boundaryIn;
+    NoteBoundaryIn noteBoundaryIn;
     TrackDto dto;
 
     private final Map<String, Observable<TrackModell>> observableMap = new HashMap<>();
 
     @Inject
-    public TrackServiceImpl(TrackBoundaryIn boundaryIn) {
+    public TrackServiceImpl(TrackBoundaryIn boundaryIn, NoteBoundaryIn noteBoundaryIn) {
         this.boundaryIn = boundaryIn;
+        this.noteBoundaryIn = noteBoundaryIn;
     }
 
     @Override
@@ -91,4 +94,8 @@ public class TrackServiceImpl implements TrackService, TrackBoundaryOut {
         boundaryIn.duplicate(trackId, start, end);
     }
 
+    @Override
+    public void playChord(String trackId, int midiCode, int length) {
+        noteBoundaryIn.play(trackId, midiCode, length);
+    }
 }

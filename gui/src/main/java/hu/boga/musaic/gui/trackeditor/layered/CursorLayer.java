@@ -84,6 +84,8 @@ public class CursorLayer extends Group implements Layer, EventHandler<MouseEvent
             moveCursor(event);
         } else if (event.getEventType().equals(MouseEvent.MOUSE_CLICKED) && event.getClickCount() == 2) {
             parent.addNotesToTrack(parent.getTickAtX(getCaculatedX(event.getX())), parent.getPitchByY(event.getY()).getMidiCode());
+        } else if(event.getEventType().equals(MouseEvent.MOUSE_CLICKED)){
+            parent.playChord(parent.getPitchByY(event.getY()).getMidiCode(), currentNoteLength.getErtek(), currentChordType);
         }
     }
 
