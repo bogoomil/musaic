@@ -59,6 +59,16 @@
                 <version>12.3.1</version>
             </dependency>
             <dependency>
+                <groupId>org.kordamp.ikonli</groupId>
+                <artifactId>ikonli-materialdesign-pack</artifactId>
+                <version>12.3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kordamp.ikonli</groupId>
+                <artifactId>ikonli-materialdesign2-pack</artifactId>
+                <version>12.3.1</version>
+            </dependency>
+            <dependency>
                 <groupId>javax.inject</groupId>
                 <artifactId>javax.inject</artifactId>
                 <version>1</version>
@@ -78,6 +88,11 @@
             <dependency>
                 <groupId>com.google.inject</groupId>
                 <artifactId>guice</artifactId>
+                <version>${guice.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.inject.extensions</groupId>
+                <artifactId>guice-assistedinject</artifactId>
                 <version>${guice.version}</version>
             </dependency>
             <dependency>
@@ -187,11 +202,13 @@
                     <verbose>false</verbose>
                     <skip>false</skip>
                     <failWhenNoMutations>false</failWhenNoMutations>
+                    <withHistory>true</withHistory>
                     <excludedClasses>
                         <param>hu.boga.musaic.core.sequence.boundary.dtos.*</param>
                         <param>hu.boga.musaic.core.track.boundary.dtos.*</param>
                         <param>hu.boga.musaic.musictheory.*</param>
                         <param>hu.boga.musaic.midigateway.Player</param>
+                        <param>hu.boga.musaic.midigateway.Saver</param>
                     </excludedClasses>
                 </configuration>
             </plugin>

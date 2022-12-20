@@ -2,7 +2,10 @@ package hu.boga.musaic.midigateway.converters;
 
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
-import hu.boga.musaic.core.modell.events.*;
+import hu.boga.musaic.core.modell.events.EventModell;
+import hu.boga.musaic.core.modell.events.MetaMessageEventModell;
+import hu.boga.musaic.core.modell.events.NoteModell;
+import hu.boga.musaic.core.modell.events.ShortMessageEventModell;
 import hu.boga.musaic.midigateway.utils.MidiUtil;
 import hu.boga.musaic.midigateway.utils.NoteUtil;
 import hu.boga.musaic.midigateway.utils.TempoUtil;
@@ -11,8 +14,6 @@ import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Track;
-import java.nio.charset.StandardCharsets;
-import java.util.stream.IntStream;
 
 public class SequenceModellToSequenceConverter {
     private SequenceModell modell;

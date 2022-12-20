@@ -9,8 +9,8 @@ public interface SequenceBoundaryIn {
     void setTempo(String sequenceId, int intValue);
     void addTrack(String sequenceId);
     void stop();
-    void reloadSequence(String sequenceId);
-    void updateChannelColorMapping(String sequenceId, int channel, String color);
     void updateChannelToProgramMappings(String sequenceId, int channel, int program);
     void duplicateTrack(String trackId);
+
+    void removeTrack(String trackId);
 }

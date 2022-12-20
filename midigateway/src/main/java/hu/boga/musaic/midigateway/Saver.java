@@ -8,12 +8,13 @@ import java.io.File;
 import java.io.IOException;
 
 public class Saver {
-    public static void save(Sequence sequence, String path) {
+    public static String save(Sequence sequence, String path) {
         File file = new File(path);
         try {
             MidiSystem.write(sequence, 1, file);
         } catch (Exception e) {
             throw new MusaicException("Saving " + path + " failed: " + e.getMessage());
         }
+        return file.getName();
     }
 }

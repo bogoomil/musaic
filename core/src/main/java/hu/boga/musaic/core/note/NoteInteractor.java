@@ -27,18 +27,4 @@ public class NoteInteractor implements NoteBoundaryIn{
             this.synthGateway.playOneNote(tempo, channel, resolution, midiCode, lengthInTicks, sequenceModell.getChannelToProgramMappings()[channel]);
         });
     }
-
-    @Override
-    public void setNoteVolume(String noteId, double volume) {
-        InMemorySequenceModellStore.getTrackByNoteId(noteId).ifPresent(trackModell -> {
-            trackModell
-                    .getNotes().stream()
-                    .filter(noteModell -> noteId.equals(noteModell.getId()))
-                    .findFirst()
-                    .ifPresent(noteModell -> {
-                        noteModell.velocity = volume;
-                        LOG.debug("setting note {}, volume to: {}", noteId, volume);
-                    });
-        });
-    }
 }

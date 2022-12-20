@@ -12,9 +12,11 @@ import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -24,7 +26,6 @@ import static org.mockito.Mockito.times;
 
 class SequenceInteractorTest {
 
-    public static final String SEQUENCE_ID = "SEQUENCE_ID";
     public static final String PATH = "PATH";
 
     private SequenceInteractor interactor;
@@ -46,6 +47,7 @@ class SequenceInteractorTest {
         trackDtoArgumentCaptor = ArgumentCaptor.forClass(TrackDto.class);
         interactor = new SequenceInteractor(boundaryOut, gateway);
         modell = new SequenceModell();
+        modell.tracks.add(new TrackModell());
         InMemorySequenceModellStore.SEQUENCE_MODELS.put(modell.getId(), modell);
     }
 
@@ -65,7 +67,7 @@ class SequenceInteractorTest {
 
     @Test
     void play(){
-        interactor.play(SEQUENCE_ID, 0, 1);
+        interactor.play(modell.getId(), 0, 1);
         Mockito.verify(gateway).play(Mockito.any(), eq(0L), eq(1L));
 
     }
@@ -97,41 +99,25 @@ class SequenceInteractorTest {
 
     @Test
     void save(){
-        interactor.save(SEQUENCE_ID, PATH);
+        interactor.save(modell.getId(), PATH);
         ArgumentCaptor<String> captor1 = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> captor2 = ArgumentCaptor.forClass(String.class);
         Mockito.verify(gateway).save(Mockito.any(), captor2.capture());
+        Mockito.verify(boundaryOut).displaySequence(Mockito.any());
         assertNotNull(captor2.getValue());
     }
 
     @Test
     void addTrack(){
         interactor.addTrack(modell.getId());
-        Mockito.verify(boundaryOut).displayNewTrack(trackDtoArgumentCaptor.capture());
-        assertNotNull(trackDtoArgumentCaptor.getValue().id);
+        Mockito.verify(boundaryOut).displaySequence(sequenceDtoArgumentCaptor.capture());
+        assertNotNull(sequenceDtoArgumentCaptor.getValue().id);
     }
 
     @Test
     void stop(){
         interactor.stop();
         Mockito.verify(gateway).stop();
-    }
-
-
-    @Test
-    void reloadSequence(){
-        interactor.create();
-        interactor.reloadSequence(modell.getId());
-        Mockito.verify(boundaryOut, times(2)).displaySequence(sequenceDtoArgumentCaptor.capture());
-
-        assertEquals(modell.getId(), sequenceDtoArgumentCaptor.getValue().id);
-    }
-
-    @Test
-    void updateChannelColorMapping(){
-        interactor.updateChannelColorMapping(modell.getId(), 10, "LOFOS");
-        assertEquals("LOFOS", modell.channelToColorMapping[10]);
-        Mockito.verify(boundaryOut).displaySequence(Mockito.any());
     }
 
     @Test
@@ -153,5 +139,20 @@ class SequenceInteractorTest {
         assertEquals(1, modell.tracks.get(2).eventModells.size());
         Mockito.verify(boundaryOut).displaySequence(Mockito.any());
     }
+
+    @Test
+    void removeTrack() {
+        TrackModell trackModell = new TrackModell();
+        modell.tracks.add(trackModell);
+        try (MockedStatic<InMemorySequenceModellStore> mockedStatic = Mockito.mockStatic(InMemorySequenceModellStore.class)) {
+            mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceByTrackId(trackModell.getId())).thenReturn(Optional.of(modell));
+            mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceById(modell.getId())).thenReturn(modell);
+            interactor.removeTrack(trackModell.getId());
+            Mockito.verify(boundaryOut).displaySequence(Mockito.any());
+
+            assertEquals(1, modell.tracks.size());
+        }
+    }
+
 
 }

@@ -67,6 +67,6 @@ class SequenceModellTest {
         modell.updateChannelToProgramMapping(3, 100);
         modell.updateChannelToProgramMapping(3, 101);
         assertEquals(101, modell.getChannelToProgramMappings()[3]);
-        assertEquals(1, modell.tracks.get(0).getShortMessageEventsByCommand(CommandEnum.PROGRAM_CHANGE).size());
+        assertEquals(2, modell.tracks.get(0).getShortMessageEventsByCommand(CommandEnum.PROGRAM_CHANGE).size());
     }
 }

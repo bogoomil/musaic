@@ -63,15 +63,22 @@ public class TrackModell extends BaseModell implements Cloneable{
     }
 
     public List<NoteModell> getNotesBetween(int fromTickInclusive, int toTickExclusive){
-        return this.eventModells.stream()
-                .filter(eventModell -> eventModell instanceof NoteModell && isTickBetween((NoteModell) eventModell, fromTickInclusive, toTickExclusive))
-                .map(eventModell -> (NoteModell)eventModell )
+        return this.getNotes().stream()
+                .filter(eventModell -> isTickBetween(eventModell, fromTickInclusive, toTickExclusive))
                 .collect(Collectors.toList());
 
     }
 
     private boolean isTickBetween(NoteModell noteModell, int fromTickInclusive, int toTickExclusive) {
-        return noteModell.tick >= fromTickInclusive && noteModell.tick < toTickExclusive;
+        return isTickGreaterOrEqualsThanFromTick(noteModell, fromTickInclusive) && isTickLessThanToTick(noteModell, toTickExclusive);
+    }
+
+    private boolean isTickLessThanToTick(NoteModell noteModell, int toTickExclusive) {
+        return noteModell.tick < toTickExclusive;
+    }
+
+    private boolean isTickGreaterOrEqualsThanFromTick(NoteModell noteModell, int fromTickInclusive) {
+        return noteModell.tick >= fromTickInclusive;
     }
 
     public TrackModell clone(){

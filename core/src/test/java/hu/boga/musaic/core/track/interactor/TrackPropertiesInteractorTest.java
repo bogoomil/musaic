@@ -6,14 +6,10 @@ import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.core.modell.events.NoteModell;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryIn;
 import hu.boga.musaic.core.track.boundary.TrackBoundaryOut;
-import hu.boga.musaic.core.track.boundary.TrackPropertiesBoundaryOut;
 import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
@@ -21,10 +17,10 @@ import static org.mockito.ArgumentMatchers.eq;
 class TrackPropertiesInteractorTest {
     public static final String NEW_NAME = "NEW_NAME";
     public static final String TRACK_ID = "TRACK_ID";
-    TrackPropertiesInteractor trackInteractor;
+    TrackInteractor trackInteractor;
     private SequenceModell modell;
     private TrackModell trackModell;
-    private TrackPropertiesBoundaryOut boundaryOut;
+    private TrackBoundaryOut boundaryOut;
     private NoteModell noteModell;
 
 
@@ -33,10 +29,10 @@ class TrackPropertiesInteractorTest {
 
         InMemorySequenceModellStore.clear();
 
-        boundaryOut = Mockito.mock(TrackPropertiesBoundaryOut.class);
+        boundaryOut = Mockito.mock(TrackBoundaryOut.class);
         TrackBoundaryIn boundaryIn = Mockito.mock(TrackBoundaryIn.class);
 
-        trackInteractor = new TrackPropertiesInteractor(boundaryOut);
+        trackInteractor = new TrackInteractor(boundaryOut);
 
         modell = new SequenceModell();
         trackModell = new TrackModell();
@@ -75,23 +71,12 @@ class TrackPropertiesInteractorTest {
     }
 
     @Test
-    void removeTrack() {
-        try (MockedStatic<InMemorySequenceModellStore> mockedStatic = Mockito.mockStatic(InMemorySequenceModellStore.class)) {
-            mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceByTrackId(trackModell.getId())).thenReturn(Optional.of(modell));
-            mockedStatic.when(() -> InMemorySequenceModellStore.getSequenceById(modell.getId())).thenReturn(modell);
-            trackInteractor.removeTrack(trackModell.getId());
-
-            assertEquals(1, modell.tracks.size());
-        }
-    }
-
-    @Test
     void updateVolume(){
         trackInteractor.updateVolume(trackModell.getId(), -0.5);
         assertEquals(0.5, noteModell.velocity);
         Mockito.verify(boundaryOut).displayTrack(Mockito.any());
 
-        trackInteractor.updateVolume(trackModell.getId(), 100);
+        trackInteractor.updateVolume(trackModell.getId(), 0.5);
         assertEquals(1, noteModell.velocity);
 
         trackInteractor.updateVolume(trackModell.getId(), -0.5);
@@ -100,7 +85,7 @@ class TrackPropertiesInteractorTest {
         trackInteractor.updateVolume(trackModell.getId(), 0.5);
         assertEquals(1, noteModell.velocity);
 
-        trackInteractor.updateVolume(trackModell.getId(), -100);
+        trackInteractor.updateVolume(trackModell.getId(), -1);
         assertEquals(0, noteModell.velocity);
 
         trackInteractor.updateVolume(trackModell.getId(), 0.5);
@@ -108,7 +93,13 @@ class TrackPropertiesInteractorTest {
 
         trackInteractor.updateVolume(trackModell.getId(), 0.5);
         assertEquals(1, noteModell.velocity);
+    }
 
 
+
+    @Test
+    void load(){
+        trackInteractor.load(trackModell.getId());
+        Mockito.verify(boundaryOut).displayTrack(Mockito.any());
     }
 }

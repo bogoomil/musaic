@@ -1,5 +1,6 @@
 package hu.boga.musaic.midigateway.sequence;
 
+import com.google.common.eventbus.EventBus;
 import hu.boga.musaic.core.exceptions.MusaicException;
 import hu.boga.musaic.core.gateway.sequence.SequenceGateway;
 import hu.boga.musaic.core.modell.SequenceModell;
@@ -20,7 +21,7 @@ class SequenceGatewayImplTest {
     private static final String PATH = "src/main/resources/phrygian.mid";
     public static final String PATH_TO_SAVE = "src/main/resources/tmp.mid";
 
-    private SequenceGateway gateway;
+    private SequenceGatewayImpl gateway;
     private SequenceModell sequenceModell;
     private TrackModell trackModell;
 
@@ -31,17 +32,21 @@ class SequenceGatewayImplTest {
         sequenceModell.resolution = SequenceModell.DEFAULT_RESOLUTION;
         trackModell = new TrackModell();
         trackModell.setName("teszt");
+        trackModell.eventModells.add(new NoteModell(0, 0, 128, 1,3));
         sequenceModell.tracks.add(trackModell);
 
         gateway = new SequenceGatewayImpl();
+
+        gateway.save(sequenceModell, PATH_TO_SAVE);
     }
 
     @Test
     void open() {
-        SequenceModell model = gateway.open(PATH);
+        SequenceModell model = gateway.open(PATH_TO_SAVE);
         assertNotNull(model);
-        assertEquals(2, model.tracks.size());
-        assertEquals(6, model.tracks.get(1).eventModells.size());
+        assertEquals(1, model.tracks.size());
+        assertEquals(4, model.tracks.get(0).eventModells.size());
+        assertEquals(0, model.tracks.get(0).channel);
     }
 
     @Test
@@ -62,6 +67,8 @@ class SequenceGatewayImplTest {
         try (MockedStatic<Player> mockedStatic = Mockito.mockStatic(Player.class)) {
             gateway.play(sequenceModell, 0, 1);
             mockedStatic.verify(() -> Player.playSequence(Mockito.any(), eq(0L), eq(1L)), times(1));
+            mockedStatic.verify(() -> Player.removeMetaEventListener(Mockito.any()), times(1));
+            mockedStatic.verify(() -> Player.createMetaEventListener(eq(sequenceModell)), times(1));
         }
     }
 
@@ -85,4 +92,6 @@ class SequenceGatewayImplTest {
             mockedStatic.verify(() -> Player.stopPlayback(), times(1));
         }
     }
+
+
 }

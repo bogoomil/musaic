@@ -16,11 +16,8 @@ public class MusaicApp extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-
         URL fxmlLocation = MainController.class.getResource("main-view.fxml");
         FXMLLoader loader = new FXMLLoader(fxmlLocation);
-
-//        FXMLLoader fxmlLoader = new FXMLLoader(MainController.class.getResource("main-view.fxml"));
         loader.setControllerFactory(GuiceModule.INJECTOR::getInstance);
         Scene scene = new Scene(loader.load(), 800, 600);
         stage.setTitle("midiai");

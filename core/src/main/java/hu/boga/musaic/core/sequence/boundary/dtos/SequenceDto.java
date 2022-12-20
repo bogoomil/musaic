@@ -20,7 +20,6 @@ public class SequenceDto {
     public float ticksPerSecond;
 
     public int[] channelToProgramMappings;
-    public String [] channelToColorMappings;
 
 
 

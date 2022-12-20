@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
@@ -21,23 +23,19 @@ import static org.mockito.Mockito.times;
 
 class TrackInteractorTest {
 
-    public static final String NEW_NAME = "NEW_NAME";
-    public static final String TRACK_ID = "TRACK_ID";
     TrackInteractor trackInteractor;
     private SequenceModell modell;
     private TrackModell trackModell;
     private TrackBoundaryOut boundaryOut;
     private NoteModell noteModell;
 
+    private String noteId;
+
 
     @BeforeEach
     void setUp() {
-
         InMemorySequenceModellStore.clear();
-
         boundaryOut = Mockito.mock(TrackBoundaryOut.class);
-        TrackBoundaryIn boundaryIn = Mockito.mock(TrackBoundaryIn.class);
-
         trackInteractor = new TrackInteractor(boundaryOut);
 
         modell = new SequenceModell();
@@ -46,6 +44,7 @@ class TrackInteractorTest {
 
         noteModell = new NoteModell(12, 1, 32, 1, 0);
         trackModell.eventModells.add(noteModell);
+        noteId = noteModell.getId();
 
         noteModell = new NoteModell(12, 600, 32, 1, 0);
         trackModell.eventModells.add(noteModell);
@@ -55,7 +54,7 @@ class TrackInteractorTest {
 
     @Test
     void addSingleNote() {
-        trackInteractor.addChord(trackModell.getId(), 0, 12, 32, null);
+        trackInteractor.addChord(trackModell.getId(), 0, 12, 32, ChordType.NONE);
         ArgumentCaptor<TrackDto> captor = ArgumentCaptor.forClass(TrackDto.class);
         Mockito.verify(boundaryOut).displayTrack(captor.capture());
         assertEquals(3, captor.getValue().notes.size());
@@ -74,7 +73,7 @@ class TrackInteractorTest {
 
     @Test
     void deleteNotes() {
-        trackInteractor.addChord(trackModell.getId(), 345, 23, 512, null);
+        trackInteractor.addChord(trackModell.getId(), 345, 23, 512, ChordType.NONE);
 
         NoteDto[] dtos = getNoteDtos(trackModell.eventModells.get(0).getId());
 
@@ -101,19 +100,19 @@ class TrackInteractorTest {
         assertEquals(100, noteModell.tick);
     }
 
-    @Test
-    void showTrack(){
-        trackInteractor.showTrack(trackModell.getId());
-        Mockito.verify(boundaryOut).displayTrack(Mockito.any());
-    }
 
     @Test
     void duplicate(){
-        trackInteractor.duplicate(trackModell.getId(), 1, 512);
-        assertEquals(3, trackModell.getNotes().size());
-        assertEquals(1, trackModell.getNotes().get(0).tick);
-        assertEquals(600, trackModell.getNotes().get(1).tick);
-        assertEquals(512, trackModell.getNotes().get(2).tick);
+        trackModell.eventModells.add(new NoteModell(0, 3, 100, 100, 0));
+        trackInteractor.duplicate(trackModell.getId(), 1,512);
+
+        List<NoteModell> notes = trackModell.getNotes();
+
+        assertEquals(5, notes.size());
+        assertEquals(1, notes.get(0).tick);
+        assertEquals(600, notes.get(1).tick);
+        assertEquals(3, notes.get(2).tick);
+        assertEquals(512, notes.get(3).tick);
         Mockito.verify(boundaryOut).displayTrack(Mockito.any());
     }
 
@@ -121,6 +120,13 @@ class TrackInteractorTest {
     void moveUpAndDownNotes(){
         trackInteractor.moveUpAndDownNotes(trackModell.getId(), new String[]{noteModell.getId()}, 2);
         assertEquals(14, noteModell.midiCode);
+        Mockito.verify(boundaryOut).displayTrack(Mockito.any());
+    }
+
+    @Test
+    void updateNoteVolume(){
+        trackInteractor.noteVolumeChanged(noteId, 0.8);
+        assertEquals(0.8, trackModell.getNoteModellById(noteId).get().velocity);
         Mockito.verify(boundaryOut).displayTrack(Mockito.any());
     }
 }

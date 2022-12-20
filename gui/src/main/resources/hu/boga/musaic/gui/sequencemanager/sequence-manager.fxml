@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.boga.musaic.gui.sequencemanager.SequenceManager">
+    <top>
+        <MenuBar fx:id="menu" BorderPane.alignment="CENTER">
+            <menus>
+                <Menu mnemonicParsing="false" text="Sequence">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#saveSequence" text="Save" />
+                        <MenuItem mnemonicParsing="false" onAction="#saveAsSequence" text="Save as..." />
+                        <MenuItem mnemonicParsing="false" onAction="#openSequence" text="Import..." />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Settings" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Track">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#addTrack" text="Add" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+   <center>
+      <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Tracks">
+            <content>
+                <BorderPane>
+                    <top>
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Zoom" />
+                               <Slider fx:id="zoomSlider" />
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding></VBox>
+                    </top>
+                    <center>
+                        <ScrollPane hbarPolicy="NEVER">
+                            <VBox fx:id="tracksVBox" />
+                        </ScrollPane>
+                    </center>
+                     <bottom>
+                        <VBox prefHeight="28.0" prefWidth="600.0" spacing="5.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="Horizontal scroll" />
+                               <Slider fx:id="scrollSlider" />
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </VBox>
+                     </bottom>
+                </BorderPane>
+            </content>
+          </Tab>
+          <Tab text="Channel mapping">
+            <content>
+              <AnchorPane fx:id="channelMappingPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+</BorderPane>

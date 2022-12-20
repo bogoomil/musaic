@@ -15,10 +15,11 @@ public class SequenceModell extends BaseModell{
     public static final int DEFAULT_DIVISION = 0;
     public static final int DEFAULT_RESOLUTION = 128;
 
-    public List<TrackModell> tracks = new ArrayList(Arrays.asList(new TrackModell()));
+    public List<TrackModell> tracks = new ArrayList();
     public int resolution = DEFAULT_RESOLUTION;
     public float division = DEFAULT_DIVISION;
     public float tempo = DEFAULT_TEMPO;
+    public String name;
 
     public int getTicksPerMeasure() {
         return 4 * resolution;
@@ -36,7 +37,6 @@ public class SequenceModell extends BaseModell{
         return 1 / getTicksPerSecond();
     }
 
-    public String[] channelToColorMapping = new String[]{"0xccffffff","0xcce6ffff","0xe6ccffff","0xffccffff","0xffcce6ff","0xffcce6ff","0xffccccff","0xffccb3ff","0xffe6ccff","0xffffb3ff","0xffffccff","0xe6e6ccff","0xccffccff","0xe6e680ff","0xffe666ff","0xffcc80ff"};
 
     public long getTickLength() {
         return tracks.stream().mapToLong(trackModell -> trackModell.getTickLength()).max().orElse(0);
@@ -73,5 +73,17 @@ public class SequenceModell extends BaseModell{
                 .flatMap(trackModell -> trackModell.getShortMessageEventsByCommand(CommandEnum.PROGRAM_CHANGE)
                         .stream())
                 .filter(shortMessageEventModell -> shortMessageEventModell.channel == channel).findFirst();
+    }
+
+    public SequenceModell clone(){
+        SequenceModell clone = new SequenceModell();
+        clone.tempo = tempo;
+        clone.tracks = new ArrayList<>();
+        clone.name = name;
+        clone.resolution = resolution;
+        clone.division = division;
+
+        tracks.forEach(trackModell -> clone.tracks.add(trackModell.clone()));
+        return clone;
     }
 }

@@ -8,12 +8,10 @@ import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryOut;
 import hu.boga.musaic.core.sequence.boundary.SequenceBoundaryIn;
 import hu.boga.musaic.core.sequence.boundary.dtos.SequenceDto;
 import hu.boga.musaic.core.sequence.interactor.converters.SequenceModellToDtoConverter;
-import hu.boga.musaic.core.track.interactor.converters.TrackModelltoDtoConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.util.Optional;
 
 public class SequenceInteractor implements SequenceBoundaryIn {
 
@@ -54,7 +52,10 @@ public class SequenceInteractor implements SequenceBoundaryIn {
 
     @Override
     public void save(String sequenceId, String path) {
-        gateway.save(InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId), path);
+        LOG.debug("id: {}, path: {}", sequenceId, path);
+        SequenceModell modell = InMemorySequenceModellStore.getSequenceById(sequenceId);
+        gateway.save(modell, path);
+        boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());
     }
 
     @Override
@@ -65,10 +66,11 @@ public class SequenceInteractor implements SequenceBoundaryIn {
 
     @Override
     public void addTrack(String sequenceId) {
+        LOG.debug("id: {}", sequenceId);
         SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId);
         TrackModell trackModell = new TrackModell();
         modell.tracks.add(trackModell);
-        boundaryOut.displayNewTrack(new TrackModelltoDtoConverter(trackModell).convert());
+        boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());
     }
 
     @Override
@@ -77,28 +79,16 @@ public class SequenceInteractor implements SequenceBoundaryIn {
     }
 
     @Override
-    public void reloadSequence(String sequenceId) {
-        SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId);
-        boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());
-    }
-
-    @Override
-    public void updateChannelColorMapping(String sequenceId, int channel, String color) {
-        LOG.debug("new color: " + color);
-        SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(sequenceId);
-        modell.channelToColorMapping[channel] = color;
-        boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());
-    }
-
-    @Override
-    public void updateChannelToProgramMappings(String id, int i, int selectedProgram) {
+    public void updateChannelToProgramMappings(String id, int channel, int selectedProgram) {
+        LOG.debug("seq: {}, channel: {}, program: {}", id, channel, selectedProgram);
         SequenceModell modell = InMemorySequenceModellStore.SEQUENCE_MODELS.get(id);
-        modell.updateChannelToProgramMapping(i, selectedProgram);
+        modell.updateChannelToProgramMapping(channel, selectedProgram);
         boundaryOut.displaySequence(new SequenceModellToDtoConverter(modell).convert());
     }
 
     @Override
     public void duplicateTrack(String trackId) {
+        LOG.debug("track: {}", trackId);
         InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
             sequenceModell.getTrackById(trackId).ifPresent(trackModell -> {
                 TrackModell clone = trackModell.clone();
@@ -107,6 +97,15 @@ public class SequenceInteractor implements SequenceBoundaryIn {
             boundaryOut.displaySequence(new SequenceModellToDtoConverter(sequenceModell).convert());
         });
     }
+
+    @Override
+    public void removeTrack(String trackId) {
+        InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
+            sequenceModell.tracks.removeIf(trackModell -> trackModell.getId().equals(trackId));
+            boundaryOut.displaySequence(new SequenceModellToDtoConverter(sequenceModell).convert());
+        });
+    }
+
 
     private SequenceModell createNewSequence(){
         SequenceModell modell = new SequenceModell();

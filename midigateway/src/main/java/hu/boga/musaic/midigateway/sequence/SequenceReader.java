@@ -4,6 +4,7 @@ import hu.boga.musaic.core.exceptions.MusaicException;
 import hu.boga.musaic.core.modell.SequenceModell;
 import hu.boga.musaic.core.modell.TrackModell;
 import hu.boga.musaic.midigateway.converters.*;
+import hu.boga.musaic.midigateway.utils.TempoUtil;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
@@ -25,11 +26,14 @@ public class SequenceReader {
     private SequenceModell tryingToOpen(String path) throws InvalidMidiDataException, IOException {
         File file = new File(path);
         Sequence sequence = MidiSystem.getSequence(file);
-        return convertSquence(sequence);
+        SequenceModell modell =  convertSquence(sequence);
+        modell.name = file.getName();
+        return modell;
     }
 
     private SequenceModell convertSquence(Sequence sequence) {
         SequenceModell sequenceModell = new SequenceToModellConverter(sequence).convert();
+        sequenceModell.tempo = TempoUtil.getTempo(sequence);
         Arrays.stream(sequence.getTracks()).forEach(track -> {
             sequenceModell.tracks.add(convertTracks(track));
         });
@@ -41,6 +45,7 @@ public class SequenceReader {
         trackModell.eventModells.addAll(new NoteToModellConverter(track).convert());
         trackModell.eventModells.addAll(new MetaMessageEventToModellConverter(track).convert());
         trackModell.eventModells.addAll(new ShortMessageEventToModellConverter(track).convert());
+
         if(!trackModell.getNotes().isEmpty()){
             trackModell.channel = trackModell.getNotes().get(0).channel;
         }

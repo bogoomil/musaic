@@ -8,6 +8,7 @@ module midigateway {
     requires core;
     requires javax.inject;
     requires org.slf4j;
+    requires com.google.common;
 
     opens hu.boga.musaic.midigateway to com.google.guice;
 

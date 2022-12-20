@@ -5,5 +5,4 @@ import hu.boga.musaic.core.track.boundary.dtos.TrackDto;
 
 public interface SequenceBoundaryOut {
     void displaySequence(SequenceDto dto);
-    void displayNewTrack(TrackDto trackDto);
 }
