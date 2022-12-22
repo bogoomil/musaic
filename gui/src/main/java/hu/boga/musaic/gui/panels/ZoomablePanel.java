@@ -19,6 +19,7 @@ public abstract class ZoomablePanel extends Pane {
         this.fourthInBar = fourthInBar;
         this.measureNum = measureNumProperty;
         zoom.addListener((observable, oldValue, newValue) -> updateGui());
+        fourthInBar.addListener((observable, oldValue, newValue) -> updateGui());
     }
 
     protected abstract void updateGui();
