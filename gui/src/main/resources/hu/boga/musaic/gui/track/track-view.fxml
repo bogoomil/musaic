@@ -47,7 +47,12 @@
                                     </HBox.margin>
 
                                 </CheckBox>
-                                <Button mnemonicParsing="false" text="Duplicate sel." onAction="#duplicateSelection"/>
+                                <CheckBox fx:id="chxbSolo" mnemonicParsing="false" text="solo" onAction="#onSolo">
+                                    <HBox.margin>
+                                        <Insets top="4.0"/>
+                                    </HBox.margin>
+                                </CheckBox>
+                                <Button mnemonicParsing="false" onAction="#duplicateSelection" text="Duplicate sel."/>
                             </children>
                             <padding>
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>

@@ -21,4 +21,5 @@ public interface TrackService {
     void duplicateSelection(String trackId, int start, int end);
 
     void playChord(String trackId, int midiCode, int ertek);
+    void solo(String trackId, boolean solo);
 }

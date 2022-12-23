@@ -36,6 +36,8 @@ public class TrackPresenterImpl implements TrackPresenter{
 
     private static final Logger LOG = LoggerFactory.getLogger(TrackPresenterImpl.class);
     @FXML
+    private CheckBox chxbSolo;
+    @FXML
     private AnchorPane panelGroupAnchor;
     @FXML
     private BorderPane mainPanel;
@@ -187,5 +189,9 @@ public class TrackPresenterImpl implements TrackPresenter{
 
     public void duplicateSelection(ActionEvent actionEvent) {
         trackService.duplicateSelection(trackModell.id, selectionStart, selectionEnd);
+    }
+
+    public void onSolo(ActionEvent actionEvent) {
+        trackService.solo(trackModell.id, chxbSolo.isSelected());
     }
 }

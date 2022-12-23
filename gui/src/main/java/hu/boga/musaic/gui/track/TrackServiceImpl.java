@@ -98,4 +98,9 @@ public class TrackServiceImpl implements TrackService, TrackBoundaryOut {
     public void playChord(String trackId, int midiCode, int length) {
         noteBoundaryIn.play(trackId, midiCode, length);
     }
+
+    @Override
+    public void solo(String trackId, boolean solo) {
+        boundaryIn.setSolo(trackId, solo);
+    }
 }

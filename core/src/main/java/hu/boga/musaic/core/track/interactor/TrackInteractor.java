@@ -36,7 +36,7 @@ public class TrackInteractor implements TrackBoundaryIn {
         InMemorySequenceModellStore.getSequenceByTrackId(id).ifPresent(sequenceModell -> {
             sequenceModell.getTrackById(id).ifPresent(trackModell -> {
                 trackModell.muted = muted;
-                LOG.debug("track muted: {}", id);
+                LOG.debug("track muted: {}, val: {}", id, muted);
             });
         });
     }
@@ -157,6 +157,24 @@ public class TrackInteractor implements TrackBoundaryIn {
             boundaryOut.displayTrack(new TrackModelltoDtoConverter(trackModell).convert());
         });
 
+    }
+
+    @Override
+    public void setSolo(String trackId, boolean solo) {
+        InMemorySequenceModellStore.getSequenceByTrackId(trackId).ifPresent(sequenceModell -> {
+            sequenceModell.tracks.forEach(trackModell -> {
+                if(solo){
+                    if(trackModell.getId().equals(trackId)){
+                        trackModell.muted = false;
+                    } else {
+                        trackModell.muted = true;
+                    }
+                } else {
+                    trackModell.muted = false;
+                }
+                boundaryOut.displayTrack(new TrackModelltoDtoConverter(trackModell).convert());
+            });
+        });
     }
 
     private void addNotesToTrack(int tick, int pitch, int length, ChordType chordType, SequenceModell sequenceModell, TrackModell trackModell) {
