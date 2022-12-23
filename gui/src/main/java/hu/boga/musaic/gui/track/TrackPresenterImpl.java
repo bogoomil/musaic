@@ -127,7 +127,7 @@ public class TrackPresenterImpl implements TrackPresenter{
         Group panelGroup = new Group();
         panelGroup.getChildren().add(new GridPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum));
         panelGroup.getChildren().add(new NotesPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModellObservable));
-        panelGroup.getChildren().add(new CursorPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModell));
+//        panelGroup.getChildren().add(new CursorPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModell));
         panelGroup.getChildren().add(new SelectionPanel(GuiConstants.TRACK_HEIGHT, zoom, scroll, resolution, fourthInBar, measureNum, trackModellObservable, eventBus, trackEditorPresenterFactory));
         return panelGroup;
     }

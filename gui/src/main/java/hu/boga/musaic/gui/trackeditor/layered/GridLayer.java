@@ -1,7 +1,11 @@
 package hu.boga.musaic.gui.trackeditor.layered;
 
+import com.google.common.eventbus.Subscribe;
+import hu.boga.musaic.core.events.EventSystem;
+import hu.boga.musaic.core.events.TickEvent;
 import hu.boga.musaic.gui.constants.GuiConstants;
 import hu.boga.musaic.musictheory.enums.NoteName;
+import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.scene.Group;
@@ -21,6 +25,8 @@ public class GridLayer extends Group implements Layer {
 
     LayeredPane parent;
 
+    private Rectangle progressBar;
+
     public GridLayer(LayeredPane parent) {
         this.parent = parent;
     }
@@ -32,6 +38,16 @@ public class GridLayer extends Group implements Layer {
         createVerticalLines();
         createHorizontalLines();
         createTexts();
+        initProgressBar();
+    }
+
+    private void initProgressBar() {
+        Color highLight = Color.GRAY;
+        highLight = Color.color(highLight.getRed(), highLight.getGreen(), highLight.getBlue(), 0.4);
+
+        progressBar = new Rectangle(0, 0, 0, parent.getFullHeight());
+        progressBar.setFill(highLight);
+        getChildren().add(progressBar);
     }
 
     private void createTexts() {
@@ -108,7 +124,7 @@ public class GridLayer extends Group implements Layer {
     private void createMeasure(int i) {
         double height = parent.getFullHeight();
         double barW = parent.getMeasureWidth();
-        double rectW =  parent.getFourthWidth();
+        double rectW = parent.getFourthWidth();
         for (int j = 0; j < parent.fourthInBarProperty().intValue(); j++) {
             double rectX = i * barW + j * rectW;
             Rectangle rectangle = new Rectangle(rectX, 0, rectW, height);
@@ -116,5 +132,13 @@ public class GridLayer extends Group implements Layer {
             getChildren().add(rectangle);
         }
     }
+
+    @Subscribe
+    void handleTickEvent(TickEvent event){
+        Platform.runLater(() -> {
+            progressBar.setWidth(parent.getXByTick(event.getTick()));
+        });
+    }
+
 
 }

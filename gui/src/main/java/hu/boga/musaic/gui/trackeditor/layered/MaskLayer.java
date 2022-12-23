@@ -77,9 +77,13 @@ public class MaskLayer extends Group implements Layer{
     }
 
     private void paintDisabledRectangle(int y) {
+
+        Color highLight = Color.GRAY;
+        highLight = Color.color(highLight.getRed(), highLight.getGreen(), highLight.getBlue(), 0.7);
+
         final Rectangle rectangle = new Rectangle();
         rectangle.setMouseTransparent(false);
-        rectangle.setFill(Color.GRAY);
+        rectangle.setFill(highLight);
         rectangle.setX(0);
         rectangle.setY(y);
         rectangle.setWidth(parent.getFullWidth());

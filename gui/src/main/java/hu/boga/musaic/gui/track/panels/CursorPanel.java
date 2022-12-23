@@ -24,20 +24,21 @@ public final class CursorPanel extends NotesPanelBase{
 
     @Override
     protected void updateGui() {
+        LOG.debug("updating cursor panels gui");
         createBorder();
         initCursor();
-        getChildren().add(cursor);
     }
 
     private void initCursor() {
         cursor = new Line(0, 0, 0, height);
         cursor.setStrokeWidth(2);
         cursor.setStroke(Color.RED);
+        getChildren().add(cursor);
     }
 
     @Subscribe
     void handleTickEvent(TickEvent event){
-        cursor.setStartX(getXByTick(event.getTick()));
-        cursor.setEndX(getXByTick(event.getTick()));
+//        cursor.setStartX(getXByTick(event.getTick()));
+//        cursor.setEndX(getXByTick(event.getTick()));
     }
 }

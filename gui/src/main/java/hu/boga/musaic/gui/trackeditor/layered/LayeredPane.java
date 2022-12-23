@@ -1,5 +1,6 @@
 package hu.boga.musaic.gui.trackeditor.layered;
 
+import hu.boga.musaic.core.events.EventSystem;
 import hu.boga.musaic.gui.constants.GuiConstants;
 import hu.boga.musaic.gui.panels.ZoomablePanel;
 import hu.boga.musaic.gui.logic.Observable;
@@ -17,6 +18,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Rectangle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -122,6 +124,7 @@ public class LayeredPane extends ZoomablePanel implements NoteChangedListener {
     private void initGridLayer() {
         layers.add(gridLayer);
         this.getChildren().add(gridLayer);
+        EventSystem.EVENT_BUS.register(gridLayer);
     }
 
     private void initNotesLayer() {

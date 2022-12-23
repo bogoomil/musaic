@@ -32,4 +32,5 @@ module gui {
     opens hu.boga.musaic.gui.trackeditor to javafx.fxml;
 
     opens hu.boga.musaic.gui.panels to com.google.common;
+    opens hu.boga.musaic.gui.trackeditor.layered to com.google.common;
 }
